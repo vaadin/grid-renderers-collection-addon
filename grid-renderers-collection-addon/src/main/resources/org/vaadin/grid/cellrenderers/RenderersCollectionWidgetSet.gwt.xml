@@ -1,0 +1,12 @@
+<module>
+
+    <!-- WS Compiler: manually edited -->
+    <inherits name="com.vaadin.terminal.gwt.DefaultWidgetSet"/>
+
+    <!-- Inherit DefaultWidgetSet -->
+    <inherits name="com.vaadin.DefaultWidgetSet"/>
+
+    <!-- Widget styles in public -directory -->
+    <stylesheet src="grid-renderers-collection-addon/styles.css"/>
+
+</module>
