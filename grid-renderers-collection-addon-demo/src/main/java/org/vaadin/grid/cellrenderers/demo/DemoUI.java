@@ -6,7 +6,10 @@ import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.converter.StringToBooleanConverter;
+
 import org.vaadin.grid.cellrenderers.CheckboxRenderer;
+import org.vaadin.grid.cellrenderers.TextFieldRenderer;
+
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
@@ -59,6 +62,8 @@ public class DemoUI extends UI {
         );
         truth.setEditable(false);
 
+        grid.getColumn("description").setRenderer(new TextFieldRenderer());
+        
         final VerticalLayout layout = new VerticalLayout();
 
         layout.setStyleName("demoContentLayout");
