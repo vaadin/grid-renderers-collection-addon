@@ -51,8 +51,11 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
-### Version 1.0-SNAPSHOT
+### Version 0.9
 * CheckboxRenderer - renderer for boolean columns. Looks like checkbox, activates edit mode at first click. Supposed to be used with Grid unbuffered mode
+
+### Version 0.91
+* Vaadin version advanced to 7.5.6. Fixed IllegalStateException
 
 ## Issue tracking
 
