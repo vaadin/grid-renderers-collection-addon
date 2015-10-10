@@ -16,6 +16,8 @@
 package org.vaadin.grid.cellrenderers.demo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Provides various helper methods for connectors. Meant for internal use.
@@ -27,14 +29,18 @@ public class SimplePojo implements Serializable {
     private String description;
     private boolean yes;
     private boolean truth;
+    private Date date;
+    private BigDecimal number;
 
     public SimplePojo() {
     }
 
-    public SimplePojo(long id, String description, boolean yes) {
+    public SimplePojo(long id, String description, boolean yes, Date date, BigDecimal number) {
         this.id = id;
         this.description = description;
         this.yes = yes;
+        this.date = date;
+        this.number = number;
     }
 
     public long getId() {
@@ -45,6 +51,22 @@ public class SimplePojo implements Serializable {
         this.id = id;
     }
 
+    public BigDecimal getNumber() {
+        return number;
+    }
+
+    public void setNumber(BigDecimal number) {
+        this.number = number;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+    
     public String getDescription() {
         return description;
     }
