@@ -1,6 +1,6 @@
-package org.vaadin.grid.cellrenderers.client;
+package org.vaadin.grid.cellrenderers.client.editable;
 
-import org.vaadin.grid.cellrenderers.TextFieldRenderer;
+import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 
 import com.google.gwt.core.client.GWT; 
 import com.google.gwt.dom.client.BrowserEvents; 

@@ -51,11 +51,17 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
-### Version 0.9
-* CheckboxRenderer - renderer for boolean columns. Looks like checkbox, activates edit mode at first click. Supposed to be used with Grid unbuffered mode
+### Version 0.92
+* Vaadin version advanced to 7.5.7
+* New renderers added
+* Renderers are split to editable and editor-aware
 
 ### Version 0.91
-* Vaadin version advanced to 7.5.6. Fixed IllegalStateException
+* Vaadin version advanced to 7.5.6
+* Fixed IllegalStateException
+
+### Version 0.9
+* CheckboxRenderer - renderer for boolean columns. Looks like checkbox, activates edit mode at first click. Supposed to be used with Grid unbuffered mode
 
 ## Issue tracking
 
@@ -77,6 +83,8 @@ Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.t
 
 Grid Renderers collection is initially written by Ilia Motornyi(elmot@vaadin.com)
 
+Contributed by Tatu Lund(tatu@vaadin.com)
+
 # Developer Guide
 
 ## Getting started
@@ -91,5 +99,11 @@ For a more comprehensive example, see org.vaadin.grid.cellrenderers.demo.DemoUI
 ## Features
 
 ### CheckboxRenderer
-Single-click editor for boolean columns (unbuffered Grids only)
+Single-click editor for boolean columns - Editor aware. Most suitable for unbuffered Grid(Vaadin 7.6+)
+
+### DateFieldRenderer
+Inline Dates editor
+
+### TextFieldRenderer
+Multipurpose inline Text editor. Supports various types of data using com.vaadin.data.util.converter.Converter
 

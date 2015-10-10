@@ -1,4 +1,4 @@
-package org.vaadin.grid.cellrenderers.client;
+package org.vaadin.grid.cellrenderers.client.editable;
 
 import com.vaadin.shared.communication.SharedState;
 

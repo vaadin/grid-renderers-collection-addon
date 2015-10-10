@@ -1,10 +1,8 @@
-package org.vaadin.grid.cellrenderers.client;
+package org.vaadin.grid.cellrenderers.client.editable;
 
 import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
 
-import org.vaadin.grid.cellrenderers.DateFieldRenderer;
+import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
 
 import com.google.gwt.core.client.GWT; 
 import com.google.gwt.dom.client.BrowserEvents; 
@@ -15,20 +13,14 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.web.bindery.event.shared.HandlerRegistration; 
 import com.vaadin.client.LocaleService;
-import com.vaadin.client.Util;
-import com.vaadin.client.VConsole;
-import com.vaadin.client.communication.RpcProxy; 
+import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector; 
 import com.vaadin.client.connectors.GridConnector; 
 import com.vaadin.client.renderers.ClickableRenderer; 
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler; 
-import com.vaadin.client.renderers.Renderer; 
-import com.vaadin.client.ui.VCalendarPanel;
-import com.vaadin.client.ui.VDateField;
+import com.vaadin.client.renderers.Renderer;
 import com.vaadin.client.ui.VOverlay;
-import com.vaadin.client.ui.VPopupCalendar;
-import com.vaadin.client.ui.VTextField;
-import com.vaadin.client.widget.grid.RendererCellReference; 
+import com.vaadin.client.widget.grid.RendererCellReference;
 import com.vaadin.client.widgets.Grid; 
 import com.vaadin.shared.ui.Connect; 
 import com.vaadin.shared.ui.datefield.Resolution;

@@ -1,10 +1,10 @@
-package org.vaadin.grid.cellrenderers;
+package org.vaadin.grid.cellrenderers.editable;
 
 
 import java.util.Date;
 
-import org.vaadin.grid.cellrenderers.client.DateFieldRendererServerRpc;
-import org.vaadin.grid.cellrenderers.client.DateFieldRendererState;
+import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererServerRpc;
+import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererState;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;

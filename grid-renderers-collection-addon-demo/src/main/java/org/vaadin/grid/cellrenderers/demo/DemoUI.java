@@ -12,9 +12,9 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.converter.StringToBigDecimalConverter;
 import com.vaadin.data.util.converter.StringToBooleanConverter;
 
-import org.vaadin.grid.cellrenderers.CheckboxRenderer;
-import org.vaadin.grid.cellrenderers.DateFieldRenderer;
-import org.vaadin.grid.cellrenderers.TextFieldRenderer;
+import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
+import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
+import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;

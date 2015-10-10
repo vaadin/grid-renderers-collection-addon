@@ -1,7 +1,7 @@
-package org.vaadin.grid.cellrenderers;
+package org.vaadin.grid.cellrenderers.editable;
 
-import org.vaadin.grid.cellrenderers.client.TextFieldRendererServerRpc;
-import org.vaadin.grid.cellrenderers.client.TextFieldRendererState;
+import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererServerRpc;
+import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererState;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.vaadin.grid.cellrenderers.client.renderers;
+package org.vaadin.grid.cellrenderers.client.editoraware.renderers;
 
 import com.google.gwt.core.client.GWT;
 import com.vaadin.client.renderers.ClickableRenderer;
