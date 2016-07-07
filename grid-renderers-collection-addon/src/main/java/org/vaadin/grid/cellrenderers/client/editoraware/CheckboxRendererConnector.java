@@ -13,14 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.vaadin.grid.cellrenderers.client;
+package org.vaadin.grid.cellrenderers.client.editoraware;
 
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.vaadin.client.connectors.ClickableRendererConnector;
 import com.vaadin.client.renderers.ClickableRenderer;
 import com.vaadin.shared.ui.Connect;
 import elemental.json.JsonObject;
-import org.vaadin.grid.cellrenderers.CheckboxRenderer;
+import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
 
 /**
  * Provides various helper methods for connectors. Meant for internal use.
@@ -30,9 +30,9 @@ import org.vaadin.grid.cellrenderers.CheckboxRenderer;
 @Connect(CheckboxRenderer.class)
 public class CheckboxRendererConnector extends ClickableRendererConnector<Boolean> {
     @Override
-    public org.vaadin.grid.cellrenderers.client.renderers.CheckboxRenderer getRenderer() {
+    public org.vaadin.grid.cellrenderers.client.editoraware.renderers.CheckboxRenderer getRenderer() {
 
-        return (org.vaadin.grid.cellrenderers.client.renderers.CheckboxRenderer) super.getRenderer();
+        return (org.vaadin.grid.cellrenderers.client.editoraware.renderers.CheckboxRenderer) super.getRenderer();
     }
 
     @Override
