@@ -51,7 +51,7 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
-### Version 0.92
+### Version 0.93
 * Vaadin version advanced to 7.6.7
 * SparklineRenderer added
 * Renderers are split to view, editable and editor-aware
