@@ -51,6 +51,13 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 0.93
+* Vaadin version advanced to 7.6.7
+* SparklineRenderer added
+* Renderers are split to view, editable and editor-aware
+* Refactored the demo
+* Updated documentation
+
 ### Version 0.92
 * Vaadin version advanced to 7.5.7
 * New renderers added
@@ -83,7 +90,7 @@ Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.t
 
 Grid Renderers collection is initially written by Ilia Motornyi(elmot@vaadin.com)
 
-Contributed by Tatu Lund(tatu@vaadin.com)
+DateFieldRenderer, TextFieldRenderer & SparklineRenderer Contributed by Tatu Lund(tatu@vaadin.com)
 
 # Developer Guide
 
@@ -93,8 +100,7 @@ Here is a simple example on how to try out the add-on component:
 
     grid.getColumn("yes").setRenderer(new CheckboxRenderer());
 
-
-For a more comprehensive example, see org.vaadin.grid.cellrenderers.demo.DemoUI
+For a more comprehensive examples, see org.vaadin.grid.cellrenderers.demo.DemoUI
 
 ## Features
 
@@ -102,8 +108,16 @@ For a more comprehensive example, see org.vaadin.grid.cellrenderers.demo.DemoUI
 Single-click editor for boolean columns - Editor aware. Most suitable for unbuffered Grid(Vaadin 7.6+)
 
 ### DateFieldRenderer
-Inline Dates editor
+Inline Dates editor.
 
 ### TextFieldRenderer
-Multipurpose inline Text editor. Supports various types of data using com.vaadin.data.util.converter.Converter
+Multipurpose inline Text editor. Supports various types of data using com.vaadin.data.util.converter.Converter TextFieldRenderer and DateFieldRenderer are suitable when
+you need to edit few columns only. Tab key jumps between editable fields by default. The input is
+directly stored in the container. For backend commits it is recommend to have "save" button in the
+UI.
 
+### SparklineRenderer
+Configurable SparklineRenderer. Renders collection of Numbers as a simple chart. The renderer uses
+Sparklines add-on by Marc Englund (which inturn uses gwt-graphics add-on). SparklineRenderer has
+SparklineConfiguration class inside, which controls various Sparkline configuration options thru
+shared state. Most of the settings have immediate effect, see the demo.
