@@ -15,6 +15,7 @@ import com.vaadin.data.util.converter.StringToBooleanConverter;
 
 import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
 import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
+import org.vaadin.grid.cellrenderers.editable.RatingStarsRenderer;
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer.SparklineConfiguration;
@@ -54,13 +55,23 @@ public class DemoUI extends UI {
     		int id = -1;
     		final Number[] numbers;
     		final Random rand;
+    		Double stars;
 
     		public MyPojo(int i) {
     			id = i;
     			numbers = new Number[60];
     			rand = new Random(id);
+    			stars =  (double) rand.nextInt(10) / 2.0;
     		}
 
+    		public Double getStars() {
+    			return stars;
+    		}
+    		
+    		public void setStars(Double stars) {
+    			this.stars = stars;
+    		}
+    		    		
     		public Number[] getNumbers() {
     			for (int i=0;i<60;i++) {
         			numbers[i] = rand.nextInt()/10000.0;    				
@@ -98,7 +109,8 @@ public class DemoUI extends UI {
     		Grid grid = new Grid(container);
     		grid.setSizeFull();
     		grid.getColumn("numbers").setRenderer(sparkline);
-    		grid.setColumns("id", "foo", "bar", "numbers");
+    		grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5,true));
+    		grid.setColumns("id", "foo", "bar", "stars", "numbers");
     		return grid;
     	}
 
@@ -166,9 +178,9 @@ public class DemoUI extends UI {
 		public CheckBoxDemo() {		
 			Random random = new Random(4837291937l);
 			BeanItemContainer<SimplePojo> container = new BeanItemContainer<SimplePojo>(SimplePojo.class);
-			container.addBean(new SimplePojo(0, "Me", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100)));
-			container.addBean(new SimplePojo(1, "You", false, new Date(), BigDecimal.valueOf(random.nextDouble()*100)));
-			container.addBean(new SimplePojo(2, "He", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100)));
+			container.addBean(new SimplePojo(0, "Me", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5))));
+			container.addBean(new SimplePojo(1, "You", false, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5))));
+			container.addBean(new SimplePojo(2, "He", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5))));
 
 			Grid grid = new Grid(container);
 			grid.setColumns("description","yes","truth","date","number");
@@ -209,11 +221,11 @@ public class DemoUI extends UI {
 			Random random = new Random(4837291937l);
 			BeanItemContainer<SimplePojo> container = new BeanItemContainer<SimplePojo>(SimplePojo.class);
 			for (int i=0;i<1000;i++) {
-				container.addBean(new SimplePojo(i, "Bean", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100)));
+				container.addBean(new SimplePojo(i, "Bean", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5))));
 			}
 
 			Grid grid = new Grid(container);
-			grid.setColumns("description","yes","truth","date","number");
+			grid.setColumns("description","stars","truth","date","number");
 			grid.setSizeFull();
 			grid.setEditorEnabled(false);
 			Grid.Column yes = grid.getColumn("yes");
@@ -236,7 +248,8 @@ public class DemoUI extends UI {
 			grid.getColumn("number").setConverter(new StringToBigDecimalConverter());
 			grid.getColumn("number").setRenderer(new TextFieldRenderer<BigDecimal>());
 			grid.getColumn("date").setRenderer(new DateFieldRenderer());
-    
+			grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5,false));
+			
 			setStyleName("demoContentLayout");
 			setSizeFull();
 			addComponent(grid);

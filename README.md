@@ -51,6 +51,10 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 0.94
+* RatingStarsRenderer added
+* Updated the demo to use RatingStarsRenderer
+
 ### Version 0.93
 * Vaadin version advanced to 7.6.7
 * SparklineRenderer added
@@ -90,7 +94,7 @@ Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.t
 
 Grid Renderers collection is initially written by Ilia Motornyi(elmot@vaadin.com)
 
-DateFieldRenderer, TextFieldRenderer & SparklineRenderer Contributed by Tatu Lund(tatu@vaadin.com)
+DateFieldRenderer, TextFieldRenderer, SparklineRenderer & RatingStarsRenderer Contributed by Tatu Lund(tatu@vaadin.com)
 
 # Developer Guide
 
@@ -121,3 +125,10 @@ Configurable SparklineRenderer. Renders collection of Numbers as a simple chart.
 Sparklines add-on by Marc Englund (which inturn uses gwt-graphics add-on). SparklineRenderer has
 SparklineConfiguration class inside, which controls various Sparkline configuration options thru
 shared state. Most of the settings have immediate effect, see the demo.
+
+### RatingStarsRenderer
+RatingStarsRenderer is based on Widget in RatingStars add-on by Teemu Pöntelin. You can use 
+RatingStarsRenderer both as a view only or editable field renderer. The max number of stars can
+be also configured.
+
+

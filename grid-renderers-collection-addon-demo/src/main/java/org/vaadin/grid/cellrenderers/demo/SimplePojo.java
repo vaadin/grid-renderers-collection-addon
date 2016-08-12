@@ -31,18 +31,28 @@ public class SimplePojo implements Serializable {
     private boolean truth;
     private Date date;
     private BigDecimal number;
+    private Double stars;
 
     public SimplePojo() {
     }
 
-    public SimplePojo(long id, String description, boolean yes, Date date, BigDecimal number) {
+    public SimplePojo(long id, String description, boolean yes, Date date, BigDecimal number, Double stars) {
         this.id = id;
         this.description = description;
         this.yes = yes;
         this.date = date;
         this.number = number;
+		this.stars =  (double) stars;
     }
 
+	public Double getStars() {
+		return stars;
+	}
+	
+	public void setStars(Double stars) {
+		this.stars = stars;
+	}
+	
     public long getId() {
         return id;
     }
