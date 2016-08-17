@@ -1,12 +1,13 @@
 package org.vaadin.grid.cellrenderers.editable;
 
 import com.vaadin.ui.renderers.ClickableRenderer;
+import org.vaadin.grid.cellrenderers.EditableRenderer;
 import org.vaadin.grid.cellrenderers.client.editable.RatingStarsRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.RatingStarsRendererState;
 import com.vaadin.data.Property;
 import com.vaadin.data.Item;
 
-public class RatingStarsRenderer extends ClickableRenderer<Double> {
+public class RatingStarsRenderer extends EditableRenderer<Double> {
 
     public RatingStarsRenderer(int stars, boolean readOnly) {
         super(Double.class);
@@ -29,6 +30,8 @@ public class RatingStarsRenderer extends ClickableRenderer<Double> {
                 Property<Double> cell = (Property<Double>) row.getItemProperty(columnPropertyId);
 
                 cell.setValue(newValue);
+
+                fireItemEditEvent(itemId, row, columnPropertyId, newValue);
             }
 
         });
