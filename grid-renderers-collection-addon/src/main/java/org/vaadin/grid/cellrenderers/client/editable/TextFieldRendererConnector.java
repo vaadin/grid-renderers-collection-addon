@@ -1,5 +1,8 @@
 package org.vaadin.grid.cellrenderers.client.editable;
 
+import com.google.gwt.dom.client.Style;
+import com.vaadin.client.VConsole;
+import com.vaadin.client.annotations.OnStateChange;
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 
 import com.google.gwt.core.client.GWT; 
@@ -68,7 +71,17 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
         public VTextField createWidget() {
             VTextField textField = GWT.create(VTextField.class);
 
-            textField.sinkBitlessEvent(BrowserEvents.CHANGE);
+            if(getState().fitToCell) {
+                textField.setWidth("100%");
+
+                textField.getElement().getStyle().setPosition(Style.Position.RELATIVE);
+                textField.getElement().getStyle().setProperty("border-radius", "0");
+                textField.getElement().getStyle().setProperty("padding", "0 16px");
+                textField.getElement().getStyle().setLeft(-16.0, Style.Unit.PX);
+                textField.getElement().getStyle().setProperty("border", "none");
+                textField.getElement().getStyle().setTop(-1, Style.Unit.PX);
+            }
+
             textField.sinkBitlessEvent(BrowserEvents.CLICK);
             textField.sinkBitlessEvent(BrowserEvents.MOUSEDOWN);
 
@@ -125,4 +138,5 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
     private Grid<JsonObject> getGrid() {
         return ((GridConnector) getParent()).getWidget();
     }
+
 }
