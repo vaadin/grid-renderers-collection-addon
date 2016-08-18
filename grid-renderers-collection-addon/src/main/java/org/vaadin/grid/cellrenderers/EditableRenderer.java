@@ -18,6 +18,9 @@ public class EditableRenderer<T> extends ClickableRenderer<T> {
         super(presentationType);
     }
 
+    public EditableRenderer(Class<T> presentationType, String nullRepresentation) {
+        super(presentationType, nullRepresentation);
+    }
 
     public interface ItemEditListener extends ConnectorEventListener {
 
