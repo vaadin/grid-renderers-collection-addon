@@ -8,7 +8,7 @@ Try the add-on demo at *TBD*
 
 ## Download release
 
-Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to http://vaadin.com/addon/grid-renderers-collection-addon
+Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to https://vaadin.com/directory#!addon/grid-renderers-collection-for-vaadin7
 
 ## Building and running demo
 
@@ -128,7 +128,7 @@ SparklineConfiguration class inside, which controls various Sparkline configurat
 shared state. Most of the settings have immediate effect, see the demo.
 
 ### RatingStarsRenderer
-RatingStarsRenderer is based on Widget in RatingStars add-on by Teemu P�ntelin. You can use 
+RatingStarsRenderer is based on Widget in RatingStars add-on by Teemu P&ouml;ntelin. You can use 
 RatingStarsRenderer both as a view only or editable field renderer. The max number of stars can
 be also configured.
 
