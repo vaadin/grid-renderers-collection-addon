@@ -8,71 +8,108 @@ import com.vaadin.ui.renderers.ClickableRenderer;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
+import java.util.Set;
 
 /**
  * @author Mikael Grankvist - Vaadin
  */
 public class EditableRenderer<T> extends ClickableRenderer<T> {
+	private static final long serialVersionUID = 5590369317672309950L;
 
-    protected EditableRenderer(Class<T> presentationType) {
-        super(presentationType);
-    }
+	public enum Mode {
+		SINGLE, MULTI
+	}
 
+	protected EditableRenderer(Class<T> presentationType) {
+		super(presentationType);
+	}
 
-    public interface ItemEditListener extends ConnectorEventListener {
+	public interface ItemEditListener<T> extends ConnectorEventListener {
 
-        Method ITEM_EDIT_METHOD = ReflectTools.findMethod(
-                ItemEditListener.class, "itemEdited", ItemEditEvent.class);
+		Method ITEM_EDIT_METHOD = ReflectTools.findMethod(ItemEditListener.class, "itemEdited", ItemEditEvent.class);
 
-        void itemEdited(ItemEditEvent event);
-    }
+		void itemEdited(ItemEditEvent<T> event);
+	}
 
-    public static class ItemEditEvent<T> extends Component.Event {
+	public static class ItemEditEvent<T> extends Component.Event {
 
-        private final Object itemId;
-        private final Item item;
-        private final Object columnPropertyId;
-        private final T newValue;
+		private static final long serialVersionUID = 1L;
 
-        public ItemEditEvent(Grid grid, Object itemId, Item item, Object columnPropertyId, T newValue) {
-            super(grid);
-        this.itemId = itemId;
-            this.item = item;
-            this.columnPropertyId = columnPropertyId;
-            this.newValue = newValue;
-        }
+		private final Mode mode;
+		private final Object itemId;
+		private final Item item;
+		private final Object columnPropertyId;
+		private final T newValue;
+		private final Set<T> newValues;
 
-        public Object getItemId() {
-            return itemId;
-        }
+		public ItemEditEvent(Grid grid, Object itemId, Item item, Object columnPropertyId, T newValue) {
+			super(grid);
+			this.mode = Mode.SINGLE;
+			this.itemId = itemId;
+			this.item = item;
+			this.columnPropertyId = columnPropertyId;
+			this.newValue = newValue;
+			this.newValues = null;
+		}
 
-        public Item getItem() {
-            return item;
-        }
+		public ItemEditEvent(Grid grid, Object itemId, Item item, Object columnPropertyId, Set<T> newValues) {
+			super(grid);
+			this.mode = Mode.MULTI;
+			this.itemId = itemId;
+			this.item = item;
+			this.columnPropertyId = columnPropertyId;
+			this.newValue = null;
+			this.newValues = newValues;
+		}
 
-        public Object getColumnPropertyId() {
-            return columnPropertyId;
-        }
+		public Object getItemId() {
+			return this.itemId;
+		}
 
-        public T getNewValue() {
-            return newValue;
-        }
-    }
+		public Item getItem() {
+			return this.item;
+		}
 
-    public void addItemEditListener(ItemEditListener listener) {
-        addListener(ItemEditEvent.class, listener,
-                ItemEditListener.ITEM_EDIT_METHOD);
-    }
+		public Object getColumnPropertyId() {
+			return this.columnPropertyId;
+		}
 
-    public void removeItemEditListener(ItemEditListener listener) {
-        removeListener(ItemEditListener.class, listener);
-    }
+		public T getNewValue() {
+			return this.newValue;
+		}
 
-    /**
-     * Fires a event to all listeners without any event details.
-     *
-     */
-    public void fireItemEditEvent(Object itemId, Item item, Object columnPropertyId, T newValue) {
-        fireEvent(new ItemEditEvent(getParentGrid(), itemId, item, columnPropertyId, newValue));
-    }
+		public Mode getMode() {
+			return this.mode;
+		}
+
+		public Set<T> getNewValues() {
+			return this.newValues;
+		}
+	}
+
+	public void addItemEditListener(ItemEditListener<T> listener) {
+		addListener(ItemEditEvent.class, listener, ItemEditListener.ITEM_EDIT_METHOD);
+	}
+
+	public void removeItemEditListener(ItemEditListener<T> listener) {
+		removeListener(ItemEditListener.class, listener);
+	}
+
+	/**
+	 * Fires a event with single value to all listeners without any event
+	 * details.
+	 *
+	 */
+	public void fireItemEditEvent(Object itemId, Item item, Object columnPropertyId, T newValue) {
+		fireEvent(new ItemEditEvent<T>(getParentGrid(), itemId, item, columnPropertyId, newValue));
+	}
+
+	/**
+	 * Fires a event with multi value to all listeners without any event
+	 * details.
+	 *
+	 */
+	public void fireItemEditEvent(Object itemId, Item item, Object columnPropertyId, Set<T> newValues) {
+		fireEvent(new ItemEditEvent<T>(getParentGrid(), itemId, item, columnPropertyId, newValues));
+	}
 }
