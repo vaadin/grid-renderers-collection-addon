@@ -1,1 +1,7 @@
-grid-renderers-collection-addon/target
+*/target
+*/src/main/webapp
+
+# eclipse
+.settings
+.project
+.classpath
