@@ -7,14 +7,8 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import com.vaadin.ui.renderers.NumberRenderer;
@@ -155,13 +149,17 @@ public class DemoUI extends UI {
             );
 
             grid.addColumn(SimplePojo::getDescription).setCaption("Description");
-            grid.addColumn(SimplePojo::isYes, new CheckboxRenderer<>(SimplePojo::setYes)).setCaption("Yes").setEditable(true);
+            grid.addColumn(SimplePojo::isYes, new CheckboxRenderer<>(SimplePojo::setYes)).setCaption("Yes").setEditorComponent(new CheckBox()).setEditable(true);
             grid.addColumn(
                     simplePojo -> (simplePojo.isTruth() ? FontAwesome.CHECK_CIRCLE_O : FontAwesome.CIRCLE_O).getHtml()
                     , new HtmlRenderer()).setCaption("Truth");
 
-            grid.addColumn(SimplePojo::getDate, new DateRenderer()).setCaption("Date").setEditable(true);
-            grid.addColumn(SimplePojo::getNumber, new NumberRenderer()).setCaption("Number").setEditable(true);
+            grid.addColumn(SimplePojo::getDate, new DateRenderer()).setCaption("Date")
+                    .setEditorComponent(new DateField())
+                    .setEditable(true);
+            grid.addColumn(SimplePojo::getNumber, new NumberRenderer()).setCaption("Number")
+                    .setEditorComponent(new TextField())
+                    .setEditable(true);
 
             grid.setSizeFull();
             grid.getEditor().setEnabled(true);
@@ -197,9 +195,9 @@ public class DemoUI extends UI {
             grid.addColumn(SimplePojo::getStars, new RatingStarsRenderer<>(5, null)).setCaption("Stars");
             grid.addColumn(
                     simplePojo -> (simplePojo.isTruth() ? FontAwesome.CHECK_CIRCLE_O : FontAwesome.CIRCLE_O).getHtml()
-                    , new HtmlRenderer()).setCaption("Truth").setEditable(false);
+                    , new HtmlRenderer()).setCaption("Truth")/*todo file bug!.setEditable(false)*/;
 
-            grid.addColumn(SimplePojo::getDate, new DateRenderer()).setCaption("Date").setEditable(false);
+            grid.addColumn(SimplePojo::getDate, new DateRenderer()).setCaption("Date")/*todo file bug!.setEditable(false)*/;
             grid.addColumn(simplePojo -> String.valueOf(simplePojo.getNumber()),new TextFieldRenderer<>(null))
                     .setCaption("Number");
 
