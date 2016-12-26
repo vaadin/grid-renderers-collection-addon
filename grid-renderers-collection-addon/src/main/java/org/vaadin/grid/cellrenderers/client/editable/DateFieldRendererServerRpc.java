@@ -1,5 +1,6 @@
 package org.vaadin.grid.cellrenderers.client.editable;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.vaadin.shared.communication.ServerRpc;

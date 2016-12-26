@@ -1,9 +1,9 @@
 package org.vaadin.grid.cellrenderers.client.editable;
 
+import com.vaadin.shared.ui.grid.renderers.ClickableRendererState;
+
 import java.util.Date;
 
-import com.vaadin.shared.communication.SharedState;
-
-public class DateFieldRendererState extends SharedState{
+public class DateFieldRendererState extends ClickableRendererState {
 	public Date value = null;
 }

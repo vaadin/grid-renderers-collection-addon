@@ -1,10 +1,12 @@
 package org.vaadin.grid.cellrenderers.view;
 
-import com.vaadin.ui.Grid.AbstractRenderer;
+import com.vaadin.ui.renderers.AbstractRenderer;
 import org.vaadin.grid.cellrenderers.client.view.SparklineRendererState;
 
-public class SparklineRenderer extends AbstractRenderer<Number[]> {
+@SuppressWarnings("unused")
+public class SparklineRenderer extends AbstractRenderer<Object, Number[]> {
 	
+	@SuppressWarnings("WeakerAccess")
 	public class SparklineConfiguration {
 
 		public SparklineConfiguration() {
@@ -111,7 +113,7 @@ public class SparklineRenderer extends AbstractRenderer<Number[]> {
 
 	}
 	
-	SparklineConfiguration config = null;
+	private SparklineConfiguration config = null;
 	
     public SparklineRenderer() {
         super(Number[].class);

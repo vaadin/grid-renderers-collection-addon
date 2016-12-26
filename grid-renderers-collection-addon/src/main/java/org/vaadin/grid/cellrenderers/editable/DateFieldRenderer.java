@@ -1,45 +1,35 @@
 package org.vaadin.grid.cellrenderers.editable;
 
 
-import java.util.Date;
-
+import com.vaadin.server.Setter;
+import com.vaadin.ui.renderers.ClickableRenderer;
 import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererState;
 
-import com.vaadin.data.Item;
-import com.vaadin.data.Property;
-import com.vaadin.ui.renderers.ClickableRenderer;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 
-public class DateFieldRenderer extends ClickableRenderer<Date>
-{
-    public DateFieldRenderer()
-    {
-        super(Date.class);
-     
-        registerRpc(new DateFieldRendererServerRpc()
-        {
+public class DateFieldRenderer<T> extends ClickableRenderer<T, LocalDate> {
+    public DateFieldRenderer(Setter<T, LocalDate> setter) {
+        super(LocalDate.class);
 
-            public void onChange(String rowKey, String columnId, Date newValue)
-            {
-
-                Object itemId = getItemId(rowKey);
-                Object columnPropertyId = getColumn(columnId).getPropertyId();
-
-                Item row = getParentGrid().getContainerDataSource().getItem(itemId);
-
-                @SuppressWarnings("unchecked")
-                Property<Date> cell = (Property<Date>) row.getItemProperty(columnPropertyId);
-                
-                cell.setValue(newValue);
+        registerRpc((DateFieldRendererServerRpc) (rowKey, columnId, newValue) -> {
+            T item = getParentGrid().getDataCommunicator().getKeyMapper().get(rowKey);
+            LocalDate newLocalDate;
+            if (newValue == null) {
+                newLocalDate = null;
+            } else {
+                newLocalDate = Instant.ofEpochMilli(newValue.getTime()).atZone(ZoneOffset.UTC)
+                        .toLocalDate();
             }
-
+            setter.accept(item, newLocalDate);
         });
     }
 
     @Override
-    protected DateFieldRendererState getState()
-    {
-    	return (DateFieldRendererState) super.getState();
+    protected DateFieldRendererState getState() {
+        return (DateFieldRendererState) super.getState();
     }
-    
+
 }

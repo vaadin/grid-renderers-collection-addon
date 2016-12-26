@@ -15,10 +15,10 @@
  */
 package org.vaadin.grid.cellrenderers.editoraware;
 
-import com.vaadin.data.Container;
-import com.vaadin.data.Property;
-import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.HasValue;
+import com.vaadin.server.Setter;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.components.grid.Editor;
 import com.vaadin.ui.renderers.ClickableRenderer;
 
 /**
@@ -26,30 +26,27 @@ import com.vaadin.ui.renderers.ClickableRenderer;
  *
  * @author Vaadin Ltd
  */
-public class CheckboxRenderer extends ClickableRenderer<Boolean> {
-    public CheckboxRenderer() {
-        super(Boolean.class, null);
-        addClickListener(new RendererClickListener() {
-            @Override
-            public void click(RendererClickEvent event) {
-                Grid grid = getParentGrid();
-                if (event.getColumn().isEditable() && grid.isEditorEnabled()) {
-                    Object itemId = event.getItemId();
-                    Object propertyId = event.getPropertyId();
+public class CheckboxRenderer<T> extends ClickableRenderer<T, Boolean> {
 
-                    try {
-                        if (grid.isEditorActive() && !itemId.equals(grid.getEditedItemId())) {
-                            grid.saveEditor();
-                            grid.cancelEditor();
-                        }
-                        Container.Indexed containerDataSource = grid.getContainerDataSource();
-                        Property itemProperty = containerDataSource.getItem(itemId).getItemProperty(propertyId);
-                        itemProperty.setValue(!Boolean.TRUE.equals(itemProperty.getValue()));
-                        grid.editItem(itemId);
-                    } catch (FieldGroup.CommitException e) {
-                        Grid.CommitErrorEvent errorEvent = new Grid.CommitErrorEvent(grid, e);
-                        grid.getEditorErrorHandler().commitError(errorEvent);
+    public CheckboxRenderer(Setter<T, Boolean> setter) {
+        super(Boolean.class, null);
+        addClickListener(new RendererClickListener<T>() {
+            @Override
+            public void click(RendererClickEvent<T> event) {
+                Grid<T> grid = getParentGrid();
+                Editor<T> editor = grid.getEditor();
+                Grid.Column<T, ?> column = event.getColumn();
+                if (column.isEditable() && editor.isEnabled()) {
+                    T item = event.getItem();
+
+                    if (editor.isOpen() && !item.equals(editor.getBinder().getBean())) {
+                        editor.save();
+                        editor.cancel();
                     }
+                    setter.accept(item, ((HasValue<Boolean>) event.getSource()).getValue());
+
+                    // Todo run editor over a row?
+                    // grid.getEditor().editItem(itemId);
                 }
             }
         });

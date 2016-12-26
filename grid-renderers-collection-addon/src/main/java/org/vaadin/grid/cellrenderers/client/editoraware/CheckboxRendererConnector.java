@@ -15,7 +15,7 @@
  */
 package org.vaadin.grid.cellrenderers.client.editoraware;
 
-import com.google.web.bindery.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.vaadin.client.connectors.ClickableRendererConnector;
 import com.vaadin.client.renderers.ClickableRenderer;
 import com.vaadin.shared.ui.Connect;

@@ -2,27 +2,27 @@ package org.vaadin.grid.cellrenderers.client.editable;
 
 import java.util.Date;
 
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.vaadin.client.connectors.grid.GridConnector;
 import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
 
-import com.google.gwt.core.client.GWT; 
-import com.google.gwt.dom.client.BrowserEvents; 
-import com.google.gwt.dom.client.Element; 
-import com.google.gwt.event.dom.client.*; 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.BrowserEvents;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.web.bindery.event.shared.HandlerRegistration; 
 import com.vaadin.client.LocaleService;
 import com.vaadin.client.communication.RpcProxy;
-import com.vaadin.client.connectors.ClickableRendererConnector; 
-import com.vaadin.client.connectors.GridConnector; 
-import com.vaadin.client.renderers.ClickableRenderer; 
-import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler; 
+import com.vaadin.client.connectors.ClickableRendererConnector;
+import com.vaadin.client.renderers.ClickableRenderer;
+import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler;
 import com.vaadin.client.renderers.Renderer;
 import com.vaadin.client.ui.VOverlay;
 import com.vaadin.client.widget.grid.RendererCellReference;
-import com.vaadin.client.widgets.Grid; 
-import com.vaadin.shared.ui.Connect; 
+import com.vaadin.client.widgets.Grid;
+import com.vaadin.shared.ui.Connect;
 import com.vaadin.shared.ui.datefield.Resolution;
 
 import elemental.json.JsonObject;
@@ -38,8 +38,8 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
         private static final String COLUMN_ID_PROPERTY = "columnId";
 
         private boolean doesTextFieldContainValue(VMyPopupCalendar dateField, Date value) {
-            if(dateField.getDate().equals(value)) {
-            	return true;
+            if (dateField.getDate().equals(value)) {
+                return true;
             }
             return false;
         }
@@ -51,24 +51,24 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             Element e = dateField.getElement();
 
             getState().value = selectedValue;
-            
-            if(e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell.getRow())) {
+
+            if (e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell.getRow())) {
                 e.setPropertyString(ROW_KEY_PROPERTY,
                         getRowKey((JsonObject) cell.getRow()));
             }
             // Generics issue, need a correctly typed column.
 
-            if(e.getPropertyString(COLUMN_ID_PROPERTY) != getColumnId(getGrid()
+            if (e.getPropertyString(COLUMN_ID_PROPERTY) != getColumnId(getGrid()
                     .getColumn(cell.getColumnIndex()))) {
                 e.setPropertyString(COLUMN_ID_PROPERTY, getColumnId(getGrid()
                         .getColumn(cell.getColumnIndex())));
             }
-            
+
             // Setting and showing the date from the Grid
             dateField.setCurrentDate(selectedValue);
             dateField.buildDate();
-            
-            if(dateField.isEnabled() != cell.getColumn().isEditable()) {
+
+            if (dateField.isEnabled() != cell.getColumn().isEditable()) {
                 dateField.setEnabled(cell.getColumn().isEditable());
             }
         }
@@ -108,11 +108,11 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             dateField.popup.setOwner(gridConnector.getWidget());
 
             // Set application connection
-            dateField.client = getConnection();   
+            dateField.client = getConnection();
             dateField.paintableId = getConnectorId();
 
             LocaleService lservice = new LocaleService();
-            
+
             // Set date locale
             String locale = lservice.getDefaultLocale();
             dateField.setCurrentLocale(locale);
@@ -123,6 +123,7 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
                 public void onChange(ChangeEvent changeEvent) {
 //                    VMyPopupCalendar dateField = (VMyPopupCalendar) changeEvent.getSource();
                     Element e = dateField.getElement();
+                    Date date = dateField.getDate();
                     rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
                             e.getPropertyString(COLUMN_ID_PROPERTY),
                             dateField.getDate());
@@ -141,13 +142,13 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
                 public void onMouseDown(MouseDownEvent event) {
                     event.stopPropagation();
                 }
-            }, MouseDownEvent.getType() );
+            }, MouseDownEvent.getType());
 
             // Add close handler to popup calendar panel
             // This is needed to get value change when user selects date from popup
             // Note: Popup doesn't update currentDate automatically
             dateField.popup.addCloseHandler(new CloseHandler<PopupPanel>() {
-            	@Override
+                @Override
                 public void onClose(CloseEvent<PopupPanel> closeEvent) {
                     VOverlay popup = (VOverlay) closeEvent.getSource();
                     Element e = dateField.getElement();
@@ -160,12 +161,12 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             return dateField;
         }
     }
-    
+
     @Override
     public DateFieldRendererState getState() {
-    	return (DateFieldRendererState) super.getState();
+        return (DateFieldRendererState) super.getState();
     }
-    
+
     @Override
     protected Renderer<Date> createRenderer() {
         return new DateFieldClientRenderer();
