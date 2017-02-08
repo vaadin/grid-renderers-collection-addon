@@ -14,6 +14,7 @@ import java.util.Set;
  * @author Mikael Grankvist - Vaadin
  */
 public class EditableRenderer<T> extends ClickableRenderer<T> {
+
 	private static final long serialVersionUID = 5590369317672309950L;
 
 	public enum Mode {
@@ -112,4 +113,5 @@ public class EditableRenderer<T> extends ClickableRenderer<T> {
 	public void fireItemEditEvent(Object itemId, Item item, Object columnPropertyId, Set<T> newValues) {
 		fireEvent(new ItemEditEvent<T>(getParentGrid(), itemId, item, columnPropertyId, newValues));
 	}
+
 }
