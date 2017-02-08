@@ -3,7 +3,6 @@ package org.vaadin.grid.cellrenderers.client.editable;
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -13,6 +12,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+import com.vaadin.client.MouseEventDetailsBuilder;
+import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector;
 import com.vaadin.client.connectors.GridConnector;
@@ -23,6 +24,7 @@ import com.vaadin.client.ui.VTextField;
 import com.vaadin.client.widget.grid.RendererCellReference;
 import com.vaadin.client.widgets.Grid;
 import com.vaadin.shared.ui.Connect;
+import com.vaadin.shared.ui.grid.renderers.RendererClickRpc;
 
 import elemental.json.JsonObject;
 
@@ -70,6 +72,8 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 
 		@Override
 		public VTextField createWidget() {
+			onUnregister();
+
 			VTextField textField = GWT.create(VTextField.class);
 
 			if (getState().fitToCell) {
@@ -95,12 +99,10 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 							.setTop(-1, Style.Unit.PX);
 			}
 
-			textField.sinkBitlessEvent(BrowserEvents.CLICK);
-			textField.sinkBitlessEvent(BrowserEvents.MOUSEDOWN);
-
 			textField.addChangeHandler(new ChangeHandler() {
 				@Override
 				public void onChange(ChangeEvent changeEvent) {
+					VConsole.error("onClick");
 					VTextField textField = (VTextField) changeEvent.getSource();
 					Element e = textField.getElement();
 					TextFieldRendererConnector.this.rpc.onChange(	e.getPropertyString(ROW_KEY_PROPERTY),
@@ -113,12 +115,20 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 				@Override
 				public void onClick(ClickEvent event) {
 					event.stopPropagation();
+					VConsole.log("onClick");
+					VTextField textField = (VTextField) event.getSource();
+					Element e = textField.getElement();
+					getRpcProxy(RendererClickRpc.class).click(	e.getPropertyString(ROW_KEY_PROPERTY),
+																e.getPropertyString(COLUMN_ID_PROPERTY),
+																MouseEventDetailsBuilder.buildMouseEventDetails(event.getNativeEvent()));
+
 				}
 			});
 
 			textField.addMouseDownHandler(new MouseDownHandler() {
 				@Override
 				public void onMouseDown(MouseDownEvent event) {
+					VConsole.error("onMouseDown");
 					event.stopPropagation();
 				}
 			});
