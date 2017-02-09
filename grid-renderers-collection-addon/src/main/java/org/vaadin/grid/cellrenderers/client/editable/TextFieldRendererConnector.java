@@ -13,7 +13,6 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.vaadin.client.MouseEventDetailsBuilder;
-import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector;
 import com.vaadin.client.connectors.GridConnector;
@@ -102,7 +101,6 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 			textField.addChangeHandler(new ChangeHandler() {
 				@Override
 				public void onChange(ChangeEvent changeEvent) {
-					VConsole.error("onClick");
 					VTextField textField = (VTextField) changeEvent.getSource();
 					Element e = textField.getElement();
 					TextFieldRendererConnector.this.rpc.onChange(	e.getPropertyString(ROW_KEY_PROPERTY),
@@ -115,20 +113,17 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 				@Override
 				public void onClick(ClickEvent event) {
 					event.stopPropagation();
-					VConsole.log("onClick");
 					VTextField textField = (VTextField) event.getSource();
 					Element e = textField.getElement();
 					getRpcProxy(RendererClickRpc.class).click(	e.getPropertyString(ROW_KEY_PROPERTY),
 																e.getPropertyString(COLUMN_ID_PROPERTY),
 																MouseEventDetailsBuilder.buildMouseEventDetails(event.getNativeEvent()));
-
 				}
 			});
 
 			textField.addMouseDownHandler(new MouseDownHandler() {
 				@Override
 				public void onMouseDown(MouseDownEvent event) {
-					VConsole.error("onMouseDown");
 					event.stopPropagation();
 				}
 			});
