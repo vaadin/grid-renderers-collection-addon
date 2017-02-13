@@ -33,9 +33,14 @@
     <inherits name="com.vaadin.DefaultWidgetSet" />
     
 
-    <inherits name="org.vaadin.grid.cellrenderers.RenderersCollectionWidgetSet" />
+    
+    
 
-    <inherits name="org.vaadin.sparklines.SparklinesWidgetset" />
+    
 
     <inherits name="org.vaadin.teemu.ratingstars.gwt.RatingStarsWidgetset" />
+
+    
+
+    <inherits name="org.vaadin.RenderersCollectionWidgetSet" />
 </module>

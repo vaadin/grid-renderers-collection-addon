@@ -51,6 +51,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 2.0.0.beta
+* Migration to Vaadin 8.beta2
+
 ### Version 0.94
 * RatingStarsRenderer added
 * Updated the demo to use RatingStarsRenderer

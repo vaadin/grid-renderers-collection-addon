@@ -17,6 +17,7 @@ package org.vaadin.grid.cellrenderers.demo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -29,14 +30,14 @@ public class SimplePojo implements Serializable {
     private String description;
     private boolean yes;
     private boolean truth;
-    private Date date;
+    private LocalDate date;
     private BigDecimal number;
     private Double stars;
 
     public SimplePojo() {
     }
 
-    public SimplePojo(long id, String description, boolean yes, Date date, BigDecimal number, Double stars) {
+    public SimplePojo(long id, String description, boolean yes, LocalDate date, BigDecimal number, Double stars) {
         this.id = id;
         this.description = description;
         this.yes = yes;
@@ -69,11 +70,11 @@ public class SimplePojo implements Serializable {
         this.number = number;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
     

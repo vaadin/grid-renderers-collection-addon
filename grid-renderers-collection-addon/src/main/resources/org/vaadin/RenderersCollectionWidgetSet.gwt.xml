@@ -6,4 +6,8 @@
     <!-- Widget styles in public -directory -->
     <stylesheet src="grid-renderers-collection-addon/styles.css"/>
 
+    <inherits name='org.vaadin.gwtgraphics.GWTGraphics' />
+
+    <stylesheet src="sparklines/sparklines.css"/>
+
 </module>

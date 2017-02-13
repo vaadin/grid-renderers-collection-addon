@@ -1,0 +1,26 @@
+.v-sparkline {
+	font-family: Trebuchet MS;
+	font-size: 20px;
+}
+.v-sparklineminmax {
+	font-size: 0.5em;
+	line-height: 0.9em;
+	margin: 0 0.6em;
+	text-align: right;
+}
+.v-sparklinecaption, .v-sparklinevalue {
+	margin-left: 0.2em;
+}
+
+.v-sparklinevalue {
+	width: 100%;
+	text-align: right;
+}
+
+div.grid-renderers-collection-addon {
+	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}

@@ -20,6 +20,7 @@ import org.vaadin.grid.cellrenderers.view.SparklineRenderer.SparklineConfigurati
 
 import javax.servlet.annotation.WebServlet;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -143,23 +144,25 @@ public class DemoUI extends UI {
             Random random = new Random(4837291937L);
             Grid<SimplePojo> grid = new Grid<>();
             grid.setItems(
-                    new SimplePojo(0, "Me", true, new Date(), BigDecimal.valueOf(random.nextDouble() * 100), (double) random.nextInt(5)),
-                    new SimplePojo(1, "You", false, new Date(), BigDecimal.valueOf(random.nextDouble() * 100), (double) random.nextInt(5)),
-                    new SimplePojo(2, "He", true, new Date(), BigDecimal.valueOf(random.nextDouble() * 100), (double) random.nextInt(5))
+                    new SimplePojo(0, "Me", true, LocalDate.now(), BigDecimal.valueOf(random.nextDouble() * 100), (double) random.nextInt(5)),
+                    new SimplePojo(1, "You", false, LocalDate.now(), BigDecimal.valueOf(random.nextDouble() * 100), (double) random.nextInt(5)),
+                    new SimplePojo(2, "He", true, LocalDate.now(), BigDecimal.valueOf(random.nextDouble() * 100), (double) random.nextInt(5))
             );
 
             grid.addColumn(SimplePojo::getDescription).setCaption("Description");
-            grid.addColumn(SimplePojo::isYes, new CheckboxRenderer<>(SimplePojo::setYes)).setCaption("Yes").setEditorComponent(new CheckBox()).setEditable(true);
+            grid.addColumn(SimplePojo::isYes, new CheckboxRenderer<>(SimplePojo::setYes))
+                    .setCaption("Yes")
+                    .setEditorComponent(new CheckBox(), SimplePojo::setYes).setEditable(true);
             grid.addColumn(
                     simplePojo -> (simplePojo.isTruth() ? FontAwesome.CHECK_CIRCLE_O : FontAwesome.CIRCLE_O).getHtml()
                     , new HtmlRenderer()).setCaption("Truth");
 
-            grid.addColumn(SimplePojo::getDate, new DateRenderer()).setCaption("Date")
-                    .setEditorComponent(new DateField())
-                    .setEditable(true);
-            grid.addColumn(SimplePojo::getNumber, new NumberRenderer()).setCaption("Number")
-                    .setEditorComponent(new TextField())
-                    .setEditable(true);
+//            grid.addColumn(SimplePojo::getDate, new DateRenderer()).setCaption("Date")
+//                    .setEditorComponent(new DateField(), SimplePojo::setDate)
+//                    .setEditable(true);
+//            grid.addColumn(SimplePojo::getNumber, new NumberRenderer()).setCaption("Number")
+//                    .setEditorComponent(new TextField(), SimplePojo::setNumber)
+//                    .setEditable(true);
 
             grid.setSizeFull();
             grid.getEditor().setEnabled(true);
@@ -184,8 +187,8 @@ public class DemoUI extends UI {
             Random random = new Random(4837291937L);
             List<SimplePojo> pojoList = new ArrayList<>();
             for (int i = 0; i < 1000; i++) {
-                pojoList.add(new SimplePojo(i, "Bean", true, new Date(),
-                        BigDecimal.valueOf(random.nextDouble() * 100), (double)random.nextInt(5)));
+                pojoList.add(new SimplePojo(i, "Bean", true, LocalDate.now(),
+                        BigDecimal.valueOf(random.nextDouble() * 100), (double) random.nextInt(5)));
             }
 
             Grid<SimplePojo> grid = new Grid<>();
@@ -197,8 +200,8 @@ public class DemoUI extends UI {
                     simplePojo -> (simplePojo.isTruth() ? FontAwesome.CHECK_CIRCLE_O : FontAwesome.CIRCLE_O).getHtml()
                     , new HtmlRenderer()).setCaption("Truth")/*todo file bug!.setEditable(false)*/;
 
-            grid.addColumn(SimplePojo::getDate, new DateRenderer()).setCaption("Date")/*todo file bug!.setEditable(false)*/;
-            grid.addColumn(simplePojo -> String.valueOf(simplePojo.getNumber()),new TextFieldRenderer<>(null))
+//            grid.addColumn(SimplePojo::getDate, new DateRenderer()).setCaption("Date")/*todo file bug!.setEditable(false)*/;
+            grid.addColumn(simplePojo -> String.valueOf(simplePojo.getNumber()), new TextFieldRenderer<>(null))
                     .setCaption("Number");
 
             grid.setSizeFull();
