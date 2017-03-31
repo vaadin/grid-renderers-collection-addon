@@ -1,0 +1,9 @@
+*/target
+*/src/main/webapp
+
+# eclipse
+.settings
+.project
+.classpath
+
+rebel.xml
