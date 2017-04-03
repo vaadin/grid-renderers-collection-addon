@@ -3,40 +3,91 @@ package org.vaadin.grid.cellrenderers.view;
 import com.vaadin.ui.Grid.AbstractRenderer;
 import org.vaadin.grid.cellrenderers.client.view.SparklineRendererState;
 
+/**
+ * @author Tatu Lund - Vaadin
+ * 
+ */
 public class SparklineRenderer extends AbstractRenderer<Number[]> {
 	
+	/**
+	 * Configuration class for a SparklineRenderer
+	 * The parameters are roughly the same as with
+	 * Sparkline Add-On
+	 * 
+	 */
 	public class SparklineConfiguration {
 
+		/**
+		 * The default constructor with default values
+		 */
 		public SparklineConfiguration() {
 		}
 
+		/**
+		 * Create configuration with specific width and height
+		 * @param width The width
+		 * @param height The height. Note if this is higher than default Grid row
+		 *               height, you need to style your grid row height accordingly.
+		 */
 		public SparklineConfiguration(int width, int height) {
 			getState().width = width;
 			getState().height = height;
 		}
 
+		/**
+		 * Create configuration with specific width and height
+		 * @param width The width
+		 * @param height The height. Note if this is higher than default Grid row
+		 *               height, you need to style your grid row height accordingly.
+		 * @param caption The new caption as String
+		 */
 		public SparklineConfiguration(int width, int height, String caption) {
 			getState().width = width;
 			getState().height = height;
 			getState().caption = caption;
 		}
 			
+		/**
+		 * Enable/disalbe showing normal range
+		 * 
+		 * @param normalRangeVisible Setting
+		 */
 		public void setNormalRangeVisible(boolean normalRangeVisible) {
 			getState().normalRangeVisible = normalRangeVisible;
 		}
 
+		/**
+		 * Enable/disable showing average line
+		 * 
+		 * @param averageVisible Setting
+		 */
 		public void setAverageVisible(boolean averageVisible) {
 			getState().averageVisible = averageVisible;
 		}
 
+		/**
+		 * Enable/disable display of the last value as number on the right side
+		 * 
+		 * @param valueVisible Setting
+		 */
 		public void setValueVisible(boolean valueVisible) {
 			getState().valueVisible = valueVisible;
 		}
 
+		/**
+		 * Enable/disable viewing of the minimum and maximum values on the right
+		 * 
+		 * @param minmaxVisible Setting
+		 */
 		public void setMinMaxVisible(boolean minmaxVisible) {
 			getState().minmaxVisible = minmaxVisible;
 		}
 		
+		/**
+		 * Enable/disable highlight of the minimum and maximum values
+		 * 
+		 * @param minmaxDotsVisible Setting
+		 */
 		public void setMinMaxDotsVisible(boolean minmaxDotsVisible) {
 			getState().minmaxDotsVisible = minmaxDotsVisible;
 		}

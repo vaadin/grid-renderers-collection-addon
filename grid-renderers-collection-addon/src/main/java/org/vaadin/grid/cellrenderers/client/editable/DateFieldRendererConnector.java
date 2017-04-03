@@ -28,6 +28,9 @@ import com.vaadin.shared.ui.datefield.Resolution;
 
 import elemental.json.JsonObject;
 
+/**
+ * @author Tatu Lund - Vaadin
+ */
 @Connect(DateFieldRenderer.class)
 public class DateFieldRendererConnector extends ClickableRendererConnector<Date> {
     DateFieldRendererServerRpc rpc = RpcProxy.create(

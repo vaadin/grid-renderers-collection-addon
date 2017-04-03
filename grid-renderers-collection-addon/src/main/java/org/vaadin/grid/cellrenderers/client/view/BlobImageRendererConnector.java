@@ -12,6 +12,9 @@ import com.vaadin.shared.ui.Connect;
 import org.apache.commons.codec.binary.Base64;
 import org.vaadin.grid.cellrenderers.client.view.SparklineRendererConnector.SparklineClientRenderer;
 
+/**
+ * @author Tatu Lund - Vaadin
+ */
 @Connect(org.vaadin.grid.cellrenderers.view.BlobImageRenderer.class)
 public class BlobImageRendererConnector extends
         AbstractRendererConnector<String> {
@@ -21,16 +24,17 @@ public class BlobImageRendererConnector extends
 
         @Override
         public Image createWidget() {
+        	BlobImageRendererState state = getState();
             Image image = GWT.create(Image.class);
             image.addClickHandler(this);
+            if (state.width > -1) image.setWidth(state.width+"px");
+            if (state.height > -1) image.setWidth(state.height+"px");
             return image;
         }
 
     	@Override
     	public void render(RendererCellReference cell, String imageData, Image image) {
             image.setUrl(imageData);
-//    		cell.getElement().setInnerSafeHtml(
-//    				SafeHtmlUtils.fromSafeConstant(imageData));
     	}
     }
     
@@ -44,4 +48,9 @@ public class BlobImageRendererConnector extends
         return (BlobImageClientRenderer) super.getRenderer();
     }
 
+    @Override
+    public BlobImageRendererState getState() {
+    	return (BlobImageRendererState) super.getState();
+    }
+ 
  }

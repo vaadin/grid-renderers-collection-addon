@@ -32,7 +32,8 @@ public class SimplePojo implements Serializable {
     private Date date;
     private BigDecimal number;
     private Double stars;
-
+    byte[] image;
+    
     public SimplePojo() {
     }
 
@@ -44,6 +45,14 @@ public class SimplePojo implements Serializable {
         this.number = number;
 		this.stars =  (double) stars;
     }
+
+	public byte[] getImage() {
+		return image;
+	}
+	
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
 
 	public Double getStars() {
 		return stars;

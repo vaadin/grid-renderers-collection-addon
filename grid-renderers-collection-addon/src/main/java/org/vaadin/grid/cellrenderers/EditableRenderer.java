@@ -18,6 +18,12 @@ public class EditableRenderer<T> extends ClickableRenderer<T> {
         super(presentationType);
     }
 
+    /**
+     * Superclass for editable renderers (e.g. TextFieldRenderer, DateFieldRenderer)
+     * 
+     * @param presentationType Presentation type
+     * @param nullRepresentation Null presentation
+     */
     public EditableRenderer(Class<T> presentationType, String nullRepresentation) {
         super(presentationType, nullRepresentation);
     }
@@ -30,6 +36,14 @@ public class EditableRenderer<T> extends ClickableRenderer<T> {
         void itemEdited(ItemEditEvent event);
     }
 
+    /**
+     * 
+     * ItemEditEvent is fired when a property value of the item in Grid is
+     * being changed by EditableRenderer. You can use this to event to 
+     * e.g. commit changes to database.
+     *
+     * @param <T> Type parameter
+     */
     public static class ItemEditEvent<T> extends Component.Event {
 
         private final Object itemId;
@@ -45,36 +59,62 @@ public class EditableRenderer<T> extends ClickableRenderer<T> {
             this.newValue = newValue;
         }
 
+        /**
+         * Get ItemId of the item which was edited by a EditableRenderer
+         * 
+         * @return Object, you need to cast this to your type.
+         */
         public Object getItemId() {
             return itemId;
         }
 
-        public Item getItem() {
+        /**
+         * Get Item of the item which was edited by a EditableRenderer
+         * 
+         * @return Item, you need to cast this to your type.
+         */
+       public Item getItem() {
             return item;
         }
 
+       /**
+        * Get propety name which was edited.
+        * 
+        * @return Object, typically a String with most Containers.
+        */
         public Object getColumnPropertyId() {
             return columnPropertyId;
         }
 
-        public T getNewValue() {
+        /**
+         * Get the value that was edited.
+         * 
+         * @return Object, you need to cast this to your property type.
+         */
+       public T getNewValue() {
             return newValue;
         }
     }
 
+    /**
+     * Add a new ItemEditEvent listener
+     * 
+     * @param listener The listener instance to be added
+     */
     public void addItemEditListener(ItemEditListener listener) {
         addListener(ItemEditEvent.class, listener,
                 ItemEditListener.ITEM_EDIT_METHOD);
     }
 
+    /**
+     * Remove the ItemEditEvent listener
+     * 
+     * @param listener The listener to be removed
+     */
     public void removeItemEditListener(ItemEditListener listener) {
         removeListener(ItemEditListener.class, listener);
     }
 
-    /**
-     * Fires a event to all listeners without any event details.
-     *
-     */
     public void fireItemEditEvent(Object itemId, Item item, Object columnPropertyId, T newValue) {
         fireEvent(new ItemEditEvent(getParentGrid(), itemId, item, columnPropertyId, newValue));
     }
