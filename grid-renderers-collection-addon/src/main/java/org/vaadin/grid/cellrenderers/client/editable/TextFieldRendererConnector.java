@@ -23,6 +23,9 @@ import com.vaadin.shared.ui.Connect;
 
 import elemental.json.JsonObject;
 
+/**
+ * @author Tatu Lund - Vaadin
+ */
 @Connect(TextFieldRenderer.class)
 public class TextFieldRendererConnector extends ClickableRendererConnector<String>  {
     TextFieldRendererServerRpc rpc = RpcProxy.create(

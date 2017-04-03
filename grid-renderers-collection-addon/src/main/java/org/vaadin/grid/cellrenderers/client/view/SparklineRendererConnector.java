@@ -19,6 +19,9 @@ import elemental.json.JsonArray;
 import elemental.json.JsonObject;
 import elemental.json.JsonValue;
 
+/**
+ * @author Tatu Lund - Vaadin
+ */
 @Connect(org.vaadin.grid.cellrenderers.view.SparklineRenderer.class)
 public class SparklineRendererConnector extends
         AbstractRendererConnector<double[]> {

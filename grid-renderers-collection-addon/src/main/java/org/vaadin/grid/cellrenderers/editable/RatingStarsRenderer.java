@@ -1,6 +1,5 @@
 package org.vaadin.grid.cellrenderers.editable;
 
-import com.vaadin.ui.renderers.ClickableRenderer;
 import org.vaadin.grid.cellrenderers.EditableRenderer;
 import org.vaadin.grid.cellrenderers.client.editable.RatingStarsRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.RatingStarsRendererState;

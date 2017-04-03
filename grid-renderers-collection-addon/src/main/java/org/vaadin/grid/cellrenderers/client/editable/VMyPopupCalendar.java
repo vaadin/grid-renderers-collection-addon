@@ -10,8 +10,10 @@ import com.vaadin.client.VConsole;
 import com.vaadin.client.ui.VPopupCalendar;
 import com.vaadin.shared.ui.datefield.Resolution;
 
-/*
+/**
+ * 
  * Purpose of this class is to get rid of extra baggage of updateValue which is not needed in renderer usecase
+ * @author Tatu Lund - Vaadin
  */
 public class VMyPopupCalendar extends VPopupCalendar {
 
