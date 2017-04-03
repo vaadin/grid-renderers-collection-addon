@@ -1,5 +1,6 @@
 package org.vaadin.grid.cellrenderers.editable;
 
+import org.vaadin.grid.cellrenderers.EditableRenderer;
 import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererState;
 
@@ -9,7 +10,7 @@ import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.renderers.ClickableRenderer;
 
 
-public class TextFieldRenderer<T> extends ClickableRenderer<T>
+public class TextFieldRenderer<T> extends EditableRenderer<T>
 {
     public TextFieldRenderer()
     {
@@ -31,11 +32,15 @@ public class TextFieldRenderer<T> extends ClickableRenderer<T>
 
                 Class<T> targetType = (Class<T>) cell.getType();
                 Converter<String, T> converter = (Converter<String, T>) getColumn(columnId).getConverter();
+                T value = null;
                 if (converter != null) {
-                	cell.setValue(converter.convertToModel(newValue, targetType, getParentGrid().getLocale()));
+                    value = converter.convertToModel(newValue, targetType, getParentGrid().getLocale());
                 } else if (targetType == String.class) {
-                	cell.setValue(newValue);
+                    value = (T) newValue;
                 }
+
+                cell.setValue(value);
+                fireItemEditEvent(itemId, row, columnPropertyId, value);
             }
 
         });

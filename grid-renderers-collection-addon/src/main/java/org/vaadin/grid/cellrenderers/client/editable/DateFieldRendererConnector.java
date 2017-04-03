@@ -2,6 +2,7 @@ package org.vaadin.grid.cellrenderers.client.editable;
 
 import java.util.Date;
 
+import com.google.gwt.dom.client.Style;
 import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
 
 import com.google.gwt.core.client.GWT; 
@@ -76,6 +77,11 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
         @Override
         public VMyPopupCalendar createWidget() {
             final VMyPopupCalendar dateField = GWT.create(VMyPopupCalendar.class);
+
+            dateField.setWidth("100%");
+
+            dateField.getElement().getStyle().setProperty("border-radius", "0");
+            dateField.getElement().getStyle().setTop(-1, Style.Unit.PX);
 
             dateField.sinkBitlessEvent(BrowserEvents.CHANGE);
             dateField.sinkBitlessEvent(BrowserEvents.CLICK);

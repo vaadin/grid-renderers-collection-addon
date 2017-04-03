@@ -17,6 +17,7 @@ import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
 import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
 import org.vaadin.grid.cellrenderers.editable.RatingStarsRenderer;
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
+import org.vaadin.grid.cellrenderers.view.BlobImageRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer.SparklineConfiguration;
 
@@ -56,7 +57,8 @@ public class DemoUI extends UI {
     		final Number[] numbers;
     		final Random rand;
     		Double stars;
-
+    		byte[] image;
+    		
     		public MyPojo(int i) {
     			id = i;
     			numbers = new Number[60];
@@ -64,6 +66,14 @@ public class DemoUI extends UI {
     			stars =  (double) rand.nextInt(10) / 2.0;
     		}
 
+    		public byte[] getImage() {
+    			return image;
+    		}
+    		
+    		public void setImage(byte[] image) {
+    			this.image = image;
+    		}
+    		
     		public Double getStars() {
     			return stars;
     		}
@@ -110,7 +120,8 @@ public class DemoUI extends UI {
     		grid.setSizeFull();
     		grid.getColumn("numbers").setRenderer(sparkline);
     		grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5,true));
-    		grid.setColumns("id", "foo", "bar", "stars", "numbers");
+    		grid.getColumn("image").setRenderer(new BlobImageRenderer());
+    		grid.setColumns("id", "foo", "bar", "stars", "numbers", "image");
     		return grid;
     	}
 

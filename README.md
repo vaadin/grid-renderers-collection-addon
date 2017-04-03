@@ -8,7 +8,7 @@ Try the add-on demo at *TBD*
 
 ## Download release
 
-Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to http://vaadin.com/addon/grid-renderers-collection-addon
+Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to https://vaadin.com/directory#!addon/grid-renderers-collection-for-vaadin7
 
 ## Building and running demo
 
@@ -54,6 +54,10 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
 ### Version 0.94
 * RatingStarsRenderer added
 * Updated the demo to use RatingStarsRenderer
+<<<<<<< HEAD
+=======
+* Vaadin version advanced to 7.6.8
+>>>>>>> Vaadin/master
 
 ### Version 0.93
 * Vaadin version advanced to 7.6.7
@@ -96,6 +100,7 @@ Grid Renderers collection is initially written by Ilia Motornyi(elmot@vaadin.com
 
 DateFieldRenderer, TextFieldRenderer, SparklineRenderer & RatingStarsRenderer Contributed by Tatu Lund(tatu@vaadin.com)
 
+
 # Developer Guide
 
 ## Getting started
@@ -127,7 +132,11 @@ SparklineConfiguration class inside, which controls various Sparkline configurat
 shared state. Most of the settings have immediate effect, see the demo.
 
 ### RatingStarsRenderer
+<<<<<<< HEAD
 RatingStarsRenderer is based on Widget in RatingStars add-on by Teemu Pöntelin. You can use 
+=======
+RatingStarsRenderer is based on Widget in RatingStars add-on by Teemu P&ouml;ntelin. You can use 
+>>>>>>> Vaadin/master
 RatingStarsRenderer both as a view only or editable field renderer. The max number of stars can
 be also configured.
 
