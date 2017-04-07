@@ -3,8 +3,10 @@ package org.vaadin.grid.cellrenderers.client.editable;
 import java.util.Date;
 
 import com.google.gwt.dom.client.Style;
-import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
 
+import org.vaadin.grid.cellrenderers.client.editable.common.CellId;
+import org.vaadin.grid.cellrenderers.client.editable.common.EditableRendererClientUtil;
+import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.*;
@@ -22,7 +24,6 @@ import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler;
 import com.vaadin.client.renderers.Renderer;
 import com.vaadin.client.ui.VOverlay;
 import com.vaadin.client.widget.grid.RendererCellReference;
-import com.vaadin.client.widgets.Grid;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.shared.ui.grid.renderers.RendererClickRpc;
@@ -35,12 +36,9 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 
 	public class DateFieldClientRenderer extends ClickableRenderer<Date, VMyPopupCalendar> {
 
-		private static final String ROW_KEY_PROPERTY = "rowKey";
-		private static final String COLUMN_ID_PROPERTY = "columnId";
-
 		private boolean doesTextFieldContainValue(VMyPopupCalendar dateField, Date value) {
-			if (dateField	.getDate()
-							.equals(value)) {
+			if (dateField.getDate()
+				.equals(value)) {
 				return true;
 			}
 			return false;
@@ -53,24 +51,36 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 
 			getState().value = selectedValue;
 
-			if (e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell.getRow())) {
-				e.setPropertyString(ROW_KEY_PROPERTY, getRowKey((JsonObject) cell.getRow()));
+			if (e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell
+				.getRow())) {
+				e.setPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY, getRowKey((JsonObject) cell.getRow()));
 			}
 			// Generics issue, need a correctly typed column.
 
-			if (e.getPropertyString(COLUMN_ID_PROPERTY) != getColumnId(getGrid().getColumn(cell.getColumnIndex()))) {
-				e.setPropertyString(COLUMN_ID_PROPERTY, getColumnId(getGrid().getColumn(cell.getColumnIndex())));
+			if (e
+				.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY) != getColumnId(EditableRendererClientUtil
+					.getGridFromParent(getParent())
+					.getColumn(cell.getColumnIndex()))) {
+				e.setPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY,
+									getColumnId(EditableRendererClientUtil.getGridFromParent(getParent())
+										.getColumn(cell.getColumnIndex())));
 			}
 
 			// Setting and showing the date from the Grid
 			dateField.setCurrentDate(selectedValue);
 			dateField.buildDate();
 
-			if (dateField.isEnabled() != cell	.getColumn()
-												.isEditable()) {
-				dateField.setEnabled(cell	.getColumn()
-											.isEditable());
+			if (!cell.getColumn()
+				.isEditable()
+					|| !cell.getGrid()
+						.isEnabled()) {
+				dateField.setEnabled(false);
+				return;
 			}
+
+			DateFieldRendererConnector.this.rpc
+				.onRender(new CellId(e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
+						e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY)));
 		}
 
 		@Override
@@ -79,12 +89,12 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 
 			dateField.setWidth("100%");
 
-			dateField	.getElement()
-						.getStyle()
-						.setProperty("border-radius", "0");
-			dateField	.getElement()
-						.getStyle()
-						.setTop(-1, Style.Unit.PX);
+			dateField.getElement()
+				.getStyle()
+				.setProperty("border-radius", "0");
+			dateField.getElement()
+				.getStyle()
+				.setTop(-1, Style.Unit.PX);
 
 			// Configuring the popup calendar panel for Day resolution
 			// This is done in similar fashion than the regular connector does
@@ -97,8 +107,8 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 				dateField.calendar.setResolution(dateField.getCurrentResolution());
 				if (dateField.calendar.getDate() != null && dateField.getCurrentDate() != null) {
 					hasSelectedDate = true;
-					dateField.calendar.setDate((Date) dateField	.getCurrentDate()
-																.clone());
+					dateField.calendar.setDate((Date) dateField.getCurrentDate()
+						.clone());
 				}
 				// force re-render when changing resolution only
 				dateField.calendar.renderCalendar(hasSelectedDate);
@@ -127,8 +137,9 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 					// VMyPopupCalendar dateField = (VMyPopupCalendar)
 					// changeEvent.getSource();
 					Element e = dateField.getElement();
-					DateFieldRendererConnector.this.rpc.onChange(	e.getPropertyString(ROW_KEY_PROPERTY),
-																	e.getPropertyString(COLUMN_ID_PROPERTY),
+					DateFieldRendererConnector.this.rpc.onChange(
+																	e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
+																	e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
 																	dateField.getDate());
 				}
 			}, ChangeEvent.getType());
@@ -138,9 +149,10 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 				public void onClick(ClickEvent event) {
 					event.stopPropagation();
 					Element e = dateField.getElement();
-					getRpcProxy(RendererClickRpc.class).click(	e.getPropertyString(ROW_KEY_PROPERTY),
-																e.getPropertyString(COLUMN_ID_PROPERTY),
-																MouseEventDetailsBuilder.buildMouseEventDetails(event.getNativeEvent()));
+					getRpcProxy(RendererClickRpc.class)
+						.click(	e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
+								e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
+								MouseEventDetailsBuilder.buildMouseEventDetails(event.getNativeEvent()));
 				}
 			}, ClickEvent.getType());
 
@@ -160,10 +172,22 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 				public void onClose(CloseEvent<PopupPanel> closeEvent) {
 					VOverlay popup = (VOverlay) closeEvent.getSource();
 					Element e = dateField.getElement();
-					DateFieldRendererConnector.this.rpc.onChange(	e.getPropertyString(ROW_KEY_PROPERTY),
-																	e.getPropertyString(COLUMN_ID_PROPERTY),
+					DateFieldRendererConnector.this.rpc.onChange(
+																	e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
+																	e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
 																	dateField.calendar.getDate());
 				}
+			});
+
+			registerRpc(DateFieldRendererClientRpc.class, new DateFieldRendererClientRpc() {
+
+				@Override
+				public void setEnabled(boolean enabled, CellId id) {
+					if (id.equals(EditableRendererClientUtil.getCellId(dateField))) {
+						dateField.setEnabled(enabled);
+					}
+				}
+
 			});
 
 			return dateField;
@@ -188,10 +212,6 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 	@Override
 	protected HandlerRegistration addClickHandler(RendererClickHandler<JsonObject> handler) {
 		return getRenderer().addClickHandler(handler);
-	}
-
-	private Grid<JsonObject> getGrid() {
-		return ((GridConnector) getParent()).getWidget();
 	}
 
 }
