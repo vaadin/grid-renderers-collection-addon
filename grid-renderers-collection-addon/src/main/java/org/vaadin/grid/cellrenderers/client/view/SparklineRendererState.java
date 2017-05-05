@@ -4,6 +4,9 @@ import java.util.Date;
 
 import com.vaadin.shared.communication.SharedState;
 
+/**
+ * @author Tatu Lund - Vaadin
+ */
 public class SparklineRendererState extends SharedState{
 	public int width = 75;
 	public int height = 16;

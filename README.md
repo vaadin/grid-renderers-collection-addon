@@ -8,7 +8,7 @@ Try the add-on demo at *TBD*
 
 ## Download release
 
-Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to http://vaadin.com/addon/grid-renderers-collection-addon
+Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to https://vaadin.com/directory#!addon/grid-renderers-collection-for-vaadin7
 
 ## Building and running demo
 
@@ -51,9 +51,18 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 0.95
+* BlobImageRenderer added
+* Added ItemEditEvent for EditableRenderers
+* Tested with 7.7.8
+* Updated demo
+* Added JavaDocs
+
 ### Version 0.94
 * RatingStarsRenderer added
 * Updated the demo to use RatingStarsRenderer
+* Vaadin version advanced to 7.6.8
+
 
 ### Version 0.93
 * Vaadin version advanced to 7.6.7
@@ -92,9 +101,11 @@ Contributions are welcome, but there are no guarantees that they are accepted as
 
 Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.txt.
 
-Grid Renderers collection is initially written by Ilia Motornyi(elmot@vaadin.com)
+Grid Renderers collection is initially written by Ilia Motornyi 
 
-DateFieldRenderer, TextFieldRenderer, SparklineRenderer & RatingStarsRenderer Contributed by Tatu Lund(tatu@vaadin.com)
+BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, SparklineRenderer & RatingStarsRenderer Contributed by Tatu Lund (tatu@vaadin.com corresponding author)
+
+ItemEditEvent contributed by Mikael Granqvist
 
 # Developer Guide
 
@@ -107,6 +118,10 @@ Here is a simple example on how to try out the add-on component:
 For a more comprehensive examples, see org.vaadin.grid.cellrenderers.demo.DemoUI
 
 ## Features
+
+### BlobImageRenderer
+Render small images directly from byte[] of the bean. Useful when your read image as Blob field
+from SQL database. Note, use only small images to avoid excess overhead.
 
 ### CheckboxRenderer
 Single-click editor for boolean columns - Editor aware. Most suitable for unbuffered Grid(Vaadin 7.6+)
@@ -127,7 +142,9 @@ SparklineConfiguration class inside, which controls various Sparkline configurat
 shared state. Most of the settings have immediate effect, see the demo.
 
 ### RatingStarsRenderer
+
 RatingStarsRenderer is based on Widget in RatingStars add-on by Teemu Pöntelin. You can use 
+
 RatingStarsRenderer both as a view only or editable field renderer. The max number of stars can
 be also configured.
 

@@ -5,12 +5,12 @@
 	<groupId>com.vaadin</groupId>
 	<artifactId>grid-renderers-collection-addon</artifactId>
 	<packaging>jar</packaging>
-	<version>0.94</version>
+	<version>0.95</version>
 	<name>Grid Renderers collection For Vaadin7</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.6.7</vaadin.version>
+		<vaadin.version>7.7.8</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 
 		<!-- ZIP Manifest fields -->
@@ -111,6 +111,11 @@
 			<artifactId>junit</artifactId>
 			<version>4.8.1</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.10</version>
 		</dependency>
 	</dependencies>
 

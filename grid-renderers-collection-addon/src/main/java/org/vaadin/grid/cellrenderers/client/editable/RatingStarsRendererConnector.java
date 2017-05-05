@@ -22,6 +22,9 @@ import elemental.json.JsonObject;
 
 import org.vaadin.teemu.ratingstars.gwt.client.RatingStarsWidget;
 
+/**
+ * @author Tatu Lund - Vaadin
+ */
 @Connect(org.vaadin.grid.cellrenderers.editable.RatingStarsRenderer.class)
 public class RatingStarsRendererConnector extends ClickableRendererConnector<Double> {
     RatingStarsRendererServerRpc rpc = RpcProxy.create(
