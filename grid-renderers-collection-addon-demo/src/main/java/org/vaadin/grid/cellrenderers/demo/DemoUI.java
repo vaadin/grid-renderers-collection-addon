@@ -16,6 +16,7 @@ import com.vaadin.data.util.converter.StringToBooleanConverter;
 import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
 import org.vaadin.grid.cellrenderers.EditableRenderer.ItemEditEvent;
 import org.vaadin.grid.cellrenderers.EditableRenderer.ItemEditListener;
+import org.vaadin.grid.cellrenderers.editable.BooleanSwitchRenderer;
 import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
 import org.vaadin.grid.cellrenderers.editable.RatingStarsRenderer;
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
@@ -38,7 +39,9 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
+
 import org.apache.commons.codec.binary.Base64;
+
 import javax.servlet.annotation.WebServlet;
 
 @Theme("valo")
@@ -212,6 +215,7 @@ public class DemoUI extends UI {
 			Grid.Column yes = grid.getColumn("yes");
 			yes.setRenderer(new CheckboxRenderer());
 			yes.setEditable(true);
+			grid.getColumn("image").setEditable(false);
     		grid.getColumn("image").setRenderer(new BlobImageRenderer(30,30,"image/png"));
  
 			Grid.Column truth = grid.getColumn("truth");
@@ -251,21 +255,16 @@ public class DemoUI extends UI {
 			grid.setColumns("description","stars","truth","date","number");
 			grid.setSizeFull();
 			grid.setEditorEnabled(false);
-			Grid.Column yes = grid.getColumn("yes");
     
-			Grid.Column truth = grid.getColumn("truth");
-			truth.setRenderer(new HtmlRenderer(), new StringToBooleanConverter() {
-                @Override
-                protected String getTrueString() {
-                    return FontAwesome.CHECK_CIRCLE_O.getHtml();
-                }
-
-                @Override
-                protected String getFalseString() {
-                    return FontAwesome.CIRCLE_O.getHtml();
-                }
-            });
-			truth.setEditable(false);
+			BooleanSwitchRenderer booleanRenderer = new BooleanSwitchRenderer("True","False");
+			booleanRenderer.addItemEditListener(new ItemEditListener() {
+				@Override
+				public void itemEdited(ItemEditEvent event) {
+					Notification.show("Property " + event.getColumnPropertyId() + " edited with value " + event.getNewValue().toString());				
+				}
+				
+			} );
+			grid.getColumn("truth").setRenderer(booleanRenderer);
 
 			TextFieldRenderer<String> textFieldRenderer = new TextFieldRenderer<String>();
 			textFieldRenderer.addItemEditListener(new ItemEditListener() {
