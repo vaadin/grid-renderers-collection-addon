@@ -51,6 +51,12 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 0.96
+* BooleanSwitchRenderer added
+* CheckboxRenderer updated. Label configuration options added.
+* Fixed and updated demo
+* Added JavaDocs
+
 ### Version 0.95
 * BlobImageRenderer added
 * Added ItemEditEvent for EditableRenderers
@@ -124,7 +130,10 @@ Render small images directly from byte[] of the bean. Useful when your read imag
 from SQL database. Note, use only small images to avoid excess overhead.
 
 ### CheckboxRenderer
-Single-click editor for boolean columns - Editor aware. Most suitable for unbuffered Grid(Vaadin 7.6+)
+Single-click editor for boolean columns - Editor aware. Most suitable for unbuffered Grid(Vaadin 7.6+) Label options can be configured for localization.
+
+### BooleanSwitchRenderer
+Alternative version of CheckboxRenderer similar to editable renderers.
 
 ### DateFieldRenderer
 Inline Dates editor.

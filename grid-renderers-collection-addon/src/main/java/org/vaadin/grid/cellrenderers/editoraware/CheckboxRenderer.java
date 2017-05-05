@@ -15,6 +15,8 @@
  */
 package org.vaadin.grid.cellrenderers.editoraware;
 
+import org.vaadin.grid.cellrenderers.client.editoraware.CheckboxRendererState;
+
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -27,8 +29,33 @@ import com.vaadin.ui.renderers.ClickableRenderer;
  * @author Vaadin Ltd
  */
 public class CheckboxRenderer extends ClickableRenderer<Boolean> {
+
+	/**
+	 * Default constructor. Header caption is used as Checkbox label when value is false
+	 */
     public CheckboxRenderer() {
-        super(Boolean.class, null);
+    	super(Boolean.class);
+    	
+    	setupCheckboxRenderer();
+    }
+    
+    /**
+     * Constructor with configuration options for Checkbox label. Can be used for localization etc.
+     * 
+     * @param txtFalse Optional text to be shown in Checkbox label when value is false.
+     * @param txtTrue Text to be shown in Checkbox label when value is true. If null, header label will be used.
+     */
+    public CheckboxRenderer(String txtFalse, String txtTrue) {
+    	super(Boolean.class);
+
+    	getState().txtFalse = txtFalse;
+    	getState().txtTrue = txtTrue;
+    	
+    	setupCheckboxRenderer();
+    }
+
+	
+	public void setupCheckboxRenderer() {
         addClickListener(new RendererClickListener() {
             @Override
             public void click(RendererClickEvent event) {
@@ -42,8 +69,8 @@ public class CheckboxRenderer extends ClickableRenderer<Boolean> {
                             grid.saveEditor();
                             grid.cancelEditor();
                         }
-                        Container.Indexed containerDataSource = grid.getContainerDataSource();
-                        Property itemProperty = containerDataSource.getItem(itemId).getItemProperty(propertyId);
+                        @SuppressWarnings("unchecked")
+						Property<Boolean> itemProperty = grid.getContainerDataSource().getItem(itemId).getItemProperty(propertyId);
                         itemProperty.setValue(!Boolean.TRUE.equals(itemProperty.getValue()));
                         grid.editItem(itemId);
                     } catch (FieldGroup.CommitException e) {
@@ -55,4 +82,9 @@ public class CheckboxRenderer extends ClickableRenderer<Boolean> {
         });
     }
 
+    @Override
+    protected CheckboxRendererState getState() {
+    	return (CheckboxRendererState) super.getState();
+    }
+ 
 }
