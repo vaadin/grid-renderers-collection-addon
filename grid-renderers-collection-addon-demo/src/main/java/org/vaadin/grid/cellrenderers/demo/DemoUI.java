@@ -2,6 +2,8 @@ package org.vaadin.grid.cellrenderers.demo;
 
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -12,12 +14,15 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.converter.StringToBigDecimalConverter;
 import com.vaadin.data.util.converter.StringToBooleanConverter;
+import com.vaadin.data.util.converter.StringToIntegerConverter;
 
 import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
 import org.vaadin.grid.cellrenderers.EditableRenderer.ItemEditEvent;
 import org.vaadin.grid.cellrenderers.EditableRenderer.ItemEditListener;
+import org.vaadin.grid.cellrenderers.editable.BooleanSwitchRenderer;
 import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
 import org.vaadin.grid.cellrenderers.editable.RatingStarsRenderer;
+import org.vaadin.grid.cellrenderers.editable.SimpleSelectRenderer;
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 import org.vaadin.grid.cellrenderers.view.BlobImageRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
@@ -38,7 +43,9 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
+
 import org.apache.commons.codec.binary.Base64;
+
 import javax.servlet.annotation.WebServlet;
 
 @Theme("valo")
@@ -193,9 +200,9 @@ public class DemoUI extends UI {
 		public CheckBoxDemo() {		
 			Random random = new Random(4837291937l);
 			BeanItemContainer<SimplePojo> container = new BeanItemContainer<SimplePojo>(SimplePojo.class);
-			SimplePojo bean1 = new SimplePojo(0, "Me", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)));
-			SimplePojo bean2 = new SimplePojo(1, "You", false, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)));
-			SimplePojo bean3 = new SimplePojo(2, "He", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)));
+			SimplePojo bean1 = new SimplePojo(0, "Me", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5)));
+			SimplePojo bean2 = new SimplePojo(1, "You", false, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5)));
+			SimplePojo bean3 = new SimplePojo(2, "He", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5)));
 			container.addBean(bean1);
 			container.addBean(bean2);
 			container.addBean(bean3);
@@ -212,6 +219,7 @@ public class DemoUI extends UI {
 			Grid.Column yes = grid.getColumn("yes");
 			yes.setRenderer(new CheckboxRenderer());
 			yes.setEditable(true);
+			grid.getColumn("image").setEditable(false);
     		grid.getColumn("image").setRenderer(new BlobImageRenderer(30,30,"image/png"));
  
 			Grid.Column truth = grid.getColumn("truth");
@@ -244,28 +252,23 @@ public class DemoUI extends UI {
 			Random random = new Random(4837291937l);
 			BeanItemContainer<SimplePojo> container = new BeanItemContainer<SimplePojo>(SimplePojo.class);
 			for (int i=0;i<1000;i++) {
-				container.addBean(new SimplePojo(i, "Bean", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5))));
+				container.addBean(new SimplePojo(i, "Bean", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5))));
 			}
 
 			Grid grid = new Grid(container);
-			grid.setColumns("description","stars","truth","date","number");
+			grid.setColumns("description","stars","truth","date","number","choice");
 			grid.setSizeFull();
 			grid.setEditorEnabled(false);
-			Grid.Column yes = grid.getColumn("yes");
     
-			Grid.Column truth = grid.getColumn("truth");
-			truth.setRenderer(new HtmlRenderer(), new StringToBooleanConverter() {
-                @Override
-                protected String getTrueString() {
-                    return FontAwesome.CHECK_CIRCLE_O.getHtml();
-                }
-
-                @Override
-                protected String getFalseString() {
-                    return FontAwesome.CIRCLE_O.getHtml();
-                }
-            });
-			truth.setEditable(false);
+			BooleanSwitchRenderer booleanRenderer = new BooleanSwitchRenderer("True","False");
+			booleanRenderer.addItemEditListener(new ItemEditListener() {
+				@Override
+				public void itemEdited(ItemEditEvent event) {
+					Notification.show("Property " + event.getColumnPropertyId() + " edited with value " + event.getNewValue().toString());				
+				}
+				
+			} );
+			grid.getColumn("truth").setRenderer(booleanRenderer);
 
 			TextFieldRenderer<String> textFieldRenderer = new TextFieldRenderer<String>();
 			textFieldRenderer.addItemEditListener(new ItemEditListener() {
@@ -289,6 +292,17 @@ public class DemoUI extends UI {
 			grid.getColumn("date").setRenderer(new DateFieldRenderer());
 			grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5,false));
 			
+			MyStringToIntegerConverter myConverter = new MyStringToIntegerConverter();
+			grid.getColumn("choice").setConverter(myConverter);
+			SimpleSelectRenderer<Integer> choiceFieldRenderer = new SimpleSelectRenderer<Integer>(Arrays.asList(1,2,3,4,5),myConverter,"Select a number 1 to 5 fromt the drop down");
+			choiceFieldRenderer.addItemEditListener(new ItemEditListener() {
+				@Override
+				public void itemEdited(ItemEditEvent event) {
+					Notification.show("Property " + event.getColumnPropertyId() + " edited with value " + event.getNewValue().toString());				
+				}
+				
+			} );
+			grid.getColumn("choice").setRenderer(choiceFieldRenderer);			
 			setStyleName("demoContentLayout");
 			setSizeFull();
 			addComponent(grid);

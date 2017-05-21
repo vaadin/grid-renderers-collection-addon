@@ -9,18 +9,19 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.renderers.ClickableRenderer;
 
-
-public class TextFieldRenderer<T> extends EditableRenderer<T>
-{
-    public TextFieldRenderer()
-    {
+/**
+ * 
+ * @author Tatu Lund
+ *
+ */
+public class TextFieldRenderer<T> extends EditableRenderer<T> {
+    public TextFieldRenderer() {
         super((Class<T>) Object.class);
      
-        registerRpc(new TextFieldRendererServerRpc()
-        {
+        registerRpc(new TextFieldRendererServerRpc() {
 
-            public void onChange(String rowKey, String columnId, String newValue)
-            {
+            @SuppressWarnings("unchecked")
+			public void onChange(String rowKey, String columnId, String newValue) {
 
                 Object itemId = getItemId(rowKey);
                 Object columnPropertyId = getColumn(columnId).getPropertyId();
@@ -30,8 +31,10 @@ public class TextFieldRenderer<T> extends EditableRenderer<T>
                 @SuppressWarnings("unchecked")
                 Property<Object> cell = (Property<Object>) row.getItemProperty(columnPropertyId);
 
-                Class<T> targetType = (Class<T>) cell.getType();
-                Converter<String, T> converter = (Converter<String, T>) getColumn(columnId).getConverter();
+                @SuppressWarnings("unchecked")
+				Class<T> targetType = (Class<T>) cell.getType();
+                @SuppressWarnings("unchecked")
+				Converter<String, T> converter = (Converter<String, T>) getColumn(columnId).getConverter();
                 T value = null;
                 if (converter != null) {
                     value = converter.convertToModel(newValue, targetType, getParentGrid().getLocale());
@@ -48,8 +51,7 @@ public class TextFieldRenderer<T> extends EditableRenderer<T>
 
 
     @Override
-    protected TextFieldRendererState getState()
-    {
+    protected TextFieldRendererState getState() {
     	return (TextFieldRendererState) super.getState();
     }
     

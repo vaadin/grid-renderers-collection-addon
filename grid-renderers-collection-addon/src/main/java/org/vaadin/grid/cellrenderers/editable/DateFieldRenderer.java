@@ -11,6 +11,11 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.ui.renderers.ClickableRenderer;
 
+/**
+ * 
+ * @author Tatu Lund
+ *
+ */
 public class DateFieldRenderer extends EditableRenderer<Date>
 {
     public DateFieldRenderer()

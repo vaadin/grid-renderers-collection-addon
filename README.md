@@ -1,6 +1,9 @@
 # Grid Renderers Add-on for Vaadin 7
 
-Grid Renderers collection is a set of renderers for Vaadin 7 Grid.
+Grid Renderers collection is a set of renderers for Vaadin 7 Grid. It is possible to use Table as editable
+canvas with components in Table cells. With help of this collection it is possible to achieve similar
+functionality with Grid component. In addition to Editable renderers this collection has couple of renderers
+for advanced data presentation too.
 
 ## Online demo
 
@@ -50,6 +53,17 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
 
  
 ## Release notes
+
+### Version 0.97
+* SimpleSelectRenderer added
+* Updated demo
+* Added JavaDocs
+
+### Version 0.96
+* BooleanSwitchRenderer added
+* CheckboxRenderer updated. Label configuration options added.
+* Fixed and updated demo
+* Added JavaDocs
 
 ### Version 0.95
 * BlobImageRenderer added
@@ -119,12 +133,19 @@ For a more comprehensive examples, see org.vaadin.grid.cellrenderers.demo.DemoUI
 
 ## Features
 
+### SimpleSelectRenderer
+Select a value with popup selector from small set of values. This Renderer is like ComboBox, but much
+simpler. With Converter it is possible to map non String values to String. See demo.
+
 ### BlobImageRenderer
 Render small images directly from byte[] of the bean. Useful when your read image as Blob field
 from SQL database. Note, use only small images to avoid excess overhead.
 
 ### CheckboxRenderer
-Single-click editor for boolean columns - Editor aware. Most suitable for unbuffered Grid(Vaadin 7.6+)
+Single-click editor for boolean columns - Editor aware. Most suitable for unbuffered Grid(Vaadin 7.6+) Label options can be configured for localization.
+
+### BooleanSwitchRenderer
+Alternative version of CheckboxRenderer similar to editable renderers.
 
 ### DateFieldRenderer
 Inline Dates editor.

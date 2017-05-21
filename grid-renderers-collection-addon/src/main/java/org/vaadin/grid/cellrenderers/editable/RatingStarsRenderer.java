@@ -6,6 +6,11 @@ import org.vaadin.grid.cellrenderers.client.editable.RatingStarsRendererState;
 import com.vaadin.data.Property;
 import com.vaadin.data.Item;
 
+/**
+ * 
+ * @author Tatu Lund
+ *
+ */
 public class RatingStarsRenderer extends EditableRenderer<Double> {
 
     public RatingStarsRenderer(int stars, boolean readOnly) {
