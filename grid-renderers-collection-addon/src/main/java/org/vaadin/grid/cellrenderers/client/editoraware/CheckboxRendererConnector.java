@@ -32,7 +32,7 @@ import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
 /**
  * Provides various helper methods for connectors. Meant for internal use.
  *
- * @author Vaadin Ltd
+ * @author Ilya Motorny, Tatu Lund
  */
 @Connect(CheckboxRenderer.class)
 public class CheckboxRendererConnector extends ClickableRendererConnector<Boolean> {

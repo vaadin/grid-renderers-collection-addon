@@ -9,7 +9,11 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.renderers.ClickableRenderer;
 
-
+/**
+ * 
+ * @author Tatu Lund
+ *
+ */
 public class TextFieldRenderer<T> extends EditableRenderer<T> {
     public TextFieldRenderer() {
         super((Class<T>) Object.class);

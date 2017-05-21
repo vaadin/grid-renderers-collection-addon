@@ -32,16 +32,18 @@ public class SimplePojo implements Serializable {
     private Date date;
     private BigDecimal number;
     private Double stars;
-    byte[] image;
+    private Integer choice;
+    private byte[] image;
     
     public SimplePojo() {
     }
 
-    public SimplePojo(long id, String description, boolean yes, Date date, BigDecimal number, Double stars) {
+    public SimplePojo(long id, String description, boolean yes, Date date, BigDecimal number, Double stars, Integer choice) {
         this.id = id;
         this.description = description;
         this.yes = yes;
         this.date = date;
+        this.choice = choice;
         this.number = number;
 		this.stars =  (double) stars;
     }
@@ -84,6 +86,14 @@ public class SimplePojo implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+    
+    public Integer getChoice() {
+        return choice;
+    }
+
+    public void setChoice(Integer choice) {
+        this.choice = choice;
     }
     
     public String getDescription() {

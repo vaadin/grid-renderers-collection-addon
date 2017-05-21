@@ -26,7 +26,7 @@ import com.vaadin.ui.renderers.ClickableRenderer;
 /**
  * Provides various helper methods for connectors. Meant for internal use.
  *
- * @author Vaadin Ltd
+ * @author Ilya Motorny, Tatu Lund
  */
 public class CheckboxRenderer extends ClickableRenderer<Boolean> {
 
