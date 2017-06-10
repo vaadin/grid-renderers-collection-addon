@@ -129,7 +129,8 @@ public class DemoUI extends UI {
     		Grid grid = new Grid(container);
     		grid.setSizeFull();
     		grid.getColumn("numbers").setRenderer(sparkline);
-    		grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5,true));
+    		grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5));
+    		grid.getColumn("stars").setEditable(false);
     		grid.setColumns("id", "foo", "bar", "stars", "numbers");
     		return grid;
     	}
@@ -290,7 +291,7 @@ public class DemoUI extends UI {
 			} );
 			grid.getColumn("number").setRenderer(decimalFieldRenderer);
 			grid.getColumn("date").setRenderer(new DateFieldRenderer());
-			grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5,false));
+			grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5));
 			
 			MyStringToIntegerConverter myConverter = new MyStringToIntegerConverter();
 			grid.getColumn("choice").setConverter(myConverter);

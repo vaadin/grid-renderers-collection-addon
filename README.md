@@ -54,6 +54,11 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 0.98
+* Fixed bug in CheckBoxRenderer when used with buffered mode
+* Fixed BooleanSwitchRenderer tacticle and feel issue with IE and slow computers
+* Changed RatingStarsRenderer to be editable based on Column.setEditable(), added width / height settings
+
 ### Version 0.97
 * SimpleSelectRenderer added
 * Updated demo
@@ -117,7 +122,7 @@ Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.t
 
 Grid Renderers collection is initially written by Ilia Motornyi 
 
-BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, SparklineRenderer & RatingStarsRenderer Contributed by Tatu Lund (tatu@vaadin.com corresponding author)
+SimpleSelectRenderer, BooleanSwitchRenderer, BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, SparklineRenderer & RatingStarsRenderer Contributed by Tatu Lund (tatu@vaadin.com corresponding author)
 
 ItemEditEvent contributed by Mikael Granqvist
 

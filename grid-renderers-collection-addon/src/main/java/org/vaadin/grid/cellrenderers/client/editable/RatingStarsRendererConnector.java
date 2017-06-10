@@ -39,13 +39,20 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
    	 	public RatingStarsWidget createWidget() {
    	 		RatingStarsWidget ratingStars = GWT.create(RatingStarsWidget.class);
 
+   	 		RatingStarsRendererState state = getState();
+   	 		ratingStars.setWidth("100%");
+            if (state.height > -1) ratingStars.setWidth(state.height+"px");
+            else ratingStars.setHeight("100%");
+            if (state.width > -1) ratingStars.setWidth(state.width+"px");
+            else ratingStars.setWidth("100%");
+
             ratingStars.sinkBitlessEvent(BrowserEvents.CLICK);
             ratingStars.sinkBitlessEvent(BrowserEvents.MOUSEDOWN);
    	 		
             // Set widget configuration
-            boolean readOnly = getState().readOnly;          
+            boolean readOnly = state.readOnly;          
             ratingStars.setReadOnly(readOnly);
-            ratingStars.setMaxValue(getState().stars);
+            ratingStars.setMaxValue(state.stars);
             
             // Set RPC if we are in editable mode
             if (!readOnly) ratingStars.addClickHandler(new ClickHandler() {
@@ -76,6 +83,7 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
    	 	public void render(RendererCellReference cell, Double data,
     	            RatingStarsWidget widget) {
 
+   	 		widget.setReadOnly(!(cell.getColumn().isEditable() && cell.getGrid().isEnabled()));
    	 		Element e = widget.getElement();
    	 		
             getState().value = data;

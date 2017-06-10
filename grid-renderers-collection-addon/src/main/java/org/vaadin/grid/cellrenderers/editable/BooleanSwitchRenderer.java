@@ -6,6 +6,7 @@ import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererState;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
+import com.vaadin.server.Page;
 
 /**
  * @author Tatu Lund
@@ -13,7 +14,7 @@ import com.vaadin.data.Property;
 public class BooleanSwitchRenderer extends EditableRenderer<Boolean> {
 
     private long lastMillis = 0;
-    private static long DOUBLE_CLICK_DETECTION_MS = 100;
+    private long DOUBLE_CLICK_DETECTION_MS = 200;
 
 	/**
 	 * Default constructor. Header caption is used as Checkbox label when value is false
@@ -40,6 +41,10 @@ public class BooleanSwitchRenderer extends EditableRenderer<Boolean> {
     }
     
     private void setupBooleanSwithcRenderer() {
+    	if (Page.getCurrent().getWebBrowser().isIE() || Page.getCurrent().getWebBrowser().isEdge()) {
+    		DOUBLE_CLICK_DETECTION_MS = 500;
+    	}
+    	
     	addClickListener(new RendererClickListener() {
     		@Override
     		public void click(RendererClickEvent event) {
@@ -67,7 +72,7 @@ public class BooleanSwitchRenderer extends EditableRenderer<Boolean> {
     private boolean isDoubleClick() {
         long diff = System.currentTimeMillis() - lastMillis;
         lastMillis = System.currentTimeMillis();
-
+        
         if(diff > DOUBLE_CLICK_DETECTION_MS) {
             return false;
         } else {

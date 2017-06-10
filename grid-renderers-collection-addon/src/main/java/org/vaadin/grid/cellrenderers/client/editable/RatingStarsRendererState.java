@@ -9,4 +9,6 @@ public class RatingStarsRendererState extends SharedState {
 	public int stars = 0;
 	public Double value = null;
 	public boolean readOnly = true;
+	public int width = -1;
+	public int height = -1;
 }

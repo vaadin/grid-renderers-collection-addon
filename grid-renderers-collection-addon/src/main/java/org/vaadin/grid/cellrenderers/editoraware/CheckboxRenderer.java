@@ -60,6 +60,10 @@ public class CheckboxRenderer extends ClickableRenderer<Boolean> {
             @Override
             public void click(RendererClickEvent event) {
                 Grid grid = getParentGrid();
+                // Do nothing if we are not in unbuffered mode
+                if (grid.isEditorBuffered()) {
+                	return;
+                }
                 if (event.getColumn().isEditable() && grid.isEditorEnabled()) {
                     Object itemId = event.getItemId();
                     Object propertyId = event.getPropertyId();
