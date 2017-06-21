@@ -3,10 +3,14 @@ package org.vaadin.grid.cellrenderers.client.editable;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.user.client.DOM;
 import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector;
@@ -39,6 +43,15 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
    	 	public RatingStarsWidget createWidget() {
    	 		RatingStarsWidget ratingStars = GWT.create(RatingStarsWidget.class);
 
+   	 		// The input element is injected to widget so that keyboard navigation
+   	 		// extension recognizes RatingStars as editable. 
+   	 		Element input = DOM.createButton();
+   	 		input.getStyle().setWidth(1, Unit.PX);
+   	 		input.getStyle().setHeight(1, Unit.PX);
+   	 		input.getStyle().setBorderStyle(BorderStyle.NONE);
+   	 		input.getStyle().setBackgroundColor("transparent");
+   	 		ratingStars.getElement().appendChild(input);
+   	 		
    	 		RatingStarsRendererState state = getState();
    	 		ratingStars.setWidth("100%");
             if (state.height > -1) ratingStars.setWidth(state.height+"px");

@@ -17,6 +17,7 @@ import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.data.util.converter.StringToIntegerConverter;
 
 import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
+import org.vaadin.grid.cellrenderers.navigation.GridNavigationExtension;
 import org.vaadin.grid.cellrenderers.EditableRenderer.ItemEditEvent;
 import org.vaadin.grid.cellrenderers.EditableRenderer.ItemEditListener;
 import org.vaadin.grid.cellrenderers.editable.BooleanSwitchRenderer;
@@ -257,6 +258,8 @@ public class DemoUI extends UI {
 			}
 
 			Grid grid = new Grid(container);
+			GridNavigationExtension.extend(grid);
+			
 			grid.setColumns("description","stars","truth","date","number","choice");
 			grid.setSizeFull();
 			grid.setEditorEnabled(false);

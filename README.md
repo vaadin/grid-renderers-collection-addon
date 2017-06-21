@@ -54,6 +54,11 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 1.0.0
+* Added GridNavigationExtension
+* Fixed RatingStarsRenderer to work with GridNavigationExtension
+* Fixed GridNavigationExtension to recognize selects
+
 ### Version 0.98
 * Fixed bug in CheckBoxRenderer when used with buffered mode
 * Fixed BooleanSwitchRenderer tacticle and feel issue with IE and slow computers
@@ -174,4 +179,11 @@ RatingStarsRenderer is based on Widget in RatingStars add-on by Teemu Pöntelin. 
 RatingStarsRenderer both as a view only or editable field renderer. The max number of stars can
 be also configured.
 
+### GridNavigationExtension
 
+GridNavigationExtension makes possible to quickly navigate Grid with keyboard and input data
+with editable Renderers. See the demo. GridNavigation extension was originally written by Mikael
+Granqvist. 
+
+Note, there is another similar type of extension available also for use with Grid's unbuffered
+editor, which is called GridFastNavigation https://vaadin.com/directory#!addon/gridfastnavigation-add-on
