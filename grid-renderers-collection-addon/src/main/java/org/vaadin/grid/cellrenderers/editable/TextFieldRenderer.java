@@ -17,12 +17,21 @@ public class TextFieldRenderer<T> extends EditableRenderer<T> {
 	private final EditableRendererEnabled editableRendererEnabled;
 
 	public TextFieldRenderer() {
-		this(null);
+		this(-1, null);
+	}
+
+	public TextFieldRenderer(int maxLength) {
+		this(maxLength, null);
 	}
 
 	public TextFieldRenderer(EditableRendererEnabled editableRendererEnabled) {
+		this(-1, editableRendererEnabled);
+	}
+
+	public TextFieldRenderer(int maxLength, EditableRendererEnabled editableRendererEnabled) {
 		super((Class<T>) Object.class);
 
+		getState().maxLength = maxLength;
 		this.editableRendererEnabled = editableRendererEnabled;
 
 		registerRpc(new TextFieldRendererServerRpc() {

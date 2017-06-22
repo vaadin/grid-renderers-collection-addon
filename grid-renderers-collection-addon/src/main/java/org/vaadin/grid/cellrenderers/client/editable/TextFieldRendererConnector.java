@@ -77,6 +77,10 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 
 			final VTextField textField = GWT.create(VTextField.class);
 
+			if (getState().maxLength > 0) {
+				textField.setMaxLength(getState().maxLength);
+			}
+
 			if (getState().fitToCell) {
 				textField.setWidth("100%");
 

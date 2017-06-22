@@ -246,7 +246,7 @@ public class DemoUI extends UI {
 			});
 			truth.setEditable(false);
 
-			TextFieldRenderer<String> tfr = new TextFieldRenderer<String>();
+			TextFieldRenderer<String> tfr = new TextFieldRenderer<String>(3);
 			tfr.addClickListener(new RendererClickListener() {
 
 				@Override
