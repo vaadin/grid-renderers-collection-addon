@@ -54,6 +54,10 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 1.1.0
+* Added DeleteButtonRenderer
+* Updated demo
+
 ### Version 1.0.0
 * Added GridNavigationExtension
 * Fixed RatingStarsRenderer to work with GridNavigationExtension
@@ -142,6 +146,11 @@ Here is a simple example on how to try out the add-on component:
 For a more comprehensive examples, see org.vaadin.grid.cellrenderers.demo.DemoUI
 
 ## Features
+
+### DeleteButtonRenderer
+Two stage (Delete & Confirm) Delete action button. Delete and Confirm texts can be configured e.g. for
+localization. There is style name for Confirm state in order to add accent in custom theme if needed.
+Vaadin 8 version of this renderer can be found in https://vaadin.com/directory#!addon/gridfastnavigation-add-on
 
 ### SimpleSelectRenderer
 Select a value with popup selector from small set of values. This Renderer is like ComboBox, but much
