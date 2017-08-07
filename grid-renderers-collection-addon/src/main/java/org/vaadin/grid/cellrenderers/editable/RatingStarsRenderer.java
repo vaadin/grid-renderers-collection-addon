@@ -13,17 +13,32 @@ import com.vaadin.data.Item;
  */
 public class RatingStarsRenderer extends EditableRenderer<Double> {
 
+	@Deprecated
     public RatingStarsRenderer(int stars, boolean readOnly) {
+        super(Double.class);   	
+        setupRatingStarsRenderer(stars, readOnly, -1, -1);
+    }
+    
+	
+    public RatingStarsRenderer(int stars) {
         super(Double.class);
+        setupRatingStarsRenderer(stars, false, -1, -1);
+    }
+    
+    public RatingStarsRenderer(int stars, int width, int height) {
+        super(Double.class);
+        setupRatingStarsRenderer(stars, false, width, height);
+    }
+    
+    public void setupRatingStarsRenderer(int stars, boolean readOnly, int width, int height) {
+
         getState().stars = stars;
         getState().readOnly = readOnly;
 
     	// Use RPC only if needed
-        if (!readOnly) registerRpc(new RatingStarsRendererServerRpc()
-        {
+        if (!readOnly) registerRpc(new RatingStarsRendererServerRpc() {
 
-            public void onChange(String rowKey, String columnId, Double newValue)
-            {
+            public void onChange(String rowKey, String columnId, Double newValue) {
 
                 Object itemId = getItemId(rowKey);
                 Object columnPropertyId = getColumn(columnId).getPropertyId();

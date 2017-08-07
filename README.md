@@ -54,6 +54,20 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 1.1.0
+* Added DeleteButtonRenderer
+* Updated demo
+
+### Version 1.0.0
+* Added GridNavigationExtension
+* Fixed RatingStarsRenderer to work with GridNavigationExtension
+* Fixed GridNavigationExtension to recognize selects
+
+### Version 0.98
+* Fixed bug in CheckBoxRenderer when used with buffered mode
+* Fixed BooleanSwitchRenderer tacticle and feel issue with IE and slow computers
+* Changed RatingStarsRenderer to be editable based on Column.setEditable(), added width / height settings
+
 ### Version 0.97
 * SimpleSelectRenderer added
 * Updated demo
@@ -117,7 +131,7 @@ Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.t
 
 Grid Renderers collection is initially written by Ilia Motornyi 
 
-BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, SparklineRenderer & RatingStarsRenderer Contributed by Tatu Lund (tatu@vaadin.com corresponding author)
+SimpleSelectRenderer, BooleanSwitchRenderer, BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, SparklineRenderer & RatingStarsRenderer Contributed by Tatu Lund (tatu@vaadin.com corresponding author)
 
 ItemEditEvent contributed by Mikael Granqvist
 
@@ -132,6 +146,11 @@ Here is a simple example on how to try out the add-on component:
 For a more comprehensive examples, see org.vaadin.grid.cellrenderers.demo.DemoUI
 
 ## Features
+
+### DeleteButtonRenderer
+Two stage (Delete & Confirm) Delete action button. Delete and Confirm texts can be configured e.g. for
+localization. There is style name for Confirm state in order to add accent in custom theme if needed.
+Vaadin 8 version of this renderer can be found in https://vaadin.com/directory#!addon/gridfastnavigation-add-on
 
 ### SimpleSelectRenderer
 Select a value with popup selector from small set of values. This Renderer is like ComboBox, but much
@@ -169,4 +188,11 @@ RatingStarsRenderer is based on Widget in RatingStars add-on by Teemu Pöntelin. 
 RatingStarsRenderer both as a view only or editable field renderer. The max number of stars can
 be also configured.
 
+### GridNavigationExtension
 
+GridNavigationExtension makes possible to quickly navigate Grid with keyboard and input data
+with editable Renderers. See the demo. GridNavigation extension was originally written by Mikael
+Granqvist. 
+
+Note, there is another similar type of extension available also for use with Grid's unbuffered
+editor, which is called GridFastNavigation https://vaadin.com/directory#!addon/gridfastnavigation-add-on

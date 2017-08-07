@@ -16,7 +16,11 @@ import com.vaadin.data.util.converter.StringToBigDecimalConverter;
 import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.data.util.converter.StringToIntegerConverter;
 
+import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer;
+import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickEvent;
+import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickListener;
 import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
+import org.vaadin.grid.cellrenderers.navigation.GridNavigationExtension;
 import org.vaadin.grid.cellrenderers.EditableRenderer.ItemEditEvent;
 import org.vaadin.grid.cellrenderers.EditableRenderer.ItemEditListener;
 import org.vaadin.grid.cellrenderers.editable.BooleanSwitchRenderer;
@@ -129,7 +133,8 @@ public class DemoUI extends UI {
     		Grid grid = new Grid(container);
     		grid.setSizeFull();
     		grid.getColumn("numbers").setRenderer(sparkline);
-    		grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5,true));
+    		grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5));
+    		grid.getColumn("stars").setEditable(false);
     		grid.setColumns("id", "foo", "bar", "stars", "numbers");
     		return grid;
     	}
@@ -250,16 +255,26 @@ public class DemoUI extends UI {
 
 		public DateTextDemo() {		
 			Random random = new Random(4837291937l);
-			BeanItemContainer<SimplePojo> container = new BeanItemContainer<SimplePojo>(SimplePojo.class);
+			final BeanItemContainer<SimplePojo> container = new BeanItemContainer<SimplePojo>(SimplePojo.class);
 			for (int i=0;i<1000;i++) {
 				container.addBean(new SimplePojo(i, "Bean", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5))));
 			}
 
 			Grid grid = new Grid(container);
-			grid.setColumns("description","stars","truth","date","number","choice");
+			GridNavigationExtension.extend(grid);
+			
+			grid.setColumns("action","description","stars","truth","date","number","choice");
 			grid.setSizeFull();
 			grid.setEditorEnabled(false);
-    
+
+			grid.getColumn("action").setRenderer(new DeleteButtonRenderer(new DeleteRendererClickListener() {
+				@Override
+				public void click(DeleteRendererClickEvent event) {
+					container.removeItem(event.getItem());
+				}
+				
+			}));
+
 			BooleanSwitchRenderer booleanRenderer = new BooleanSwitchRenderer("True","False");
 			booleanRenderer.addItemEditListener(new ItemEditListener() {
 				@Override
@@ -290,7 +305,7 @@ public class DemoUI extends UI {
 			} );
 			grid.getColumn("number").setRenderer(decimalFieldRenderer);
 			grid.getColumn("date").setRenderer(new DateFieldRenderer());
-			grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5,false));
+			grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5));
 			
 			MyStringToIntegerConverter myConverter = new MyStringToIntegerConverter();
 			grid.getColumn("choice").setConverter(myConverter);
