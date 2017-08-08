@@ -54,6 +54,10 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 1.1.1
+* Fixed DeleteButtonRenderer, support for HTML content mode was missing
+* Updated demo
+
 ### Version 1.1.0
 * Added DeleteButtonRenderer
 * Updated demo

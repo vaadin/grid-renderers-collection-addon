@@ -267,13 +267,15 @@ public class DemoUI extends UI {
 			grid.setSizeFull();
 			grid.setEditorEnabled(false);
 
-			grid.getColumn("action").setRenderer(new DeleteButtonRenderer(new DeleteRendererClickListener() {
+			DeleteButtonRenderer deleteButton = new DeleteButtonRenderer(new DeleteRendererClickListener() {
 				@Override
 				public void click(DeleteRendererClickEvent event) {
 					container.removeItem(event.getItem());
 				}
 				
-			}));
+			},FontAwesome.TRASH.getHtml()+" Delete",FontAwesome.CHECK.getHtml()+" Confirm");
+			deleteButton.setHtmlContentAllowed(true);
+			grid.getColumn("action").setRenderer(deleteButton);
 
 			BooleanSwitchRenderer booleanRenderer = new BooleanSwitchRenderer("True","False");
 			booleanRenderer.addItemEditListener(new ItemEditListener() {
