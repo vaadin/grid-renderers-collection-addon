@@ -16,7 +16,7 @@ import com.vaadin.ui.renderers.ClickableRenderer.RendererClickEvent;
 import com.vaadin.ui.renderers.ClickableRenderer.RendererClickListener;
 import com.vaadin.util.ReflectTools;
 
-public class DeleteButtonRenderer extends ClickableRenderer<String> {
+public class DeleteButtonRenderer extends ClickableRenderer<Boolean> {
 
     /**
      * An interface for listening to {@link DeleteRendererClickEvent renderer click
@@ -84,7 +84,7 @@ public class DeleteButtonRenderer extends ClickableRenderer<String> {
      *            text meaning confirm
      */
     public DeleteButtonRenderer(String delete, String confirm) {
-        super(String.class, "");
+        super(Boolean.class, "");
         getState().delete = delete;
         getState().confirm = confirm;
         setupRpc();
