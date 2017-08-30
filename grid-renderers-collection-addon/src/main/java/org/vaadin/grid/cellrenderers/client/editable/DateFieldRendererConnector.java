@@ -3,6 +3,7 @@ package org.vaadin.grid.cellrenderers.client.editable;
 import java.util.Date;
 
 import com.google.gwt.dom.client.Style;
+
 import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
 
 import com.google.gwt.core.client.GWT; 
@@ -11,12 +12,12 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.*; 
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.web.bindery.event.shared.HandlerRegistration; 
 import com.vaadin.client.LocaleService;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector; 
-import com.vaadin.client.connectors.GridConnector; 
+import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer; 
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler; 
 import com.vaadin.client.renderers.Renderer;
@@ -24,7 +25,6 @@ import com.vaadin.client.ui.VOverlay;
 import com.vaadin.client.widget.grid.RendererCellReference;
 import com.vaadin.client.widgets.Grid; 
 import com.vaadin.shared.ui.Connect; 
-import com.vaadin.shared.ui.datefield.Resolution;
 
 import elemental.json.JsonObject;
 
@@ -92,7 +92,7 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 
             // Configuring the popup calendar panel for Day resolution
             // This is done in similar fashion than the regular connector does it
-            dateField.setCurrentResolution(Resolution.DAY);
+//            dateField.setCurrentResolution(Resolution.DAY);
             dateField.calendar.setDateTimeService(dateField.getDateTimeService());
             dateField.calendar.setShowISOWeekNumbers(dateField
                     .isShowISOWeekNumbers());

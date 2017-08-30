@@ -10,7 +10,7 @@ import com.vaadin.client.widgets.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.connectors.AbstractRendererConnector;
-import com.vaadin.client.connectors.GridConnector;
+import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.WidgetRenderer;
 import com.vaadin.client.widget.grid.RendererCellReference;
 import com.vaadin.shared.ui.Connect;

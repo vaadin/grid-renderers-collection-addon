@@ -10,17 +10,17 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector;
-import com.vaadin.client.connectors.GridConnector;
+import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer;
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler;
 import com.vaadin.client.widget.grid.RendererCellReference;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.client.widgets.Grid; 
-import com.google.web.bindery.event.shared.HandlerRegistration; 
 
 import elemental.json.JsonObject;
 

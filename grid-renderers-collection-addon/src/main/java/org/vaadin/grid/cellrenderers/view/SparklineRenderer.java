@@ -1,13 +1,13 @@
 package org.vaadin.grid.cellrenderers.view;
 
-import com.vaadin.ui.Grid.AbstractRenderer;
 import org.vaadin.grid.cellrenderers.client.view.SparklineRendererState;
+import com.vaadin.ui.renderers.AbstractRenderer;
 
 /**
  * @author Tatu Lund - Vaadin
  * 
  */
-public class SparklineRenderer extends AbstractRenderer<Number[]> {
+public class SparklineRenderer<T> extends AbstractRenderer<T,Number[]> {
 	
 	/**
 	 * Configuration class for a SparklineRenderer

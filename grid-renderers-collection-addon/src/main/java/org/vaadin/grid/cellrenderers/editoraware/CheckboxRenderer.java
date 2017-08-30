@@ -17,10 +17,10 @@ package org.vaadin.grid.cellrenderers.editoraware;
 
 import org.vaadin.grid.cellrenderers.client.editoraware.CheckboxRendererState;
 
-import com.vaadin.data.Container;
-import com.vaadin.data.Property;
-import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.HasValue;
+import com.vaadin.server.Setter;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.components.grid.Editor;
 import com.vaadin.ui.renderers.ClickableRenderer;
 
 /**
@@ -28,15 +28,15 @@ import com.vaadin.ui.renderers.ClickableRenderer;
  *
  * @author Ilya Motorny, Tatu Lund
  */
-public class CheckboxRenderer extends ClickableRenderer<Boolean> {
+public class CheckboxRenderer<T> extends ClickableRenderer<T,Boolean> {
 
 	/**
 	 * Default constructor. Header caption is used as Checkbox label when value is false
 	 */
-    public CheckboxRenderer() {
+    public CheckboxRenderer(Setter<T, Boolean> setter) {
     	super(Boolean.class);
     	
-    	setupCheckboxRenderer();
+    	setupCheckboxRenderer(setter);
     }
     
     /**
@@ -45,43 +45,35 @@ public class CheckboxRenderer extends ClickableRenderer<Boolean> {
      * @param txtFalse Optional text to be shown in Checkbox label when value is false.
      * @param txtTrue Text to be shown in Checkbox label when value is true. If null, header label will be used.
      */
-    public CheckboxRenderer(String txtFalse, String txtTrue) {
+    public CheckboxRenderer(String txtFalse, String txtTrue, Setter<T, Boolean> setter) {
     	super(Boolean.class);
 
     	getState().txtFalse = txtFalse;
     	getState().txtTrue = txtTrue;
     	
-    	setupCheckboxRenderer();
+    	setupCheckboxRenderer(setter);
     }
 
 	
-	public void setupCheckboxRenderer() {
+	public void setupCheckboxRenderer(final Setter<T, Boolean> setter) {
         addClickListener(new RendererClickListener() {
             @Override
             public void click(RendererClickEvent event) {
-                Grid grid = getParentGrid();
+                Grid<T> grid = getParentGrid();
+            	Editor<T> editor = grid.getEditor();
                 // Do nothing if we are not in unbuffered mode
-                if (grid.isEditorBuffered()) {
+                if (editor.isBuffered()) {
                 	return;
                 }
-                if (event.getColumn().isEditable() && grid.isEditorEnabled()) {
-                    Object itemId = event.getItemId();
-                    Object propertyId = event.getPropertyId();
-
-                    try {
-                        if (grid.isEditorActive() && !itemId.equals(grid.getEditedItemId())) {
-                            grid.saveEditor();
-                            grid.cancelEditor();
-                        }
-                        @SuppressWarnings("unchecked")
-						Property<Boolean> itemProperty = grid.getContainerDataSource().getItem(itemId).getItemProperty(propertyId);
-                        itemProperty.setValue(!Boolean.TRUE.equals(itemProperty.getValue()));
-                        grid.editItem(itemId);
-                    } catch (FieldGroup.CommitException e) {
-                        Grid.CommitErrorEvent errorEvent = new Grid.CommitErrorEvent(grid, e);
-                        grid.getEditorErrorHandler().commitError(errorEvent);
-                    }
-                }
+               	Grid.Column<T, ?> column = event.getColumn();
+               	if (column.isEditable() && editor.isEnabled()) {
+               		T item = (T) event.getItem();
+               		if (editor.isOpen() && !item.equals(editor.getBinder().getBean())) {
+               			editor.save();
+               			editor.cancel();
+               		}
+             		setter.accept(item, ((HasValue<Boolean>) event.getSource()).getValue());
+               	}
             }
         });
     }

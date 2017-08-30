@@ -1,9 +1,10 @@
 package org.vaadin.grid.cellrenderers;
 
-import com.vaadin.data.Item;
 import com.vaadin.event.ConnectorEventListener;
+import com.vaadin.shared.Registration;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.renderers.ClickableRenderer;
 import com.vaadin.util.ReflectTools;
 
@@ -12,7 +13,7 @@ import java.lang.reflect.Method;
 /**
  * @author Mikael Grankvist - Vaadin
  */
-public class EditableRenderer<T> extends ClickableRenderer<T> {
+public class EditableRenderer<A,T> extends ClickableRenderer<A,T> {
 
     protected EditableRenderer(Class<T> presentationType) {
         super(presentationType);
@@ -44,28 +45,17 @@ public class EditableRenderer<T> extends ClickableRenderer<T> {
      *
      * @param <T> Type parameter
      */
-    public static class ItemEditEvent<T> extends Component.Event {
+    public static class ItemEditEvent<A,T> extends Component.Event {
 
-        private final Object itemId;
-        private final Item item;
-        private final Object columnPropertyId;
+        private final A item;
+        private final Column<A,T> column;
         private final T newValue;
 
-        public ItemEditEvent(Grid grid, Object itemId, Item item, Object columnPropertyId, T newValue) {
+        public ItemEditEvent(Grid<A> grid, A item, Column<A,T> column, T newValue) {
             super(grid);
-        this.itemId = itemId;
             this.item = item;
-            this.columnPropertyId = columnPropertyId;
+            this.column = column;
             this.newValue = newValue;
-        }
-
-        /**
-         * Get ItemId of the item which was edited by a EditableRenderer
-         * 
-         * @return Object, you need to cast this to your type.
-         */
-        public Object getItemId() {
-            return itemId;
         }
 
         /**
@@ -73,17 +63,17 @@ public class EditableRenderer<T> extends ClickableRenderer<T> {
          * 
          * @return Item, you need to cast this to your type.
          */
-       public Item getItem() {
+       public A getItem() {
             return item;
         }
 
        /**
-        * Get propety name which was edited.
+        * Get column which was edited.
         * 
         * @return Object, typically a String with most Containers.
         */
-        public Object getColumnPropertyId() {
-            return columnPropertyId;
+        public Column<A,T> getColumn() {
+            return column;
         }
 
         /**
@@ -101,9 +91,10 @@ public class EditableRenderer<T> extends ClickableRenderer<T> {
      * 
      * @param listener The listener instance to be added
      */
-    public void addItemEditListener(ItemEditListener listener) {
-        addListener(ItemEditEvent.class, listener,
+    public Registration addItemEditListener(ItemEditListener listener) {
+        Registration reg = addListener(ItemEditEvent.class, listener,
                 ItemEditListener.ITEM_EDIT_METHOD);
+        return reg;
     }
 
     /**
@@ -115,7 +106,7 @@ public class EditableRenderer<T> extends ClickableRenderer<T> {
         removeListener(ItemEditListener.class, listener);
     }
 
-    public void fireItemEditEvent(Object itemId, Item item, Object columnPropertyId, T newValue) {
-        fireEvent(new ItemEditEvent(getParentGrid(), itemId, item, columnPropertyId, newValue));
+    public void fireItemEditEvent(A item, Column<A,T> column, T newValue) {
+        fireEvent(new ItemEditEvent(getParentGrid(), item, column, newValue));
     }
 }

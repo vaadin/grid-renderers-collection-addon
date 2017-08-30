@@ -7,14 +7,14 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.web.bindery.event.shared.HandlerRegistration; 
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.vaadin.client.MouseEventDetailsBuilder;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.connectors.ClickableRendererConnector;
-import com.vaadin.client.connectors.GridConnector;
+import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer;
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler;
 import com.vaadin.client.renderers.Renderer;
@@ -33,7 +33,6 @@ public class DeleteButtonRendererConnector extends ClickableRendererConnector<Bo
 
         private boolean htmlContentAllowed = false;
         private static final String ROW_KEY_PROPERTY = "rowKey";
-        private static final String COLUMN_ID_PROPERTY = "columnId";
         
         @Override
         public Button createWidget() {
@@ -58,8 +57,7 @@ public class DeleteButtonRendererConnector extends ClickableRendererConnector<Bo
             	                .buildMouseEventDetails(event.getNativeEvent(),
             	                        b.getElement());
             			Element e = b.getElement();
-            			rpc.onClick(e.getPropertyString(ROW_KEY_PROPERTY),
-                                e.getPropertyString(COLUMN_ID_PROPERTY),mouseEventDetails);
+            			rpc.onClick(e.getPropertyString("rowKey"),mouseEventDetails);
             		} else {
             			// At first click we change button to confirm mode,
             			// change text accordingly and add style name, so
@@ -110,13 +108,8 @@ public class DeleteButtonRendererConnector extends ClickableRendererConnector<Bo
                 e.setPropertyString(ROW_KEY_PROPERTY,
                         getRowKey((JsonObject) cell.getRow()));
             }
-            if(e.getPropertyString(COLUMN_ID_PROPERTY) != getColumnId(getGrid()
-                    .getColumn(cell.getColumnIndex()))) {
-                e.setPropertyString(COLUMN_ID_PROPERTY, getColumnId(getGrid()
-                        .getColumn(cell.getColumnIndex())));
-            }
 
-    		String style = button.getStyleName();
+            String style = button.getStyleName();
     		if (style != null && style.contains("delete-confirm")) {
     			button.removeStyleName("delete-confirm");
     		}

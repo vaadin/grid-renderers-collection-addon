@@ -5,14 +5,14 @@ import org.vaadin.grid.cellrenderers.client.view.BlobImageRendererState;
 import org.vaadin.grid.cellrenderers.client.view.SparklineRendererState;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer.SparklineConfiguration;
 
-import com.vaadin.ui.Grid.AbstractRenderer;
+import com.vaadin.ui.renderers.AbstractRenderer;
 
 import elemental.json.JsonValue;
 
 /**
  * @author Tatu Lund - Vaadin
  */
-public class BlobImageRenderer extends AbstractRenderer<byte[]> {
+public class BlobImageRenderer<T> extends AbstractRenderer<T,byte[]> {
 
     private static final String TRANSPARENT_GIF_1PX = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
     private String mimeType = "image/png";

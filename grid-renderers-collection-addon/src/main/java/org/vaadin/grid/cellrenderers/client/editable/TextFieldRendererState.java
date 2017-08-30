@@ -1,11 +1,11 @@
 package org.vaadin.grid.cellrenderers.client.editable;
 
-import com.vaadin.shared.communication.SharedState;
+import com.vaadin.shared.ui.grid.renderers.ClickableRendererState;
 
 /**
  * @author Tatu Lund - Vaadin
  */
-public class TextFieldRendererState extends SharedState{
+public class TextFieldRendererState extends ClickableRendererState {
 	public String value = null;
 	public boolean fitToCell = true;
 }

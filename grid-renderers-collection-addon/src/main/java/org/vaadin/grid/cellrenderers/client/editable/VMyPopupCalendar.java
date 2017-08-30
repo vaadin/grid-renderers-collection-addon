@@ -4,11 +4,8 @@ import java.util.Date;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.vaadin.client.VConsole;
 import com.vaadin.client.ui.VPopupCalendar;
-import com.vaadin.shared.ui.datefield.Resolution;
 
 /**
  * 

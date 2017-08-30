@@ -3,16 +3,17 @@ package org.vaadin.grid.cellrenderers.client.editable;
 import com.google.gwt.dom.client.Style;
 import com.vaadin.client.VConsole;
 import com.vaadin.client.annotations.OnStateChange;
+
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 
 import com.google.gwt.core.client.GWT; 
 import com.google.gwt.dom.client.BrowserEvents; 
 import com.google.gwt.dom.client.Element; 
 import com.google.gwt.event.dom.client.*; 
-import com.google.web.bindery.event.shared.HandlerRegistration; 
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.vaadin.client.communication.RpcProxy; 
 import com.vaadin.client.connectors.ClickableRendererConnector; 
-import com.vaadin.client.connectors.GridConnector; 
+import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer; 
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler; 
 import com.vaadin.client.renderers.Renderer; 

@@ -2,12 +2,12 @@ package org.vaadin.grid.cellrenderers.client.view;
 
 import java.util.Date;
 
-import com.vaadin.shared.communication.SharedState;
+import com.vaadin.shared.ui.grid.renderers.AbstractRendererState;
 
 /**
  * @author Tatu Lund - Vaadin
  */
-public class SparklineRendererState extends SharedState{
+public class SparklineRendererState extends AbstractRendererState {
 	public int width = 75;
 	public int height = 16;
 	public int pathWidth = 1;

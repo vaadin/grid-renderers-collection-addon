@@ -3,34 +3,28 @@ package org.vaadin.grid.cellrenderers.editable;
 import org.vaadin.grid.cellrenderers.EditableRenderer;
 import org.vaadin.grid.cellrenderers.client.editable.RatingStarsRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.RatingStarsRendererState;
-import com.vaadin.data.Property;
-import com.vaadin.data.Item;
+
+import com.vaadin.server.Setter;
+import com.vaadin.ui.Grid.Column;
 
 /**
  * 
  * @author Tatu Lund
  *
  */
-public class RatingStarsRenderer extends EditableRenderer<Double> {
+public class RatingStarsRenderer<T> extends EditableRenderer<T,Double> {
 
-	@Deprecated
-    public RatingStarsRenderer(int stars, boolean readOnly) {
-        super(Double.class);   	
-        setupRatingStarsRenderer(stars, readOnly, -1, -1);
-    }
-    
-	
-    public RatingStarsRenderer(int stars) {
+    public RatingStarsRenderer(int stars, Setter<T, Double> setter) {
         super(Double.class);
-        setupRatingStarsRenderer(stars, false, -1, -1);
+        setupRatingStarsRenderer(stars, setter, false, -1, -1);
     }
     
-    public RatingStarsRenderer(int stars, int width, int height) {
+    public RatingStarsRenderer(int stars, Setter<T, Double> setter, int width, int height) {
         super(Double.class);
-        setupRatingStarsRenderer(stars, false, width, height);
+        setupRatingStarsRenderer(stars, setter, false, width, height);
     }
     
-    public void setupRatingStarsRenderer(int stars, boolean readOnly, int width, int height) {
+    public void setupRatingStarsRenderer(int stars, final Setter<T, Double> setter, boolean readOnly, int width, int height) {
 
         getState().stars = stars;
         getState().readOnly = readOnly;
@@ -40,25 +34,26 @@ public class RatingStarsRenderer extends EditableRenderer<Double> {
 
             public void onChange(String rowKey, String columnId, Double newValue) {
 
-                Object itemId = getItemId(rowKey);
-                Object columnPropertyId = getColumn(columnId).getPropertyId();
+            	T item = getParentGrid().getDataCommunicator().getKeyMapper().get(rowKey);
+            	Column<T,Double> column = getParent();
+            	
+//                Object columnPropertyId = getColumn(columnId).getPropertyId();
+//
+//                Item row = getParentGrid().getContainerDataSource().getItem(itemId);
+//
+//                @SuppressWarnings("unchecked")
+//                Property<Double> cell = (Property<Double>) row.getItemProperty(columnPropertyId);
 
-                Item row = getParentGrid().getContainerDataSource().getItem(itemId);
+                setter.accept(item, newValue);
 
-                @SuppressWarnings("unchecked")
-                Property<Double> cell = (Property<Double>) row.getItemProperty(columnPropertyId);
-
-                cell.setValue(newValue);
-
-                fireItemEditEvent(itemId, row, columnPropertyId, newValue);
+                fireItemEditEvent(item, column, newValue);
             }
 
         });
     }
 
     @Override
-    protected RatingStarsRendererState getState()
-    {
+    protected RatingStarsRendererState getState() {
     	return (RatingStarsRendererState) super.getState();
     }
     	
