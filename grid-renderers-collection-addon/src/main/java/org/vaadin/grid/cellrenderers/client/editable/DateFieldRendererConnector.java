@@ -39,7 +39,6 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
     public class DateFieldClientRenderer extends ClickableRenderer<Date, VMyPopupCalendar> {
 
         private static final String ROW_KEY_PROPERTY = "rowKey";
-        private static final String COLUMN_ID_PROPERTY = "columnId";
 
         private boolean doesTextFieldContainValue(VMyPopupCalendar dateField, Date value) {
             if(dateField.getDate().equals(value)) {
@@ -62,19 +61,14 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             }
             // Generics issue, need a correctly typed column.
 
-            if(e.getPropertyString(COLUMN_ID_PROPERTY) != getColumnId(getGrid()
-                    .getColumn(cell.getColumnIndex()))) {
-                e.setPropertyString(COLUMN_ID_PROPERTY, getColumnId(getGrid()
-                        .getColumn(cell.getColumnIndex())));
-            }
-            
             // Setting and showing the date from the Grid
             dateField.setCurrentDate(selectedValue);
             dateField.buildDate();
             
-            if(dateField.isEnabled() != cell.getColumn().isEditable()) {
-                dateField.setEnabled(cell.getColumn().isEditable());
-            }
+//            if(dateField.isEnabled() != cell.getColumn().isEditable()) {
+//                dateField.setEnabled(cell.getColumn().isEditable());
+//            }
+            dateField.setEnabled(true);
         }
 
         @Override
@@ -133,7 +127,6 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 //                    VMyPopupCalendar dateField = (VMyPopupCalendar) changeEvent.getSource();
                     Element e = dateField.getElement();
                     rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
-                            e.getPropertyString(COLUMN_ID_PROPERTY),
                             dateField.getDate());
                 }
             }, ChangeEvent.getType());
@@ -161,7 +154,6 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
                     VOverlay popup = (VOverlay) closeEvent.getSource();
                     Element e = dateField.getElement();
                     rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
-                            e.getPropertyString(COLUMN_ID_PROPERTY),
                             dateField.calendar.getDate());
                 }
             });
@@ -176,7 +168,7 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
     }
     
     @Override
-    protected Renderer<Date> createRenderer() {
+    protected DateFieldClientRenderer createRenderer() {
         return new DateFieldClientRenderer();
     }
 

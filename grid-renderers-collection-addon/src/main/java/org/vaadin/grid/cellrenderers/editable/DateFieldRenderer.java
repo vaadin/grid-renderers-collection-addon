@@ -11,6 +11,7 @@ import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererState;
 
 import com.vaadin.server.Setter;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 
 /**
@@ -19,14 +20,17 @@ import com.vaadin.ui.Grid.Column;
  *
  */
 public class DateFieldRenderer<T> extends EditableRenderer<T,LocalDate> {
-    public DateFieldRenderer(final Setter<T, LocalDate> setter) {
-        super(LocalDate.class);
+
+	public DateFieldRenderer(final Setter<T, LocalDate> setter) {
+
+		super(LocalDate.class);
      
         registerRpc(new DateFieldRendererServerRpc() {
 
-            public void onChange(String rowKey, String columnId, Date newValue) {
+            public void onChange(String rowKey, Date newValue) {
 
-                T item = getParentGrid().getDataCommunicator().getKeyMapper().get(rowKey);
+            	Grid<T> grid = getParentGrid();
+                T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
                 Column<T,LocalDate> column = getParent();
                 
                 LocalDate newLocalDate;
@@ -37,6 +41,7 @@ public class DateFieldRenderer<T> extends EditableRenderer<T,LocalDate> {
                 	newLocalDate = Instant.ofEpochMilli(newValue.getTime()).atZone(ZoneOffset.UTC).toLocalDate();
                 }
                 setter.accept(item,newLocalDate);
+            	grid.getDataProvider().refreshItem(item);
                 
                 fireItemEditEvent(item, column, newLocalDate);
             }

@@ -40,7 +40,6 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
     public class SimpleSelectClientRenderer extends ClickableRenderer<String, ListBox> {
 
         private static final String ROW_KEY_PROPERTY = "rowKey";
-        private static final String COLUMN_ID_PROPERTY = "columnId";
 
         private boolean doesListBoxContainValue(ListBox listBox, String value) {
             for(int i = 0; i < listBox.getItemCount(); i++) {
@@ -63,12 +62,6 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
             }
             // Generics issue, need a correctly typed column.
 
-            if (e.getPropertyString(COLUMN_ID_PROPERTY) != getColumnId(getGrid()
-                    .getColumn(cell.getColumnIndex()))) {
-                e.setPropertyString(COLUMN_ID_PROPERTY, getColumnId(getGrid()
-                        .getColumn(cell.getColumnIndex())));
-            }
-
             if (getState().dropDownList.size() != listBox.getItemCount()) {
                 listBox.clear();
 
@@ -84,9 +77,10 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
                 }
             }
 
-            if (listBox.isEnabled() != cell.getColumn().isEditable()) {
-                listBox.setEnabled(cell.getColumn().isEditable());
-            }
+//            if (listBox.isEnabled() != cell.getColumn().isEditable()) {
+//                listBox.setEnabled(cell.getColumn().isEditable());
+//            }
+            listBox.setEnabled(true);
         }
 
         @Override
@@ -109,7 +103,6 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
                     ListBox listBox = (ListBox) changeEvent.getSource();
                     Element e = listBox.getElement();
                     rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
-                            e.getPropertyString(COLUMN_ID_PROPERTY),
                             listBox.getSelectedValue());
                 }
             });
@@ -138,7 +131,7 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
     }
 
     @Override
-    protected Renderer<String> createRenderer() {
+    protected SimpleSelectClientRenderer createRenderer() {
         return new SimpleSelectClientRenderer();
     }
 

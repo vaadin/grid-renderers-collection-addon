@@ -7,6 +7,7 @@ import org.vaadin.grid.cellrenderers.client.editable.SimpleSelectRendererServerR
 import org.vaadin.grid.cellrenderers.client.editable.SimpleSelectRendererState;
 
 import com.vaadin.server.Setter;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 
 /**
@@ -22,11 +23,12 @@ import com.vaadin.ui.Grid.Column;
 public class SimpleSelectRenderer<T> extends EditableRenderer<T,String> {
 
 	/**
-	 * Constructor for SimpleSelectRenderer. Use when T = String.
+	 * Constructor for SimpleSelectRenderer. 
 	 * 
+	 * @param setter Method reference to right setter of T 
 	 * @param dropDownList List of the of the selection options to be shown in drop down menu
 	 */
-	public SimpleSelectRenderer(List<String> dropDownList, Setter<T,String> setter) {
+	public SimpleSelectRenderer(Setter<T,String> setter, List<String> dropDownList) {
         super(String.class);
  
         getState().dropDownList = dropDownList;        
@@ -35,12 +37,13 @@ public class SimpleSelectRenderer<T> extends EditableRenderer<T,String> {
     }
  
 	/**
-	 * Constructor for SimpleSelectRenderer. Use when T = String.
+	 * Constructor for SimpleSelectRenderer.
 	 * 
+	 * @param setter Method reference to right setter of T 
 	 * @param dropDownList List of the of the selection options to be shown in drop down menu
      * @param title Tooltip text for the select
 	 */
-	public SimpleSelectRenderer(List<String> dropDownList, String title, Setter<T,String> setter) {
+	public SimpleSelectRenderer(Setter<T,String> setter, List<String> dropDownList, String title) {
         super(String.class);
  
         getState().dropDownList = dropDownList;        
@@ -52,12 +55,15 @@ public class SimpleSelectRenderer<T> extends EditableRenderer<T,String> {
 	private void setupSimpleSelectRenderer(final Setter<T,String> setter) {
         registerRpc(new SimpleSelectRendererServerRpc() {
 
-            public void onChange(String rowKey, String columnId, String newValue) {
+            public void onChange(String rowKey, String newValue) {
 
-            	T item = getParentGrid().getDataCommunicator().getKeyMapper().get(rowKey);
+            	Grid<T> grid = getParentGrid();
+            	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
             	Column<T,String> column = getParent();
              	setter.accept(item,newValue);
-                fireItemEditEvent(item, column, newValue);
+            	grid.getDataProvider().refreshItem(item);
+
+            	fireItemEditEvent(item, column, newValue);
              }
         });
     }

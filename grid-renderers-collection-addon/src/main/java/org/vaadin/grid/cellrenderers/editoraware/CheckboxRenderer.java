@@ -32,6 +32,8 @@ public class CheckboxRenderer<T> extends ClickableRenderer<T,Boolean> {
 
 	/**
 	 * Default constructor. Header caption is used as Checkbox label when value is false
+	 * 
+	 * @param setter Method reference to right setter of T 
 	 */
     public CheckboxRenderer(Setter<T, Boolean> setter) {
     	super(Boolean.class);
@@ -42,10 +44,11 @@ public class CheckboxRenderer<T> extends ClickableRenderer<T,Boolean> {
     /**
      * Constructor with configuration options for Checkbox label. Can be used for localization etc.
      * 
+	 * @param setter Method reference to right setter of T 
      * @param txtFalse Optional text to be shown in Checkbox label when value is false.
      * @param txtTrue Text to be shown in Checkbox label when value is true. If null, header label will be used.
      */
-    public CheckboxRenderer(String txtFalse, String txtTrue, Setter<T, Boolean> setter) {
+    public CheckboxRenderer(Setter<T, Boolean> setter, String txtFalse, String txtTrue) {
     	super(Boolean.class);
 
     	getState().txtFalse = txtFalse;
@@ -73,6 +76,7 @@ public class CheckboxRenderer<T> extends ClickableRenderer<T,Boolean> {
                			editor.cancel();
                		}
              		setter.accept(item, ((HasValue<Boolean>) event.getSource()).getValue());
+                	grid.getDataProvider().refreshItem(item);
                	}
             }
         });

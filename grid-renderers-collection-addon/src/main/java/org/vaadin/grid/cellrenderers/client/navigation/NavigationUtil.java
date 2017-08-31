@@ -228,6 +228,9 @@ public final class NavigationUtil {
 	 *            Grid to check
 	 * @param element
 	 *            element
+	 * @param shiftKeyDown
+	 * 			  Shift key
+	 * 
 	 * @return true if the last column in the last row
 	 */
 	protected static boolean isLastCell(CellReference cellReference, Grid grid, Element element, boolean shiftKeyDown) {
@@ -279,6 +282,8 @@ public final class NavigationUtil {
 	/**
 	 * Get the currently focused cell for Grid
 	 *
+	 * @param grid The Grid
+	 * 
 	 * @return Currently focused cell
 	 */
 	protected native static Cell getFocusedCell(Grid<?> grid) /*-{

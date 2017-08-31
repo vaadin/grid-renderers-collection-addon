@@ -8,6 +8,7 @@ import org.vaadin.grid.cellrenderers.client.action.DeleteButtonRendererState;
 import com.vaadin.event.ConnectorEventListener;
 import com.vaadin.event.MouseEvents.ClickEvent;
 import com.vaadin.shared.MouseEventDetails;
+import com.vaadin.shared.Registration;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.renderers.ButtonRenderer;
@@ -184,21 +185,11 @@ public class DeleteButtonRenderer<T> extends ClickableRenderer<T,Boolean> {
      *
      * @param listener
      *            the click listener to be added
+	 * @return Returns Registration object that can be used for listener removal 
      */
-    public void addClickListener(DeleteRendererClickListener listener) {
-        addListener(DeleteRendererClickEvent.class, listener,
+    public Registration addClickListener(DeleteRendererClickListener listener) {
+        return addListener(DeleteRendererClickEvent.class, listener,
         		DeleteRendererClickListener.CLICK_METHOD);
     }
-
-    /**
-     * Removes the given click listener from this renderer.
-     *
-     * @param listener
-     *            the click listener to be removed
-     */
-    public void removeClickListener(DeleteRendererClickListener listener) {
-        removeListener(DeleteRendererClickEvent.class, listener);
-    }
-
 
 }

@@ -9,5 +9,5 @@ import com.vaadin.shared.communication.ServerRpc;
  */
 public interface DateFieldRendererServerRpc extends ServerRpc {
 
-    public void onChange(String rowKey, String columnId, Date newValue);
+    public void onChange(String rowKey, Date newValue);
 }

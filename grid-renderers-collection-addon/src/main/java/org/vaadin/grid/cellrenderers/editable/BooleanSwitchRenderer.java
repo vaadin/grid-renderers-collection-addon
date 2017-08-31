@@ -21,20 +21,24 @@ public class BooleanSwitchRenderer<T> extends EditableRenderer<T,Boolean> {
 
 	/**
 	 * Default constructor. Header caption is used as Checkbox label when value is false
+	 * 
+	 * @param setter Method reference to right setter of T 
 	 */
    public BooleanSwitchRenderer(Setter<T, Boolean> setter) {
-    	super(Boolean.class);
-    	
-    	setupBooleanSwithcRenderer(setter);
+
+	   super(Boolean.class);
+	   
+	   setupBooleanSwithcRenderer(setter);
     }
     
     /**
      * Constructor with configuration options for Checkbox label. Can be used for localization etc.
      * 
+	 * @param setter Method reference to right setter of T 
      * @param txtFalse Optional text to be shown in Checkbox label when value is false.
      * @param txtTrue Text to be shown in Checkbox label when value is true. If null, header label will be used.
      */
-    public BooleanSwitchRenderer(String txtFalse, String txtTrue, Setter<T, Boolean> setter) {
+    public BooleanSwitchRenderer(Setter<T, Boolean> setter, String txtFalse, String txtTrue) {
     	super(Boolean.class);
 
     	getState().txtFalse = txtFalse;
@@ -48,29 +52,19 @@ public class BooleanSwitchRenderer<T> extends EditableRenderer<T,Boolean> {
     		DOUBLE_CLICK_DETECTION_MS = 500;
     	}
     	
-    	addClickListener(new RendererClickListener() {
+    	addClickListener(new RendererClickListener<T>() {
     		@Override
-    		public void click(RendererClickEvent event) {
+    		public void click(RendererClickEvent<T> event) {
     			// work around duplicate clicks when using a label as checkbox
     			if (!isDoubleClick()) {
     				Grid<T> grid = getParentGrid();
-    				Column<T, Boolean> column = event.getColumn();
-//    				T item = getParentGrid().getDataCommunicator().getKeyMapper().get(rowKey);
-    				
-//    				Item row = getParentGrid().getContainerDataSource().getItem(itemId);
-//    				Object columnId = event.getPropertyId();
-//
-//    				Object columnPropertyId = row.getItemProperty(columnId);
-//    				@SuppressWarnings("unchecked")
-//    				Property<Boolean> cell = (Property<Boolean>) columnPropertyId;
-//
-//    				boolean checked = cell.getValue();
-    				if (column.isEditable()) {
-        				T item = (T) event.getItem();
-        				Boolean value = ((HasValue<Boolean>) event.getSource()).getValue();
-        				setter.accept(item, value);
-                        fireItemEditEvent(item, column, value);
-    				}    				    				
+    				Column<T, Boolean> column = (Column<T, Boolean>) event.getColumn();
+
+    				T item = (T) event.getItem();
+        			Boolean value = ((HasValue<Boolean>) event.getSource()).getValue();
+        			setter.accept(item, value);
+                    grid.getDataProvider().refreshItem(item);
+                    fireItemEditEvent(item, column, value);
     				
     			}
 

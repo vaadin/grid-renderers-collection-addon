@@ -2,21 +2,23 @@ package org.vaadin.grid.cellrenderers.client.editable;
 
 import com.google.gwt.dom.client.Style;
 import com.vaadin.client.VConsole;
-import com.vaadin.client.annotations.OnStateChange;
-
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 
 import com.google.gwt.core.client.GWT; 
 import com.google.gwt.dom.client.BrowserEvents; 
 import com.google.gwt.dom.client.Element; 
-import com.google.gwt.event.dom.client.*; 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.vaadin.client.communication.RpcProxy; 
 import com.vaadin.client.connectors.ClickableRendererConnector; 
 import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer; 
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler; 
-import com.vaadin.client.renderers.Renderer; 
 import com.vaadin.client.ui.VTextField;
 import com.vaadin.client.widget.grid.RendererCellReference; 
 import com.vaadin.client.widgets.Grid; 
@@ -35,7 +37,6 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
     public class TextFieldClientRenderer extends ClickableRenderer<String, VTextField> {
 
         private static final String ROW_KEY_PROPERTY = "rowKey";
-        private static final String COLUMN_ID_PROPERTY = "columnId";
 
         private boolean doesTextFieldContainValue(VTextField textField, String value) {
             if(textField.getValue().equals(value)) {
@@ -48,9 +49,10 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
         public void render(RendererCellReference cell, String selectedValue,
                            VTextField textField) {
 
-            Element e = textField.getElement();
-
-            getState().value = selectedValue;
+        	getState().value = selectedValue;
+            textField.setValue(selectedValue);
+            
+        	Element e = textField.getElement();
             
             if(e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell.getRow())) {
                 e.setPropertyString(ROW_KEY_PROPERTY,
@@ -58,22 +60,15 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
             }
             // Generics issue, need a correctly typed column.
 
-            if(e.getPropertyString(COLUMN_ID_PROPERTY) != getColumnId(getGrid()
-                    .getColumn(cell.getColumnIndex()))) {
-                e.setPropertyString(COLUMN_ID_PROPERTY, getColumnId(getGrid()
-                        .getColumn(cell.getColumnIndex())));
-            }
-
-            textField.setValue(selectedValue);
-            
-            if(textField.isEnabled() != cell.getColumn().isEditable()) {
-                textField.setEnabled(cell.getColumn().isEditable());
-            }
+//            if(textField.isEnabled() != cell.getColumn().isEditable()) {
+//                textField.setEnabled(cell.getColumn().isEditable());
+//            }
+            textField.setEnabled(true);
         }
 
         @Override
         public VTextField createWidget() {
-            VTextField textField = GWT.create(VTextField.class);
+            final VTextField textField = GWT.create(VTextField.class);
 
             if(getState().fitToCell) {
                 textField.setWidth("100%");
@@ -94,8 +89,7 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
                 public void onChange(ChangeEvent changeEvent) {
                     VTextField textField = (VTextField) changeEvent.getSource();
                     Element e = textField.getElement();
-                    rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
-                            e.getPropertyString(COLUMN_ID_PROPERTY),
+                    rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
                             textField.getValue());
                 }
             });
@@ -124,7 +118,7 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
     }
     
     @Override
-    protected Renderer<String> createRenderer() {
+    protected TextFieldClientRenderer createRenderer() {
         return new TextFieldClientRenderer();
     }
 

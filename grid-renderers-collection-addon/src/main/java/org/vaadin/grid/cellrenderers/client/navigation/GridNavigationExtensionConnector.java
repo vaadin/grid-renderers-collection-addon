@@ -6,7 +6,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.vaadin.client.ServerConnector;
-import com.vaadin.client.connectors.GridConnector;
+import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.extensions.AbstractExtensionConnector;
 import com.vaadin.client.widgets.Grid;
 import com.vaadin.shared.ui.Connect;

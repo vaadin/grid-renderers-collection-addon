@@ -6,6 +6,6 @@ import com.vaadin.shared.communication.ServerRpc;
  * @author Tatu Lund - Vaadin
  */
 public interface RatingStarsRendererServerRpc extends ServerRpc {
-    public void onChange(String rowKey, String columnId, Double newValue);
+    public void onChange(String rowKey, Double newValue);
 
 }

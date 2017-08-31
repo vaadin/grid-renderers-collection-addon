@@ -5,6 +5,7 @@ import org.vaadin.grid.cellrenderers.client.editable.RatingStarsRendererServerRp
 import org.vaadin.grid.cellrenderers.client.editable.RatingStarsRendererState;
 
 import com.vaadin.server.Setter;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 
 /**
@@ -14,17 +15,17 @@ import com.vaadin.ui.Grid.Column;
  */
 public class RatingStarsRenderer<T> extends EditableRenderer<T,Double> {
 
-    public RatingStarsRenderer(int stars, Setter<T, Double> setter) {
+    public RatingStarsRenderer(Setter<T, Double> setter, int stars) {
         super(Double.class);
-        setupRatingStarsRenderer(stars, setter, false, -1, -1);
+        setupRatingStarsRenderer(setter, stars, false, -1, -1);
     }
     
-    public RatingStarsRenderer(int stars, Setter<T, Double> setter, int width, int height) {
+    public RatingStarsRenderer(Setter<T, Double> setter, int stars, int width, int height) {
         super(Double.class);
-        setupRatingStarsRenderer(stars, setter, false, width, height);
+        setupRatingStarsRenderer(setter, stars, false, width, height);
     }
     
-    public void setupRatingStarsRenderer(int stars, final Setter<T, Double> setter, boolean readOnly, int width, int height) {
+    private void setupRatingStarsRenderer(final Setter<T, Double> setter, int stars, boolean readOnly, int width, int height) {
 
         getState().stars = stars;
         getState().readOnly = readOnly;
@@ -32,19 +33,13 @@ public class RatingStarsRenderer<T> extends EditableRenderer<T,Double> {
     	// Use RPC only if needed
         if (!readOnly) registerRpc(new RatingStarsRendererServerRpc() {
 
-            public void onChange(String rowKey, String columnId, Double newValue) {
+            public void onChange(String rowKey, Double newValue) {
 
-            	T item = getParentGrid().getDataCommunicator().getKeyMapper().get(rowKey);
+            	Grid<T> grid = getParentGrid();
+            	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
             	Column<T,Double> column = getParent();
-            	
-//                Object columnPropertyId = getColumn(columnId).getPropertyId();
-//
-//                Item row = getParentGrid().getContainerDataSource().getItem(itemId);
-//
-//                @SuppressWarnings("unchecked")
-//                Property<Double> cell = (Property<Double>) row.getItemProperty(columnPropertyId);
-
                 setter.accept(item, newValue);
+            	grid.getDataProvider().refreshItem(item);
 
                 fireItemEditEvent(item, column, newValue);
             }

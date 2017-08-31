@@ -89,6 +89,7 @@
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-client-compiler</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
@@ -163,6 +164,7 @@
 					<persistentunitcachedir>${basedir}/target/tmp/gwt-unitCache</persistentunitcachedir>
 					<compileReport>true</compileReport>
 					<strict>true</strict>
+					<style>DETAILED</style>
 					<runTarget>http://localhost:8080/</runTarget>
 				</configuration>
 				<executions>
@@ -181,9 +183,9 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
+				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>8.1.10.v20130312</version>
+				<version>9.3.7.v20160115</version>
 				<configuration>
 					<webApp>
 						<contextPath>/</contextPath>

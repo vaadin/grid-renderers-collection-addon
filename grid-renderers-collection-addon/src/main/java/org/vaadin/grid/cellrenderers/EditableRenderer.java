@@ -90,20 +90,12 @@ public class EditableRenderer<A,T> extends ClickableRenderer<A,T> {
      * Add a new ItemEditEvent listener
      * 
      * @param listener The listener instance to be added
+     * @return Returns registration object that can be used for listener removal
      */
     public Registration addItemEditListener(ItemEditListener listener) {
         Registration reg = addListener(ItemEditEvent.class, listener,
                 ItemEditListener.ITEM_EDIT_METHOD);
         return reg;
-    }
-
-    /**
-     * Remove the ItemEditEvent listener
-     * 
-     * @param listener The listener to be removed
-     */
-    public void removeItemEditListener(ItemEditListener listener) {
-        removeListener(ItemEditListener.class, listener);
     }
 
     public void fireItemEditEvent(A item, Column<A,T> column, T newValue) {

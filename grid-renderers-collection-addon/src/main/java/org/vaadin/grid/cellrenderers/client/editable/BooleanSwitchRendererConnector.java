@@ -20,11 +20,12 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
 
 		@Override
 		public void render(RendererCellReference rendererCellReference, Boolean value, VCheckBox checkBox) {
-			if(checkBox.isEnabled() != rendererCellReference.getColumn().isEditable()) {
-				checkBox.setEnabled(rendererCellReference.getColumn().isEditable() && rendererCellReference.getGrid().isEnabled());
-			}
-			
-			checkBox.setValue(value);
+			checkBox.setValue(value);		
+
+//			if(checkBox.isEnabled() != rendererCellReference.getColumn().isEditable()) {
+//				checkBox.setEnabled(rendererCellReference.getColumn().isEditable() && rendererCellReference.getGrid().isEnabled());
+//			}
+			checkBox.setEnabled(true);
 			
 			rendererCellReference.getElement().addClassName("unselectable");
 			if (getState().txtTrue != null) {

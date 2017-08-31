@@ -2,19 +2,18 @@ package org.vaadin.grid.cellrenderers.demo;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.converter.StringToBigDecimalConverter;
-import com.vaadin.data.util.converter.StringToBooleanConverter;
-import com.vaadin.data.util.converter.StringToIntegerConverter;
+import com.vaadin.icons.VaadinIcons;
 
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickEvent;
@@ -39,6 +38,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
@@ -47,6 +47,7 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
+import com.vaadin.ui.renderers.NumberRenderer;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -124,18 +125,20 @@ public class DemoUI extends UI {
     		}
     	}
 
-    	private Grid createGrid(SparklineRenderer sparkline) {
-    		BeanItemContainer<MyPojo> container = new BeanItemContainer<MyPojo>(MyPojo.class);
+    	private Grid<MyPojo> createGrid(SparklineRenderer sparkline) {
+    		List<MyPojo> beanList = new ArrayList<>();
     		for (int i = 0; i < 1000; ++i) {
-    			container.addBean(new MyPojo(i));
+    			beanList.add(new MyPojo(i));
     		}
 
-    		Grid grid = new Grid(container);
+    		Grid<MyPojo> grid = new Grid<>();
+    		grid.setItems(beanList);
     		grid.setSizeFull();
-    		grid.getColumn("numbers").setRenderer(sparkline);
-    		grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5));
-    		grid.getColumn("stars").setEditable(false);
-    		grid.setColumns("id", "foo", "bar", "stars", "numbers");
+    		grid.addColumn(MyPojo::getId, new NumberRenderer()).setCaption("Id");
+    		grid.addColumn(MyPojo::getFoo).setCaption("Foo");
+    		grid.addColumn(MyPojo::getBar).setCaption("Bar");
+    		grid.addColumn(MyPojo::getStars, new RatingStarsRenderer<>(MyPojo::setStars, 5));
+    		grid.addColumn(MyPojo::getNumbers, sparkline);
     		return grid;
     	}
 
@@ -204,42 +207,37 @@ public class DemoUI extends UI {
     	
 		public CheckBoxDemo() {		
 			Random random = new Random(4837291937l);
-			BeanItemContainer<SimplePojo> container = new BeanItemContainer<SimplePojo>(SimplePojo.class);
-			SimplePojo bean1 = new SimplePojo(0, "Me", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5)));
-			SimplePojo bean2 = new SimplePojo(1, "You", false, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5)));
-			SimplePojo bean3 = new SimplePojo(2, "He", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5)));
-			container.addBean(bean1);
-			container.addBean(bean2);
-			container.addBean(bean3);
+			Grid<SimplePojo> grid = new Grid<>();
+			List<SimplePojo> beanList = new ArrayList<>();
+			SimplePojo bean1 = new SimplePojo(0, "Me", true, LocalDate.now(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), String.valueOf(random.nextInt(5)));
+			SimplePojo bean2 = new SimplePojo(1, "You", false, LocalDate.now(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), String.valueOf(random.nextInt(5)));
+			SimplePojo bean3 = new SimplePojo(2, "He", true, LocalDate.now(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), String.valueOf(random.nextInt(5)));
 			byte[] image = Base64.decodeBase64(castle);
 			bean1.setImage(image);
 			bean2.setImage(image);
 			bean3.setImage(image);
+			beanList.add(bean1);
+			beanList.add(bean2);
+			beanList.add(bean3);
+			grid.setItems(beanList);
 			
-			Grid grid = new Grid(container);
-			grid.setColumns("description","yes","truth","date","number","image");
-			grid.setSizeFull();
-			grid.setEditorEnabled(true);
-			grid.setEditorBuffered(false);
-			Grid.Column yes = grid.getColumn("yes");
-			yes.setRenderer(new CheckboxRenderer());
-			yes.setEditable(true);
-			grid.getColumn("image").setEditable(false);
-    		grid.getColumn("image").setRenderer(new BlobImageRenderer(30,30,"image/png"));
- 
-			Grid.Column truth = grid.getColumn("truth");
-			truth.setRenderer(new HtmlRenderer(), new StringToBooleanConverter() {
-                @Override
-                protected String getTrueString() {
-                    return FontAwesome.CHECK_CIRCLE_O.getHtml();
-                }
+			grid.addColumn(SimplePojo::getDescription).setCaption("Description");
 
-                @Override
-                protected String getFalseString() {
-                    return FontAwesome.CIRCLE_O.getHtml();
-                }
-            });
-			truth.setEditable(false);
+			grid.addColumn(SimplePojo::isYes, new CheckboxRenderer<>(SimplePojo::setYes))
+					.setCaption("Yes")
+					.setEditorComponent(new CheckBox(), SimplePojo::setYes).setEditable(true);
+
+			grid.addColumn(simplePojo -> (simplePojo.isTruth() ? VaadinIcons.CHECK_CIRCLE : VaadinIcons.CIRCLE).getHtml()
+					, new HtmlRenderer())
+					.setCaption("Truth");
+
+			grid.addColumn(SimplePojo::getImage, new BlobImageRenderer(30,30,"image/png"))
+				.setCaption("Image");
+			
+			grid.setSizeFull();
+			grid.getEditor().setEnabled(true);
+			grid.getEditor().setBuffered(false);
+ 
     
 			setStyleName("demoContentLayout");
 			setSizeFull();
@@ -255,72 +253,66 @@ public class DemoUI extends UI {
 
 		public DateTextDemo() {		
 			Random random = new Random(4837291937l);
-			final BeanItemContainer<SimplePojo> container = new BeanItemContainer<SimplePojo>(SimplePojo.class);
+			final List<SimplePojo> beanList = new ArrayList<>();
 			for (int i=0;i<1000;i++) {
-				container.addBean(new SimplePojo(i, "Bean", true, new Date(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5))));
+				boolean truth = (Integer.valueOf(random.nextInt(2)) == 1);
+				beanList.add(new SimplePojo(i, "Bean", truth, LocalDate.now().plusDays(i), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), String.valueOf(random.nextInt(5))));
 			}
 
-			Grid grid = new Grid(container);
+			Grid<SimplePojo> grid = new Grid<>();
+			grid.setItems(beanList);
 			GridNavigationExtension.extend(grid);
 			
-			grid.setColumns("action","description","stars","truth","date","number","choice");
 			grid.setSizeFull();
-			grid.setEditorEnabled(false);
+			grid.getEditor().setEnabled(false);
 
-			DeleteButtonRenderer deleteButton = new DeleteButtonRenderer(new DeleteRendererClickListener() {
-				@Override
-				public void click(DeleteRendererClickEvent event) {
-					container.removeItem(event.getItem());
-				}
+			// Add column with Delete button and event
+			DeleteButtonRenderer<SimplePojo> deleteButton = new DeleteButtonRenderer<SimplePojo>(clickEvent -> {
+				beanList.remove(clickEvent.getItem());
+				grid.getDataProvider().refreshAll();
 				
-			},FontAwesome.TRASH.getHtml()+" Delete",FontAwesome.CHECK.getHtml()+" Confirm");
+			},VaadinIcons.TRASH.getHtml()+" Delete",VaadinIcons.CHECK.getHtml()+" Confirm");
 			deleteButton.setHtmlContentAllowed(true);
-			grid.getColumn("action").setRenderer(deleteButton);
+			grid.addColumn(SimplePojo::getAction, deleteButton).setCaption("Action");
 
-			BooleanSwitchRenderer booleanRenderer = new BooleanSwitchRenderer("True","False");
-			booleanRenderer.addItemEditListener(new ItemEditListener() {
-				@Override
-				public void itemEdited(ItemEditEvent event) {
-					Notification.show("Property " + event.getColumnPropertyId() + " edited with value " + event.getNewValue().toString());				
-				}
-				
-			} );
-			grid.getColumn("truth").setRenderer(booleanRenderer);
-
-			TextFieldRenderer<String> textFieldRenderer = new TextFieldRenderer<String>();
-			textFieldRenderer.addItemEditListener(new ItemEditListener() {
-				@Override
-				public void itemEdited(ItemEditEvent event) {
-					Notification.show("Property " + event.getColumnPropertyId() + " edited with value " + event.getNewValue().toString());				
-				}
-				
-			} );
-			grid.getColumn("description").setRenderer(textFieldRenderer);
-			grid.getColumn("number").setConverter(new StringToBigDecimalConverter());
-			TextFieldRenderer<BigDecimal> decimalFieldRenderer = new TextFieldRenderer<BigDecimal>();
-			decimalFieldRenderer.addItemEditListener(new ItemEditListener() {
-				@Override
-				public void itemEdited(ItemEditEvent event) {
-					Notification.show("Property " + event.getColumnPropertyId() + " edited with value " + event.getNewValue().toString());				
-				}
-				
-			} );
-			grid.getColumn("number").setRenderer(decimalFieldRenderer);
-			grid.getColumn("date").setRenderer(new DateFieldRenderer());
-			grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5));
+			// Add column with Boolean check box and event 
+			BooleanSwitchRenderer<SimplePojo> booleanRenderer = new BooleanSwitchRenderer<>(SimplePojo::setTruth,"True","False");
+			booleanRenderer.addItemEditListener(event ->  {
+					Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());				
+				});
+			grid.addColumn(SimplePojo::isTruth, booleanRenderer).setCaption("Truth");
 			
-			MyStringToIntegerConverter myConverter = new MyStringToIntegerConverter();
-			grid.getColumn("choice").setConverter(myConverter);
-			SimpleSelectRenderer<Integer> choiceFieldRenderer = new SimpleSelectRenderer<Integer>(Arrays.asList(1,2,3,4,5),myConverter,"Select a number 1 to 5 fromt the drop down");
-			choiceFieldRenderer.addItemEditListener(new ItemEditListener() {
-				@Override
-				public void itemEdited(ItemEditEvent event) {
-					Notification.show("Property " + event.getColumnPropertyId() + " edited with value " + event.getNewValue().toString());				
-				}
-				
-			} );
-			grid.getColumn("choice").setRenderer(choiceFieldRenderer);			
-			setStyleName("demoContentLayout");
+			TextFieldRenderer<SimplePojo> textFieldRenderer = new TextFieldRenderer<>(SimplePojo::setDescription);
+			textFieldRenderer.addItemEditListener(event -> {
+					Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
+					SimplePojo pojo = (SimplePojo) event.getItem();
+					pojo.setTruth(!pojo.isTruth());
+				});
+			grid.addColumn(SimplePojo::getDescription, textFieldRenderer).setCaption("Description");
+			
+//			grid.getColumn("number").setConverter(new StringToBigDecimalConverter());
+//			TextFieldRenderer<BigDecimal> decimalFieldRenderer = new TextFieldRenderer<BigDecimal>();
+//			decimalFieldRenderer.addItemEditListener(new ItemEditListener() {
+//				@Override
+//				public void itemEdited(ItemEditEvent event) {
+//					Notification.show("Property " + event.getColumnPropertyId() + " edited with value " + event.getNewValue().toString());				
+//				}
+//				
+//			} );
+//			grid.getColumn("number").setRenderer(decimalFieldRenderer);
+
+//			grid.addColumn(SimplePojo::getDate, new DateFieldRenderer<SimplePojo>(SimplePojo::setDate)).setCaption("Date");
+			grid.addColumn(SimplePojo::getStars, new RatingStarsRenderer<SimplePojo>(SimplePojo::setStars,5)).setCaption("Rating");
+			
+//			MyStringToIntegerConverter myConverter = new MyStringToIntegerConverter();
+//			grid.getColumn("choice").setConverter(myConverter);
+
+			SimpleSelectRenderer<SimplePojo> choiceFieldRenderer = new SimpleSelectRenderer<>(SimplePojo::setChoice, Arrays.asList("1","2","3","4","5"));
+			choiceFieldRenderer.addItemEditListener(event -> { 
+					Notification.show("Property " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());				
+				});
+			grid.addColumn(SimplePojo::getChoice, choiceFieldRenderer).setCaption("Choice");			
+
 			setSizeFull();
 			addComponent(grid);
 			setComponentAlignment(grid

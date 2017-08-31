@@ -37,7 +37,6 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
     public class RatingStarsClientRenderer extends ClickableRenderer<Double, RatingStarsWidget> {
 
         private static final String ROW_KEY_PROPERTY = "rowKey";
-        private static final String COLUMN_ID_PROPERTY = "columnId";
     	
     	@Override
    	 	public RatingStarsWidget createWidget() {
@@ -74,7 +73,6 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
                    	RatingStarsWidget ratingStars = (RatingStarsWidget) event.getSource();
                    	Element e = ratingStars.getElement();
                    	rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
-                   			e.getPropertyString(COLUMN_ID_PROPERTY),
                    			ratingStars.getValue());
                     event.stopPropagation();
                     	
@@ -96,28 +94,23 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
    	 	public void render(RendererCellReference cell, Double data,
     	            RatingStarsWidget widget) {
 
-   	 		widget.setReadOnly(!(cell.getColumn().isEditable() && cell.getGrid().isEnabled()));
+   	 		// widget.setReadOnly(!(cell.getColumn().isEditable() && cell.getGrid().isEnabled()));
+   	 		widget.setReadOnly(getState().readOnly);
    	 		Element e = widget.getElement();
    	 		
             getState().value = data;
+
+            if (data == null) {
+   	 			widget.setValue(0.0);
+   	 		} else {
+   	 			widget.setValue(data);			
+   	 		}
             
             if(e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell.getRow())) {
                 e.setPropertyString(ROW_KEY_PROPERTY,
                         getRowKey((JsonObject) cell.getRow()));
             }
-            // Generics issue, need a correctly typed column.
-
-            if(e.getPropertyString(COLUMN_ID_PROPERTY) != getColumnId(getGrid()
-                    .getColumn(cell.getColumnIndex()))) {
-                e.setPropertyString(COLUMN_ID_PROPERTY, getColumnId(getGrid()
-                        .getColumn(cell.getColumnIndex())));
-            }
    	 		
-   	 		if (data == null) {
-   	 			widget.setValue(0.0);
-   	 		} else {
-   	 			widget.setValue(data);			
-   	 		}
    	 	}
 
     }
