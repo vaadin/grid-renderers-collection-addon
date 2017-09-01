@@ -75,7 +75,9 @@ public class CheckboxRenderer<T> extends ClickableRenderer<T,Boolean> {
                			editor.save();
                			editor.cancel();
                		}
-             		setter.accept(item, ((HasValue<Boolean>) event.getSource()).getValue());
+               		System.out.println(event.getColumn().toString());
+               		System.out.println(event.getSource().toString());
+//             		setter.accept(item, ((HasValue<Boolean>) event.getSource()).getValue());
                 	grid.getDataProvider().refreshItem(item);
                	}
             }

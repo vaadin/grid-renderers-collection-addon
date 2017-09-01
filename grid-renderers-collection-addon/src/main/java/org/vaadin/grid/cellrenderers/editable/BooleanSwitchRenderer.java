@@ -1,7 +1,9 @@
 package org.vaadin.grid.cellrenderers.editable;
 
 import org.vaadin.grid.cellrenderers.EditableRenderer;
+import org.vaadin.grid.cellrenderers.client.editable.BooleanSwitchRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.BooleanSwitchRendererState;
+import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererState;
 
 import com.google.gwt.editor.client.Editor;
@@ -51,20 +53,18 @@ public class BooleanSwitchRenderer<T> extends EditableRenderer<T,Boolean> {
     	if (Page.getCurrent().getWebBrowser().isIE() || Page.getCurrent().getWebBrowser().isEdge()) {
     		DOUBLE_CLICK_DETECTION_MS = 500;
     	}
-    	
-    	addClickListener(new RendererClickListener<T>() {
-    		@Override
-    		public void click(RendererClickEvent<T> event) {
+        registerRpc(new BooleanSwitchRendererServerRpc() {
+
+			public void onChange(String rowKey, Boolean newValue) {
     			// work around duplicate clicks when using a label as checkbox
     			if (!isDoubleClick()) {
-    				Grid<T> grid = getParentGrid();
-    				Column<T, Boolean> column = (Column<T, Boolean>) event.getColumn();
-
-    				T item = (T) event.getItem();
-        			Boolean value = ((HasValue<Boolean>) event.getSource()).getValue();
-        			setter.accept(item, value);
+                	Grid<T> grid = getParentGrid();
+                	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
+                	Column<T, Boolean> column = getParent();
+                	System.out.println("I should see this only once: "+newValue);
+        			setter.accept(item, newValue);
                     grid.getDataProvider().refreshItem(item);
-                    fireItemEditEvent(item, column, value);
+                    fireItemEditEvent(item, column, newValue);
     				
     			}
 
