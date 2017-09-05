@@ -16,7 +16,14 @@
 package org.vaadin.grid.cellrenderers.client.editoraware;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.BrowserEvents;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector;
 import com.vaadin.client.renderers.ClickableRenderer;
 import com.vaadin.client.ui.VCheckBox;
@@ -35,21 +42,46 @@ import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
  */
 @Connect(CheckboxRenderer.class)
 public class CheckboxRendererConnector extends ClickableRendererConnector<Boolean> {
+	CheckboxRendererServerRpc rpc = RpcProxy.create(
+			CheckboxRendererServerRpc.class, this);
 
 	public class CheckboxClientRenderer extends ClickableRenderer<Boolean, VCheckBox> {
 
+		private static final String ROW_KEY_PROPERTY = "rowKey";
+
 	    @Override
 	    public VCheckBox createWidget() {
-	        VCheckBox b = GWT.create(VCheckBox.class);
-	        b.addClickHandler(this);
-	        b.setStylePrimaryName("v-checkbox");
-	        b.setEnabled(false);
-	        return b;
+	        VCheckBox checkBox = GWT.create(VCheckBox.class);
+	        checkBox.addClickHandler(this);
+	        checkBox.setStylePrimaryName("v-checkbox");
+
+			checkBox.sinkBitlessEvent(BrowserEvents.CLICK);
+			checkBox.sinkBitlessEvent(BrowserEvents.MOUSEDOWN);
+
+			checkBox.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                	VCheckBox checkBox = (VCheckBox) event.getSource();
+                    Element e = checkBox.getElement();
+                    checkBox.setValue(!checkBox.getValue());
+                    rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
+                    		checkBox.getValue());
+                }
+            });
+			checkBox.addMouseDownHandler(new MouseDownHandler() {
+                @Override
+                public void onMouseDown(MouseDownEvent event) {
+                    event.stopPropagation();
+                }
+            });			
+
+	        return checkBox;
 	    }
 
 	    @Override
 	    public void render(RendererCellReference cell, Boolean value, VCheckBox checkBox) {
 	        checkBox.setValue(value, false);
+	        checkBox.setEnabled(true);
 			if (getState().txtTrue != null) {
 				String text = null;
 				if (value) text = getState().txtTrue;
@@ -64,6 +96,11 @@ public class CheckboxRendererConnector extends ClickableRendererConnector<Boolea
 		            checkBox.setText(text);
 		        }				
 			}
+        	Element e = checkBox.getElement();
+            if(e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell.getRow())) {
+                e.setPropertyString(ROW_KEY_PROPERTY,
+                        getRowKey((JsonObject) cell.getRow()));
+            }
 	    }
 	}
 

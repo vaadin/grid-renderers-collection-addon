@@ -14,6 +14,8 @@ import com.vaadin.server.Setter;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 
+import elemental.json.JsonValue;
+
 /**
  * 
  * @author Tatu Lund
@@ -49,6 +51,23 @@ public class DateFieldRenderer<T> extends EditableRenderer<T,LocalDate> {
         });
     }
 
+    protected Date convertToDate(LocalDate date) {
+        if (date == null) {
+            return null;
+        }
+        return Date.from(date.atStartOfDay(ZoneOffset.UTC).toInstant());
+    }
+
+
+    @Override
+    public JsonValue encode(LocalDate value) {
+        if (value == null) {
+            return encode(null, Date.class);
+        } else {
+            return encode(convertToDate(value), Date.class);
+        }
+    }
+	
     @Override
     protected DateFieldRendererState getState() {
     	return (DateFieldRendererState) super.getState();

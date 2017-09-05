@@ -209,9 +209,9 @@ public class DemoUI extends UI {
 			Random random = new Random(4837291937l);
 			Grid<SimplePojo> grid = new Grid<>();
 			List<SimplePojo> beanList = new ArrayList<>();
-			SimplePojo bean1 = new SimplePojo(0, "Me", true, LocalDate.now(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), String.valueOf(random.nextInt(5)));
-			SimplePojo bean2 = new SimplePojo(1, "You", false, LocalDate.now(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), String.valueOf(random.nextInt(5)));
-			SimplePojo bean3 = new SimplePojo(2, "He", true, LocalDate.now(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), String.valueOf(random.nextInt(5)));
+			SimplePojo bean1 = new SimplePojo(0, "Me", true, LocalDate.now(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5)));
+			SimplePojo bean2 = new SimplePojo(1, "You", false, LocalDate.now(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5)));
+			SimplePojo bean3 = new SimplePojo(2, "He", true, LocalDate.now(), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5)));
 			byte[] image = Base64.decodeBase64(castle);
 			bean1.setImage(image);
 			bean2.setImage(image);
@@ -254,9 +254,9 @@ public class DemoUI extends UI {
 		public DateTextDemo() {		
 			Random random = new Random(4837291937l);
 			final List<SimplePojo> beanList = new ArrayList<>();
-			for (int i=0;i<1000;i++) {
+			for (int i=0;i<300;i++) {
 				boolean truth = (Integer.valueOf(random.nextInt(2)) == 1);
-				beanList.add(new SimplePojo(i, "Bean", truth, LocalDate.now().plusDays(i), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), String.valueOf(random.nextInt(5))));
+				beanList.add(new SimplePojo(i, "Bean", truth, LocalDate.now().plusDays(i), BigDecimal.valueOf(random.nextDouble()*100), Double.valueOf(random.nextInt(5)), Integer.valueOf(random.nextInt(5))));
 			}
 
 			Grid<SimplePojo> grid = new Grid<>();
@@ -301,13 +301,26 @@ public class DemoUI extends UI {
 //			} );
 //			grid.getColumn("number").setRenderer(decimalFieldRenderer);
 
-//			grid.addColumn(SimplePojo::getDate, new DateFieldRenderer<SimplePojo>(SimplePojo::setDate)).setCaption("Date");
-			grid.addColumn(SimplePojo::getStars, new RatingStarsRenderer<SimplePojo>(SimplePojo::setStars,5)).setCaption("Rating");
+			DateFieldRenderer<SimplePojo> dateFieldRenderer = new DateFieldRenderer<SimplePojo>(SimplePojo::setDate);
+			dateFieldRenderer.addItemEditListener(event -> {
+				Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
+				SimplePojo pojo = (SimplePojo) event.getItem();
+				pojo.setTruth(!pojo.isTruth());
+			});
+			grid.addColumn(SimplePojo::getDate, dateFieldRenderer).setCaption("Date");
+
+			RatingStarsRenderer<SimplePojo> ratingStarsRenderer = new RatingStarsRenderer<SimplePojo>(SimplePojo::setStars,5);
+			ratingStarsRenderer.addItemEditListener(event -> {
+				Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
+				SimplePojo pojo = (SimplePojo) event.getItem();
+				pojo.setTruth(!pojo.isTruth());
+			});
+			grid.addColumn(SimplePojo::getStars, ratingStarsRenderer).setCaption("Rating");
 			
 //			MyStringToIntegerConverter myConverter = new MyStringToIntegerConverter();
 //			grid.getColumn("choice").setConverter(myConverter);
 
-			SimpleSelectRenderer<SimplePojo> choiceFieldRenderer = new SimpleSelectRenderer<>(SimplePojo::setChoice, Arrays.asList("1","2","3","4","5"));
+			SimpleSelectRenderer<SimplePojo,Integer> choiceFieldRenderer = new SimpleSelectRenderer<>(SimplePojo::setChoice, Arrays.asList(1,2,3,4,5));
 			choiceFieldRenderer.addItemEditListener(event -> { 
 					Notification.show("Property " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());				
 				});

@@ -1,5 +1,7 @@
 package org.vaadin.grid.cellrenderers.client.editable;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.Element;
@@ -12,12 +14,12 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ListBox;
+import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector;
 import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer;
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler;
-import com.vaadin.client.renderers.Renderer;
 import com.vaadin.client.widget.grid.RendererCellReference;
 import com.vaadin.client.widgets.Grid;
 import com.vaadin.shared.ui.Connect;
@@ -66,8 +68,9 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
                 listBox.clear();
 
                 int currentIndex = 0;
-                for (String dropDownEntry : getState().dropDownList) {
-                   listBox.addItem(dropDownEntry);
+                List<String> dropDownList = getState().dropDownList;
+                for (String dropDownEntry : dropDownList) {
+                    listBox.addItem(dropDownEntry);
 
                     if (dropDownEntry.equals(selectedValue)) {
                         listBox.setSelectedIndex(currentIndex);

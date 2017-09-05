@@ -33,14 +33,14 @@ public class SimplePojo implements Serializable {
     private LocalDate date;
     private BigDecimal number;
     private Double stars;
-    private String choice;
+    private Integer choice;
     private byte[] image;
     private boolean action = false;
     
     public SimplePojo() {
     }
 
-    public SimplePojo(long id, String description, boolean yes, LocalDate date, BigDecimal number, Double stars, String choice) {
+    public SimplePojo(long id, String description, boolean yes, LocalDate date, BigDecimal number, Double stars, Integer choice) {
         this.id = id;
         this.description = description;
         this.yes = yes;
@@ -101,11 +101,11 @@ public class SimplePojo implements Serializable {
         this.date = date;
     }
     
-    public String getChoice() {
+    public Integer getChoice() {
         return choice;
     }
 
-    public void setChoice(String choice) {
+    public void setChoice(Integer choice) {
         this.choice = choice;
     }
     

@@ -1,7 +1,9 @@
 package org.vaadin.grid.cellrenderers.client.editable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.vaadin.shared.ui.grid.renderers.ClickableRendererState;
 
@@ -12,5 +14,5 @@ import com.vaadin.shared.ui.grid.renderers.ClickableRendererState;
  */
 public class SimpleSelectRendererState extends ClickableRendererState {
     public List<String> dropDownList = new ArrayList<String>();
-    public String title;
+    public String title;    
 }

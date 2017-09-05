@@ -61,7 +61,6 @@ public class BooleanSwitchRenderer<T> extends EditableRenderer<T,Boolean> {
                 	Grid<T> grid = getParentGrid();
                 	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
                 	Column<T, Boolean> column = getParent();
-                	System.out.println("I should see this only once: "+newValue);
         			setter.accept(item, newValue);
                     grid.getDataProvider().refreshItem(item);
                     fireItemEditEvent(item, column, newValue);

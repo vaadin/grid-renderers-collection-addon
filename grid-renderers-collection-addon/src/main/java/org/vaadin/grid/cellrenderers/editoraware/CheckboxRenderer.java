@@ -15,11 +15,14 @@
  */
 package org.vaadin.grid.cellrenderers.editoraware;
 
+import org.vaadin.grid.cellrenderers.client.editable.BooleanSwitchRendererServerRpc;
+import org.vaadin.grid.cellrenderers.client.editoraware.CheckboxRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editoraware.CheckboxRendererState;
 
 import com.vaadin.data.HasValue;
 import com.vaadin.server.Setter;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.components.grid.Editor;
 import com.vaadin.ui.renderers.ClickableRenderer;
 
@@ -59,25 +62,24 @@ public class CheckboxRenderer<T> extends ClickableRenderer<T,Boolean> {
 
 	
 	public void setupCheckboxRenderer(final Setter<T, Boolean> setter) {
-        addClickListener(new RendererClickListener() {
-            @Override
-            public void click(RendererClickEvent event) {
+   
+		registerRpc(new CheckboxRendererServerRpc() {
+        
+ 			public void onChange(String rowKey, Boolean newValue) {
                 Grid<T> grid = getParentGrid();
             	Editor<T> editor = grid.getEditor();
+            	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
+            	Column<T, Boolean> column = getParent();
                 // Do nothing if we are not in unbuffered mode
                 if (editor.isBuffered()) {
                 	return;
                 }
-               	Grid.Column<T, ?> column = event.getColumn();
                	if (column.isEditable() && editor.isEnabled()) {
-               		T item = (T) event.getItem();
                		if (editor.isOpen() && !item.equals(editor.getBinder().getBean())) {
                			editor.save();
                			editor.cancel();
                		}
-               		System.out.println(event.getColumn().toString());
-               		System.out.println(event.getSource().toString());
-//             		setter.accept(item, ((HasValue<Boolean>) event.getSource()).getValue());
+             		setter.accept(item, newValue);
                 	grid.getDataProvider().refreshItem(item);
                	}
             }

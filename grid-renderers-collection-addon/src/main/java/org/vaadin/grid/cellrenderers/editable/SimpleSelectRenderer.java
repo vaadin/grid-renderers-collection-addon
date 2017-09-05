@@ -1,6 +1,10 @@
 package org.vaadin.grid.cellrenderers.editable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.vaadin.grid.cellrenderers.EditableRenderer;
 import org.vaadin.grid.cellrenderers.client.editable.SimpleSelectRendererServerRpc;
@@ -20,21 +24,34 @@ import com.vaadin.ui.Grid.Column;
  * 
  * @author Tatu Lund
  */
-public class SimpleSelectRenderer<T> extends EditableRenderer<T,String> {
+public class SimpleSelectRenderer<T,A> extends EditableRenderer<T,A> {
 
+	private Map<String,A> items;
+	
 	/**
 	 * Constructor for SimpleSelectRenderer. 
 	 * 
 	 * @param setter Method reference to right setter of T 
 	 * @param dropDownList List of the of the selection options to be shown in drop down menu
 	 */
-	public SimpleSelectRenderer(Setter<T,String> setter, List<String> dropDownList) {
-        super(String.class);
+	public SimpleSelectRenderer(Setter<T,A> setter, List<A> dropDownList) {
+        super((Class<A>) Object.class);
  
-        getState().dropDownList = dropDownList;        
-
+        setItems(dropDownList);
+        
     	setupSimpleSelectRenderer(setter);
     }
+
+	private void setItems(List<A> dropDownList) {
+	    items = new HashMap<String,A>();
+        List<String> captions = new ArrayList<String>();
+		
+        for (A value : dropDownList) {
+        	String key = value.toString();
+        	if (items.putIfAbsent(key, value) == null) captions.add(key);
+        }
+        getState().dropDownList = captions;
+	}
  
 	/**
 	 * Constructor for SimpleSelectRenderer.
@@ -43,23 +60,26 @@ public class SimpleSelectRenderer<T> extends EditableRenderer<T,String> {
 	 * @param dropDownList List of the of the selection options to be shown in drop down menu
      * @param title Tooltip text for the select
 	 */
-	public SimpleSelectRenderer(Setter<T,String> setter, List<String> dropDownList, String title) {
-        super(String.class);
- 
-        getState().dropDownList = dropDownList;        
+	public SimpleSelectRenderer(Setter<T,A> setter, List<A> dropDownList, String title) {
+        super((Class<A>) Object.class);
+
+        setItems(dropDownList);
+
         getState().title = title;
 
     	setupSimpleSelectRenderer(setter);
     }
 
-	private void setupSimpleSelectRenderer(final Setter<T,String> setter) {
+	private void setupSimpleSelectRenderer(final Setter<T,A> setter) {
         registerRpc(new SimpleSelectRendererServerRpc() {
 
-            public void onChange(String rowKey, String newValue) {
+            public void onChange(String rowKey, String newKey) {
 
             	Grid<T> grid = getParentGrid();
             	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
-            	Column<T,String> column = getParent();
+            	Column<T,A> column = getParent();
+            	Map<String,A> dropDownItems = items;
+            	A newValue = dropDownItems.get(newKey);
              	setter.accept(item,newValue);
             	grid.getDataProvider().refreshItem(item);
 

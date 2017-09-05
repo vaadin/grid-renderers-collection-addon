@@ -9,22 +9,29 @@ import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
 import com.google.gwt.core.client.GWT; 
 import com.google.gwt.dom.client.BrowserEvents; 
 import com.google.gwt.dom.client.Element; 
-import com.google.gwt.event.dom.client.*; 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.vaadin.client.LocaleService;
+import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector; 
+import com.vaadin.client.connectors.grid.ColumnConnector;
 import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer; 
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler; 
-import com.vaadin.client.renderers.Renderer;
 import com.vaadin.client.ui.VOverlay;
 import com.vaadin.client.widget.grid.RendererCellReference;
 import com.vaadin.client.widgets.Grid; 
 import com.vaadin.shared.ui.Connect; 
+import com.vaadin.shared.ui.datefield.DateResolution;
 
 import elemental.json.JsonObject;
 
@@ -73,7 +80,7 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 
         @Override
         public VMyPopupCalendar createWidget() {
-            final VMyPopupCalendar dateField = GWT.create(VMyPopupCalendar.class);
+            VMyPopupCalendar dateField = GWT.create(VMyPopupCalendar.class);
 
             dateField.setWidth("100%");
 
@@ -83,10 +90,9 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             dateField.sinkBitlessEvent(BrowserEvents.CHANGE);
             dateField.sinkBitlessEvent(BrowserEvents.CLICK);
             dateField.sinkBitlessEvent(BrowserEvents.MOUSEDOWN);
-
             // Configuring the popup calendar panel for Day resolution
             // This is done in similar fashion than the regular connector does it
-//            dateField.setCurrentResolution(Resolution.DAY);
+            dateField.setCurrentResolution(DateResolution.DAY);
             dateField.calendar.setDateTimeService(dateField.getDateTimeService());
             dateField.calendar.setShowISOWeekNumbers(dateField
                     .isShowISOWeekNumbers());
@@ -107,24 +113,22 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             dateField.setTextFieldTabIndex();
 
             // Re-setting connector so that popup inherits correct theme / styles from Grid 
-            GridConnector gridConnector = (GridConnector) getParent();
+            ColumnConnector columnConnector = (ColumnConnector) getParent();
+            GridConnector gridConnector = columnConnector.getParent();
             dateField.popup.setOwner(gridConnector.getWidget());
 
             // Set application connection
             dateField.client = getConnection();   
             dateField.paintableId = getConnectorId();
 
-            LocaleService lservice = new LocaleService();
-            
             // Set date locale
-            String locale = lservice.getDefaultLocale();
+            String locale = LocaleService.getDefaultLocale();
             dateField.setCurrentLocale(locale);
 
             // Add change handler (for textual date input)
             dateField.addDomHandler(new ChangeHandler() {
                 @Override
                 public void onChange(ChangeEvent changeEvent) {
-//                    VMyPopupCalendar dateField = (VMyPopupCalendar) changeEvent.getSource();
                     Element e = dateField.getElement();
                     rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
                             dateField.getDate());
@@ -151,7 +155,6 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             dateField.popup.addCloseHandler(new CloseHandler<PopupPanel>() {
             	@Override
                 public void onClose(CloseEvent<PopupPanel> closeEvent) {
-                    VOverlay popup = (VOverlay) closeEvent.getSource();
                     Element e = dateField.getElement();
                     rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
                             dateField.calendar.getDate());
