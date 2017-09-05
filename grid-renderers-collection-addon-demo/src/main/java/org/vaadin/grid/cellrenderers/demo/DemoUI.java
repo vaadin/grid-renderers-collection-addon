@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.icons.VaadinIcons;
 
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer;
@@ -282,24 +283,21 @@ public class DemoUI extends UI {
 				});
 			grid.addColumn(SimplePojo::isTruth, booleanRenderer).setCaption("Truth");
 			
-			TextFieldRenderer<SimplePojo> textFieldRenderer = new TextFieldRenderer<>(SimplePojo::setDescription);
+			TextFieldRenderer<SimplePojo,String> textFieldRenderer = new TextFieldRenderer<>(SimplePojo::setDescription);
 			textFieldRenderer.addItemEditListener(event -> {
 					Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
 					SimplePojo pojo = (SimplePojo) event.getItem();
 					pojo.setTruth(!pojo.isTruth());
 				});
 			grid.addColumn(SimplePojo::getDescription, textFieldRenderer).setCaption("Description");
+
 			
-//			grid.getColumn("number").setConverter(new StringToBigDecimalConverter());
-//			TextFieldRenderer<BigDecimal> decimalFieldRenderer = new TextFieldRenderer<BigDecimal>();
-//			decimalFieldRenderer.addItemEditListener(new ItemEditListener() {
-//				@Override
-//				public void itemEdited(ItemEditEvent event) {
-//					Notification.show("Property " + event.getColumnPropertyId() + " edited with value " + event.getNewValue().toString());				
-//				}
-//				
-//			} );
-//			grid.getColumn("number").setRenderer(decimalFieldRenderer);
+			TextFieldRenderer<SimplePojo,BigDecimal> decimalFieldRenderer = new TextFieldRenderer<>(SimplePojo::setNumber);
+			decimalFieldRenderer.setConverter(new StringToBigDecimalConverter("Error message"));
+			decimalFieldRenderer.addItemEditListener(event -> {
+					Notification.show("Property " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());								
+			});
+			grid.addColumn(SimplePojo::getNumber, decimalFieldRenderer).setCaption("Big decimal");
 
 			DateFieldRenderer<SimplePojo> dateFieldRenderer = new DateFieldRenderer<SimplePojo>(SimplePojo::setDate);
 			dateFieldRenderer.addItemEditListener(event -> {
@@ -317,10 +315,10 @@ public class DemoUI extends UI {
 			});
 			grid.addColumn(SimplePojo::getStars, ratingStarsRenderer).setCaption("Rating");
 			
-//			MyStringToIntegerConverter myConverter = new MyStringToIntegerConverter();
-//			grid.getColumn("choice").setConverter(myConverter);
+			MyStringToIntegerConverter myConverter = new MyStringToIntegerConverter();
 
 			SimpleSelectRenderer<SimplePojo,Integer> choiceFieldRenderer = new SimpleSelectRenderer<>(SimplePojo::setChoice, Arrays.asList(1,2,3,4,5));
+			choiceFieldRenderer.setConverter(myConverter);
 			choiceFieldRenderer.addItemEditListener(event -> { 
 					Notification.show("Property " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());				
 				});

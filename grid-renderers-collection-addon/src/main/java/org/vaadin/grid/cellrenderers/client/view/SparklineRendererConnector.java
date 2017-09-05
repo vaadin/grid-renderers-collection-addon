@@ -3,13 +3,12 @@ package org.vaadin.grid.cellrenderers.client.view;
 import org.vaadin.sparklines.client.ui.SparklinesGWT;
 
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.vaadin.client.widgets.Grid; 
 import com.google.gwt.user.client.ui.HTML;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.connectors.AbstractRendererConnector;
+import com.vaadin.client.connectors.grid.ColumnConnector;
 import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.WidgetRenderer;
 import com.vaadin.client.widget.grid.RendererCellReference;
@@ -100,7 +99,8 @@ public class SparklineRendererConnector extends
     public void onStateChanged(StateChangeEvent stateChangeEvent) {
         super.onStateChanged(stateChangeEvent);
         Grid grid = getGrid();
-		refresh(grid);
+        grid.requestRefreshBody();
+//		refresh(grid);
     }
  
     private native static void refresh(Grid<?> grid)
@@ -138,7 +138,8 @@ public class SparklineRendererConnector extends
     }
  
     private Grid<JsonObject> getGrid() {
-        return ((GridConnector) getParent()).getWidget();
+    	ColumnConnector column = (ColumnConnector) getParent();
+        return column.getParent().getWidget();
     }
     
 }

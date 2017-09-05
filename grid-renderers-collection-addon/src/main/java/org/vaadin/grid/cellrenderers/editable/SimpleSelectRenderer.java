@@ -10,6 +10,8 @@ import org.vaadin.grid.cellrenderers.EditableRenderer;
 import org.vaadin.grid.cellrenderers.client.editable.SimpleSelectRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.SimpleSelectRendererState;
 
+import com.vaadin.data.Converter;
+import com.vaadin.data.ValueContext;
 import com.vaadin.server.Setter;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
@@ -27,6 +29,13 @@ import com.vaadin.ui.Grid.Column;
 public class SimpleSelectRenderer<T,A> extends EditableRenderer<T,A> {
 
 	private Map<String,A> items;
+	private Converter<String,A> converter;
+	private List<A> dropDownList;
+	
+	public void setConverter(Converter<String,A> converter) {
+		this.converter = converter;
+		setItems(dropDownList);
+	}
 	
 	/**
 	 * Constructor for SimpleSelectRenderer. 
@@ -37,6 +46,8 @@ public class SimpleSelectRenderer<T,A> extends EditableRenderer<T,A> {
 	public SimpleSelectRenderer(Setter<T,A> setter, List<A> dropDownList) {
         super((Class<A>) Object.class);
  
+        this.dropDownList = dropDownList;
+        
         setItems(dropDownList);
         
     	setupSimpleSelectRenderer(setter);
@@ -47,7 +58,12 @@ public class SimpleSelectRenderer<T,A> extends EditableRenderer<T,A> {
         List<String> captions = new ArrayList<String>();
 		
         for (A value : dropDownList) {
-        	String key = value.toString();
+        	String key = "";
+        	if (converter != null) {
+        		key = converter.convertToPresentation(value, new ValueContext());
+        	} else {
+        		key = value.toString();
+        	}
         	if (items.putIfAbsent(key, value) == null) captions.add(key);
         }
         getState().dropDownList = captions;
@@ -62,6 +78,8 @@ public class SimpleSelectRenderer<T,A> extends EditableRenderer<T,A> {
 	 */
 	public SimpleSelectRenderer(Setter<T,A> setter, List<A> dropDownList, String title) {
         super((Class<A>) Object.class);
+
+        this.dropDownList = dropDownList;
 
         setItems(dropDownList);
 
