@@ -1,6 +1,6 @@
-# Grid Renderers Add-on for Vaadin 7
+# Grid Renderers Add-on for Vaadin 8
 
-Grid Renderers collection is a set of renderers for Vaadin 7 Grid. It is possible to use Table as editable
+Grid Renderers collection is a set of renderers for Vaadin 8 Grid. It is possible to use Table as editable
 canvas with components in Table cells. With help of this collection it is possible to achieve similar
 functionality with Grid component. In addition to Editable renderers this collection has couple of renderers
 for advanced data presentation too.
@@ -54,70 +54,10 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
-### Version 1.1.2
-* DeleteButtonRenderer, made it boolean type, so that property underneath controls whether the button is enabled or not
+### Version 2.0.0
+* First version for Vaadin 8, based on featureset of version 1.1.2 for Vaadin 7
+* There are API changes
 * Updated demo
-
-### Version 1.1.1
-* Fixed DeleteButtonRenderer, support for HTML content mode was missing
-* Updated demo
-
-### Version 1.1.0
-* Added DeleteButtonRenderer
-* Updated demo
-
-### Version 1.0.0
-* Added GridNavigationExtension
-* Fixed RatingStarsRenderer to work with GridNavigationExtension
-* Fixed GridNavigationExtension to recognize selects
-
-### Version 0.98
-* Fixed bug in CheckBoxRenderer when used with buffered mode
-* Fixed BooleanSwitchRenderer tacticle and feel issue with IE and slow computers
-* Changed RatingStarsRenderer to be editable based on Column.setEditable(), added width / height settings
-
-### Version 0.97
-* SimpleSelectRenderer added
-* Updated demo
-* Added JavaDocs
-
-### Version 0.96
-* BooleanSwitchRenderer added
-* CheckboxRenderer updated. Label configuration options added.
-* Fixed and updated demo
-* Added JavaDocs
-
-### Version 0.95
-* BlobImageRenderer added
-* Added ItemEditEvent for EditableRenderers
-* Tested with 7.7.8
-* Updated demo
-* Added JavaDocs
-
-### Version 0.94
-* RatingStarsRenderer added
-* Updated the demo to use RatingStarsRenderer
-* Vaadin version advanced to 7.6.8
-
-
-### Version 0.93
-* Vaadin version advanced to 7.6.7
-* SparklineRenderer added
-* Renderers are split to view, editable and editor-aware
-* Refactored the demo
-* Updated documentation
-
-### Version 0.92
-* Vaadin version advanced to 7.5.7
-* New renderers added
-* Renderers are split to editable and editor-aware
-
-### Version 0.91
-* Vaadin version advanced to 7.5.6
-* Fixed IllegalStateException
-
-### Version 0.9
-* CheckboxRenderer - renderer for boolean columns. Looks like checkbox, activates edit mode at first click. Supposed to be used with Grid unbuffered mode
 
 ## Issue tracking
 
@@ -139,9 +79,9 @@ Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.t
 
 Grid Renderers collection is initially written by Ilia Motornyi 
 
-SimpleSelectRenderer, BooleanSwitchRenderer, BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, SparklineRenderer & RatingStarsRenderer Contributed by Tatu Lund (tatu@vaadin.com corresponding author)
+SimpleSelectRenderer, BooleanSwitchRenderer, BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, SparklineRenderer & RatingStarsRenderer DeleteButtonRenderer Contributed by Tatu Lund (tatu@vaadin.com corresponding author)
 
-ItemEditEvent contributed by Mikael Granqvist
+ItemEditEvent, GridNavigationExtension contributed by Mikael Granqvist
 
 # Developer Guide
 
@@ -149,7 +89,9 @@ ItemEditEvent contributed by Mikael Granqvist
 
 Here is a simple example on how to try out the add-on component:
 
-    grid.getColumn("yes").setRenderer(new CheckboxRenderer());
+
+    TextFieldRenderer<MyPojo,String> renderer = new TextFieldRenderer<>(MyPojo::setText);
+    grid.addColumn(MyPojo::getText, renderer);
 
 For a more comprehensive examples, see org.vaadin.grid.cellrenderers.demo.DemoUI
 
@@ -169,7 +111,8 @@ Render small images directly from byte[] of the bean. Useful when your read imag
 from SQL database. Note, use only small images to avoid excess overhead.
 
 ### CheckboxRenderer
-Single-click editor for boolean columns - Editor aware. Most suitable for unbuffered Grid(Vaadin 7.6+) Label options can be configured for localization.
+Single-click editor for boolean columns - Editor aware. Most suitable for unbuffered Grid Label options
+can be configured for localization.
 
 ### BooleanSwitchRenderer
 Alternative version of CheckboxRenderer similar to editable renderers.
@@ -178,7 +121,8 @@ Alternative version of CheckboxRenderer similar to editable renderers.
 Inline Dates editor.
 
 ### TextFieldRenderer
-Multipurpose inline Text editor. Supports various types of data using com.vaadin.data.util.converter.Converter TextFieldRenderer and DateFieldRenderer are suitable when
+Multipurpose inline Text editor. Supports various types of data using Converter that can be set
+via TextFieldRenderer.setConverter() API. TextFieldRenderer and DateFieldRenderer are suitable when
 you need to edit few columns only. Tab key jumps between editable fields by default. The input is
 directly stored in the container. For backend commits it is recommend to have "save" button in the
 UI.
