@@ -54,6 +54,14 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 1.1.2
+* DeleteButtonRenderer, made it boolean type, so that property underneath controls whether the button is enabled or not
+* Updated demo
+
+### Version 1.1.1
+* Fixed DeleteButtonRenderer, support for HTML content mode was missing
+* Updated demo
+
 ### Version 1.1.0
 * Added DeleteButtonRenderer
 * Updated demo

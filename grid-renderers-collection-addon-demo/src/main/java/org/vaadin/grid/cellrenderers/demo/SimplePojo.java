@@ -34,7 +34,7 @@ public class SimplePojo implements Serializable {
     private Double stars;
     private Integer choice;
     private byte[] image;
-    private String action = "";
+    private boolean action = false;
     
     public SimplePojo() {
     }
@@ -46,14 +46,15 @@ public class SimplePojo implements Serializable {
         this.date = date;
         this.choice = choice;
         this.number = number;
+		if (stars > 1.0) this.action = true;
 		this.stars =  (double) stars;
     }
 
-    public String getAction() {
+    public boolean getAction() {
     	return action;
     }
     
-    public void setAction(String action) {
+    public void setAction(Boolean action) {
     	this.action = action;
     }
     
@@ -70,6 +71,8 @@ public class SimplePojo implements Serializable {
 	}
 	
 	public void setStars(Double stars) {
+		if (stars > 1.0) this.action = true;
+		else this.action = false;
 		this.stars = stars;
 	}
 	
