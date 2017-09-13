@@ -54,6 +54,10 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+
+### Version 2.1.0
+* Added ConverterRenderer
+
 ### Version 2.0.0
 * First version for Vaadin 8, based on featureset of version 1.1.2 for Vaadin 7
 * There are API changes

@@ -29,6 +29,7 @@ import org.vaadin.grid.cellrenderers.editable.RatingStarsRenderer;
 import org.vaadin.grid.cellrenderers.editable.SimpleSelectRenderer;
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 import org.vaadin.grid.cellrenderers.view.BlobImageRenderer;
+import org.vaadin.grid.cellrenderers.view.ConverterRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer.SparklineConfiguration;
 
@@ -67,19 +68,21 @@ public class DemoUI extends UI {
     public class SparklineDemo extends VerticalLayout {
 
     	public class MyPojo {
-    		String foo = "foo";
-    		String bar = "bar";
-    		int id = -1;
-    		final Number[] numbers;
-    		final Random rand;
-    		Double stars;
-    		byte[] image;
+    		private String foo = "foo";
+    		private String bar = "bar";
+    		private int id = -1;
+    		private final Number[] numbers;
+    		private final Random rand;
+    		private Double stars;
+    		private byte[] image;
+    		private BigDecimal number;
     		
     		public MyPojo(int i) {
     			id = i;
     			numbers = new Number[60];
     			rand = new Random(id);
     			stars =  (double) rand.nextInt(10) / 2.0;
+    			setNumber(BigDecimal.valueOf(rand.nextDouble()*100));
     		}
 
     		public byte[] getImage() {
@@ -124,6 +127,14 @@ public class DemoUI extends UI {
     		public int getId() {
     			return id;
     		}
+
+			public BigDecimal getNumber() {
+				return number;
+			}
+
+			public void setNumber(BigDecimal number) {
+				this.number = number;
+			}
     	}
 
     	private Grid<MyPojo> createGrid(SparklineRenderer sparkline) {
@@ -136,10 +147,10 @@ public class DemoUI extends UI {
     		grid.setItems(beanList);
     		grid.setSizeFull();
     		grid.addColumn(MyPojo::getId, new NumberRenderer()).setCaption("Id");
-    		grid.addColumn(MyPojo::getFoo).setCaption("Foo");
-    		grid.addColumn(MyPojo::getBar).setCaption("Bar");
-    		grid.addColumn(MyPojo::getStars, new RatingStarsRenderer<>(MyPojo::setStars, 5));
-    		grid.addColumn(MyPojo::getNumbers, sparkline);
+    		grid.addColumn(MyPojo::getFoo).setCaption("FooBar");
+    		grid.addColumn(MyPojo::getNumber, new ConverterRenderer<MyPojo,BigDecimal>(new MyStringToBigDecimalConverter("Error message"))).setCaption("Number");
+    		grid.addColumn(MyPojo::getStars, new RatingStarsRenderer<>(MyPojo::setStars, 5)).setCaption("Rating");
+    		grid.addColumn(MyPojo::getNumbers, sparkline).setCaption("A graph");
     		return grid;
     	}
 
