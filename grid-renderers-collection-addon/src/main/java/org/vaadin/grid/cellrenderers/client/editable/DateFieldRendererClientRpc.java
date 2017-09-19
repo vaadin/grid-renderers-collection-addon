@@ -12,12 +12,12 @@ import com.vaadin.shared.communication.ClientRpc;
 public interface DateFieldRendererClientRpc extends ClientRpc {
 
 	/**
-	 * Send to the client if the checkbox should be enabled
+	 * Send to the client if some settings for it on render
 	 * 
 	 * @param enabled
 	 *            checkbox is enabled
 	 * @param id
 	 *            Cell identification
 	 */
-	void setEnabled(boolean enabled, CellId id);
+	void setOnRenderSettings(boolean enabled, CellId id);
 }

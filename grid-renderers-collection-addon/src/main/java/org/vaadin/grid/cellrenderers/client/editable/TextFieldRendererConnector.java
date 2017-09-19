@@ -12,8 +12,11 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.vaadin.client.MouseEventDetailsBuilder;
 import com.vaadin.client.communication.RpcProxy;
@@ -77,6 +80,20 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 
 			final VTextField textField = GWT.create(VTextField.class);
 
+			final Timer textChangeEventTrigger = new Timer() {
+
+				@Override
+				public void run() {
+					if (textField.isAttached()) {
+						Element e = textField.getElement();
+						TextFieldRendererConnector.this.rpc.onChange(
+																		e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
+																		e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
+																		textField.getValue(), textField.getCursorPos());
+					}
+				}
+			};
+
 			if (getState().maxLength > 0) {
 				textField.setMaxLength(getState().maxLength);
 			}
@@ -116,12 +133,22 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 			textField.addChangeHandler(new ChangeHandler() {
 				@Override
 				public void onChange(ChangeEvent changeEvent) {
+					textChangeEventTrigger.cancel();
+
 					VTextField textField = (VTextField) changeEvent.getSource();
 					Element e = textField.getElement();
 					TextFieldRendererConnector.this.rpc.onChange(
 																	e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
 																	e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
-																	textField.getValue());
+																	textField.getValue(), textField.getCursorPos());
+				}
+			});
+
+			textField.addKeyDownHandler(new KeyDownHandler() {
+
+				@Override
+				public void onKeyDown(KeyDownEvent keyDownEvent) {
+					textChangeEventTrigger.schedule(300);
 				}
 			});
 
@@ -129,6 +156,7 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 				@Override
 				public void onClick(ClickEvent event) {
 					event.stopPropagation();
+
 					VTextField textField = (VTextField) event.getSource();
 					Element e = textField.getElement();
 					getRpcProxy(RendererClickRpc.class)
@@ -145,12 +173,15 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 				}
 			});
 
-			registerRpc(DateFieldRendererClientRpc.class, new DateFieldRendererClientRpc() {
+			registerRpc(TextFieldRendererClientRpc.class, new TextFieldRendererClientRpc() {
 
 				@Override
-				public void setEnabled(boolean enabled, CellId id) {
+				public void setOnRenderSettings(boolean enabled, int cursorPos, CellId id) {
 					if (id.equals(EditableRendererClientUtil.getCellId(textField))) {
 						textField.setEnabled(enabled);
+						if (cursorPos != -1) {
+							textField.setCursorPos(cursorPos);
+						}
 					}
 				}
 

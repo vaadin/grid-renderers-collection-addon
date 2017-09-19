@@ -12,12 +12,14 @@ import com.vaadin.shared.communication.ClientRpc;
 public interface TextFieldRendererClientRpc extends ClientRpc {
 
 	/**
-	 * Send to the client if the checkbox should be enabled
+	 * Send to the client if some settings for it on render
 	 * 
 	 * @param enabled
 	 *            checkbox is enabled
+	 * @param cursorPos
+	 *            current cursorPos in field (-1: no position)
 	 * @param id
 	 *            Cell identification
 	 */
-	void setEnabled(boolean enabled, CellId id);
+	void setOnRenderSettings(boolean enabled, int cursorPos, CellId id);
 }

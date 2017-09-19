@@ -6,7 +6,7 @@ import com.vaadin.shared.communication.ServerRpc;
 
 public interface TextFieldRendererServerRpc extends ServerRpc {
 
-	public void onChange(String rowKey, String columnId, String newValue);
+	public void onChange(String rowKey, String columnId, String newValue, int cursorPos);
 
 	/**
 	 * workaround to set enabled of component correctly

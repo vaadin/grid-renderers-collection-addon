@@ -1,7 +1,7 @@
 package org.vaadin.grid.cellrenderers.editable;
 
 import org.vaadin.grid.cellrenderers.EditableRenderer;
-import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererClientRpc;
+import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererClientRpc;
 import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererState;
 import org.vaadin.grid.cellrenderers.client.editable.common.CellId;
@@ -15,6 +15,7 @@ import com.vaadin.data.util.converter.Converter;
 public class TextFieldRenderer<T> extends EditableRenderer<T> {
 
 	private final EditableRendererEnabled editableRendererEnabled;
+	private int cursorPos;
 
 	public TextFieldRenderer() {
 		this(-1, null);
@@ -33,11 +34,13 @@ public class TextFieldRenderer<T> extends EditableRenderer<T> {
 
 		getState().maxLength = maxLength;
 		this.editableRendererEnabled = editableRendererEnabled;
+		this.cursorPos = -1;
 
 		registerRpc(new TextFieldRendererServerRpc() {
 
 			@Override
-			public void onChange(String rowKey, String columnId, String newValue) {
+			public void onChange(String rowKey, String columnId, String newValue, int cursorPos) {
+				TextFieldRenderer.this.cursorPos = cursorPos;
 
 				Object itemId = getItemId(rowKey);
 				Object columnPropertyId = getColumn(columnId).getPropertyId();
@@ -63,10 +66,11 @@ public class TextFieldRenderer<T> extends EditableRenderer<T> {
 
 			@Override
 			public void onRender(CellId id) {
-				getRpcProxy(DateFieldRendererClientRpc.class)
-					.setEnabled(EditableRendererUtil.isColumnComponentEnabled(	getItemId(id.getRowId()), getParentGrid(),
-																				TextFieldRenderer.this.editableRendererEnabled),
-								id);
+				getRpcProxy(TextFieldRendererClientRpc.class)
+					.setOnRenderSettings(	EditableRendererUtil.isColumnComponentEnabled(getItemId(id.getRowId()),
+																						getParentGrid(),
+																						TextFieldRenderer.this.editableRendererEnabled),
+											TextFieldRenderer.this.cursorPos, id);
 			}
 
 		});
