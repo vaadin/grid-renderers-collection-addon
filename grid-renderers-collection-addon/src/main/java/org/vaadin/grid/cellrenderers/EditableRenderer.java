@@ -99,7 +99,15 @@ public class EditableRenderer<T> extends ClickableRenderer<T> {
 	/**
 	 * Fires a event with single value to all listeners without any event
 	 * details.
-	 *
+	 * 
+	 * @param itemId
+	 *            itemId
+	 * @param item
+	 *            item
+	 * @param columnPropertyId
+	 *            columnPropertyId
+	 * @param newValue
+	 *            newValue
 	 */
 	public void fireItemEditEvent(Object itemId, Item item, Object columnPropertyId, T newValue) {
 		fireEvent(new ItemEditEvent<T>(getParentGrid(), itemId, item, columnPropertyId, newValue));
@@ -108,7 +116,15 @@ public class EditableRenderer<T> extends ClickableRenderer<T> {
 	/**
 	 * Fires a event with multi value to all listeners without any event
 	 * details.
-	 *
+	 * 
+	 * @param itemId
+	 *            itemId
+	 * @param item
+	 *            item
+	 * @param columnPropertyId
+	 *            columnPropertyId
+	 * @param newValues
+	 *            newValues
 	 */
 	public void fireItemEditEvent(Object itemId, Item item, Object columnPropertyId, Set<T> newValues) {
 		fireEvent(new ItemEditEvent<T>(getParentGrid(), itemId, item, columnPropertyId, newValues));
