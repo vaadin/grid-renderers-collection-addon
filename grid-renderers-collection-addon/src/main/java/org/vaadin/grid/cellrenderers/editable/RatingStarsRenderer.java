@@ -17,21 +17,20 @@ public class RatingStarsRenderer<T> extends EditableRenderer<T,Double> {
 
     public RatingStarsRenderer(Setter<T, Double> setter, int stars) {
         super(Double.class);
-        setupRatingStarsRenderer(setter, stars, false, -1, -1);
+        setupRatingStarsRenderer(setter, stars, -1, -1);
     }
     
     public RatingStarsRenderer(Setter<T, Double> setter, int stars, int width, int height) {
         super(Double.class);
-        setupRatingStarsRenderer(setter, stars, false, width, height);
+        setupRatingStarsRenderer(setter, stars, width, height);
     }
     
-    private void setupRatingStarsRenderer(final Setter<T, Double> setter, int stars, boolean readOnly, int width, int height) {
+    private void setupRatingStarsRenderer(final Setter<T, Double> setter, int stars, int width, int height) {
 
         getState().stars = stars;
-        getState().readOnly = readOnly;
 
     	// Use RPC only if needed
-        if (!readOnly) registerRpc(new RatingStarsRendererServerRpc() {
+        registerRpc(new RatingStarsRendererServerRpc() {
 
             public void onChange(String rowKey, Double newValue) {
 
@@ -51,5 +50,23 @@ public class RatingStarsRenderer<T> extends EditableRenderer<T,Double> {
     protected RatingStarsRendererState getState() {
     	return (RatingStarsRendererState) super.getState();
     }
-    	
+
+    /**
+     * Toggle Renderer to be editable / non-editable (=true). Default is editable. 
+     * 
+     * @param readOnly Boolean value
+     */
+    public void setReadOnly(boolean readOnly) {
+    	getState().readOnly = readOnly;
+    }
+    
+    /**
+     * Returns if Renderer is editable or non-editable at the moment.
+     * 
+     * @return Boolean value
+     */
+    public boolean isReadOnly() {
+    	return getState().readOnly;
+    }
+    
 }

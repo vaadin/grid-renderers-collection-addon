@@ -15,4 +15,6 @@ import com.vaadin.shared.ui.grid.renderers.ClickableRendererState;
 public class SimpleSelectRendererState extends ClickableRendererState {
     public List<String> dropDownList = new ArrayList<String>();
     public String title;    
+	public boolean readOnly = false;
+
 }

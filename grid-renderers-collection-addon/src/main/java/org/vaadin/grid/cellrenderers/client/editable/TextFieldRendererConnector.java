@@ -60,10 +60,7 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
             }
             // Generics issue, need a correctly typed column.
 
-//            if(textField.isEnabled() != cell.getColumn().isEditable()) {
-//                textField.setEnabled(cell.getColumn().isEditable());
-//            }
-            textField.setEnabled(true);
+            textField.setEnabled(!getState().readOnly);
         }
 
         @Override

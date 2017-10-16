@@ -77,4 +77,22 @@ public class TextFieldRenderer<T,A> extends EditableRenderer<T,A> {
     	return (TextFieldRendererState) super.getState();
     }
     
+    /**
+     * Toggle Renderer to be editable / non-editable (=true). Default is editable. 
+     * 
+     * @param readOnly Boolean value
+     */
+    public void setReadOnly(boolean readOnly) {
+    	getState().readOnly = readOnly;
+    }
+    
+    /**
+     * Returns if Renderer is editable or non-editable at the moment.
+     * 
+     * @return Boolean value
+     */
+    public boolean isReadOnly() {
+    	return getState().readOnly;
+    }
+    
 }

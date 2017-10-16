@@ -55,6 +55,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
 ## Release notes
 
 
+### Version 2.1.1
+* Added isReadOnly() and setReadOnly(..) to Editable Renderers.
+
 ### Version 2.1.0
 * Added ConverterRenderer
 

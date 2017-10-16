@@ -9,7 +9,7 @@ import com.vaadin.shared.ui.grid.renderers.ClickableRendererState;
 public class RatingStarsRendererState extends ClickableRendererState {
 	public int stars = 0;
 	public Double value = null;
-	public boolean readOnly = true;
+	public boolean readOnly = false;
 	public int width = -1;
 	public int height = -1;
 }
