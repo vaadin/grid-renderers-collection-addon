@@ -9,4 +9,6 @@ import com.vaadin.shared.ui.grid.renderers.ClickableRendererState;
  */
 public class DateFieldRendererState extends ClickableRendererState {
 	public Date value = null;
+	public boolean readOnly = false;
+
 }

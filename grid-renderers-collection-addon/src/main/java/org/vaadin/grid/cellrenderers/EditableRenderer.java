@@ -101,4 +101,5 @@ public class EditableRenderer<A,T> extends ClickableRenderer<A,T> {
     public void fireItemEditEvent(A item, Column<A,T> column, T newValue) {
         fireEvent(new ItemEditEvent(getParentGrid(), item, column, newValue));
     }
+
 }

@@ -137,7 +137,7 @@ public class DemoUI extends UI {
 			}
     	}
 
-    	private Grid<MyPojo> createGrid(SparklineRenderer sparkline) {
+    	private Grid<MyPojo> createGrid(SparklineRenderer<MyPojo> sparkline) {
     		List<MyPojo> beanList = new ArrayList<>();
     		for (int i = 0; i < 1000; ++i) {
     			beanList.add(new MyPojo(i));
@@ -149,13 +149,16 @@ public class DemoUI extends UI {
     		grid.addColumn(MyPojo::getId, new NumberRenderer()).setCaption("Id");
     		grid.addColumn(MyPojo::getFoo).setCaption("FooBar");
     		grid.addColumn(MyPojo::getNumber, new ConverterRenderer<MyPojo,BigDecimal>(new MyStringToBigDecimalConverter("Error message"))).setCaption("Number");
-    		grid.addColumn(MyPojo::getStars, new RatingStarsRenderer<>(MyPojo::setStars, 5)).setCaption("Rating");
+    		RatingStarsRenderer<MyPojo> ratingStars = new RatingStarsRenderer<>(MyPojo::setStars, 5);
+    		ratingStars.setReadOnly(true);
+    		grid.addColumn(MyPojo::getStars, ratingStars).setCaption("Rating");
+    		
     		grid.addColumn(MyPojo::getNumbers, sparkline).setCaption("A graph");
     		return grid;
     	}
 
     	public SparklineDemo() {
-    		SparklineRenderer sparkline = new SparklineRenderer(200,30); 
+    		SparklineRenderer<MyPojo> sparkline = new SparklineRenderer<>(200,30); 
     		final SparklineConfiguration config = sparkline.getConfiguration();
 
     		config.setPathWidth(2);
