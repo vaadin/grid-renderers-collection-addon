@@ -78,6 +78,44 @@ public class TextFieldRenderer<T,A> extends EditableRenderer<T,A> {
     }
     
     /**
+     * When eagerChangeMode is set to true the text field emits value
+     *  change after each key press. Default is false. 
+     * 
+     * @param eagerChangeMode Boolean value
+     */
+    public void setEagerChangeMode(boolean eagerChangeMode) {
+    	getState().eagerChangeMode = eagerChangeMode;
+    }
+    
+    /**
+     * Get the current state of eagerChangeMode
+     * 
+     * @return State of eagerChangeMode
+     */
+    public boolean isEagerChangeMode() {
+    	return getState().eagerChangeMode;
+    }
+
+    /**
+     * When blurChangeMode is set to true the text field emits value
+     *  change on blur event. Default is false. 
+     * 
+     * @param blurChangeMode Boolean value
+     */
+    public void setBlurChangeMode(boolean blurChangeMode) {
+    	getState().blurChangeMode = blurChangeMode;
+    }
+    
+    /**
+     * Get the current state of blurChangeMode
+     * 
+     * @return State of blurChangeMode
+     */
+    public boolean isBlurChangeMode() {
+    	return getState().blurChangeMode;
+    }
+
+    /**
      * Toggle Renderer to be editable / non-editable (=true). Default is editable. 
      * 
      * @param readOnly Boolean value

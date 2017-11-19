@@ -11,6 +11,7 @@ import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererState;
 
 import com.vaadin.server.Setter;
+import com.vaadin.shared.ui.datefield.DateResolution;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 
@@ -74,6 +75,30 @@ public class DateFieldRenderer<T> extends EditableRenderer<T,LocalDate> {
     }
     
     /**
+     * When blurChangeMode is set to true the text field emits value
+     *  change on blur event. Default is false. 
+     * 
+     * @param blurChangeMode Boolean value
+     */
+    public void setBlurChangeMode(boolean blurChangeMode) {
+    	getState().blurChangeMode = blurChangeMode;
+    }
+
+    /**
+     * Set the date resolution of the DateField to be rendered
+     *   valid values are DateResolution.DAY, DateResolution.MONTH and DateResolution.YEAR. 
+     * 
+     * @param dateResolution The date resolution
+     */
+    public void setDateResolution(DateResolution dateResolution) {
+    	if (dateResolution == DateResolution.DAY || dateResolution == DateResolution.MONTH || dateResolution ==  DateResolution.YEAR) {
+    		getState().dateResolution = dateResolution;
+    	} else {
+            assert false : "Unexpected resolution argument " + dateResolution;
+    	}
+    }
+
+    /**
      * Toggle Renderer to be editable / non-editable (=true). Default is editable. 
      * 
      * @param readOnly Boolean value
@@ -88,7 +113,6 @@ public class DateFieldRenderer<T> extends EditableRenderer<T,LocalDate> {
      * @return Boolean value
      */
     public boolean isReadOnly() {
-    	return getState().readOnly;
-    }
-    
+    	return getState().readOnly;        
+    }    
 }
