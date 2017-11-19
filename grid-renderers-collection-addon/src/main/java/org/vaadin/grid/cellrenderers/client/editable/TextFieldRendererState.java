@@ -9,4 +9,6 @@ public class TextFieldRendererState extends ClickableRendererState {
 	public String value = null;
 	public boolean fitToCell = true;
 	public boolean readOnly = false;
+	public boolean eagerChangeMode = false;
+	public boolean blurChangeMode = false;
 }

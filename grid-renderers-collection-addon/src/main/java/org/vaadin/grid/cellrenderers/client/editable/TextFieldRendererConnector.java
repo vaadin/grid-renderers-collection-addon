@@ -91,6 +91,24 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
                 }
             });
 
+            textField.addBlurHandler(event -> { 
+            	if (getState().blurChangeMode) {
+            		VTextField field = (VTextField) event.getSource();
+            		Element e = field.getElement();
+            		rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
+            				textField.getValue());
+            	}            	            	
+            });
+            
+            textField.addKeyUpHandler(event -> {
+            	if (getState().eagerChangeMode) {
+            		VTextField field = (VTextField) event.getSource();
+            		Element e = field.getElement();
+            		rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
+            				textField.getValue());
+            	}            	
+            });
+            
             textField.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {

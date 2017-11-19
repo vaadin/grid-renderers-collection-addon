@@ -8,13 +8,23 @@ import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
 
 import com.google.gwt.core.client.GWT; 
 import com.google.gwt.dom.client.BrowserEvents; 
-import com.google.gwt.dom.client.Element; 
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -89,7 +99,7 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             dateField.sinkBitlessEvent(BrowserEvents.MOUSEDOWN);
             // Configuring the popup calendar panel for Day resolution
             // This is done in similar fashion than the regular connector does it
-            dateField.setCurrentResolution(DateResolution.DAY);
+            dateField.setCurrentResolution(getState().dateResolution);
             dateField.calendar.setDateTimeService(dateField.getDateTimeService());
             dateField.calendar.setShowISOWeekNumbers(dateField
                     .isShowISOWeekNumbers());
@@ -139,6 +149,17 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
                 }
             }, ClickEvent.getType());
 
+            dateField.text.addDomHandler(new BlurHandler() {
+				@Override
+				public void onBlur(BlurEvent event) {
+                	if (getState().blurChangeMode) {
+                		Element e = dateField.getElement();
+                		rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
+                            dateField.getDate());
+                	}
+				}            	
+            }, BlurEvent.getType());
+            
             dateField.addDomHandler(new MouseDownHandler() {
                 @Override
                 public void onMouseDown(MouseDownEvent event) {
@@ -153,11 +174,11 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             	@Override
                 public void onClose(CloseEvent<PopupPanel> closeEvent) {
                     Element e = dateField.getElement();
-                    rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
-                            dateField.calendar.getDate());
+                    Date date = dateField.calendar.getDate();
+                    rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),date);
                 }
             });
-
+            
             return dateField;
         }
     }

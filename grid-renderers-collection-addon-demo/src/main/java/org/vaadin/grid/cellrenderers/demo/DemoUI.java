@@ -19,6 +19,7 @@ import com.vaadin.icons.VaadinIcons;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickEvent;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickListener;
+import org.vaadin.grid.cellrenderers.action.HtmlButtonRenderer;
 import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
 import org.vaadin.grid.cellrenderers.navigation.GridNavigationExtension;
 import org.vaadin.grid.cellrenderers.EditableRenderer.ItemEditEvent;
@@ -36,6 +37,7 @@ import org.vaadin.grid.cellrenderers.view.SparklineRenderer.SparklineConfigurati
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.shared.ui.datefield.DateResolution;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -68,7 +70,7 @@ public class DemoUI extends UI {
     public class SparklineDemo extends VerticalLayout {
 
     	public class MyPojo {
-    		private String foo = "foo";
+    		private String foo = "<B>Vaadin</B> "+VaadinIcons.VAADIN_H.getHtml();
     		private String bar = "bar";
     		private int id = -1;
     		private final Number[] numbers;
@@ -147,7 +149,12 @@ public class DemoUI extends UI {
     		grid.setItems(beanList);
     		grid.setSizeFull();
     		grid.addColumn(MyPojo::getId, new NumberRenderer()).setCaption("Id");
-    		grid.addColumn(MyPojo::getFoo).setCaption("FooBar");
+			HtmlButtonRenderer<MyPojo> htmlButton = new HtmlButtonRenderer<MyPojo>(clickEvent -> {
+				Notification.show("HTML button has been clicked");
+			});
+			htmlButton.setHtmlContentAllowed(true);
+			grid.addColumn(MyPojo::getFoo, htmlButton).setCaption("Vaadin");
+
     		grid.addColumn(MyPojo::getNumber, new ConverterRenderer<MyPojo,BigDecimal>(new MyStringToBigDecimalConverter("Error message"))).setCaption("Number");
     		RatingStarsRenderer<MyPojo> ratingStars = new RatingStarsRenderer<>(MyPojo::setStars, 5);
     		ratingStars.setReadOnly(true);
@@ -298,6 +305,7 @@ public class DemoUI extends UI {
 			grid.addColumn(SimplePojo::isTruth, booleanRenderer).setCaption("Truth");
 			
 			TextFieldRenderer<SimplePojo,String> textFieldRenderer = new TextFieldRenderer<>(SimplePojo::setDescription);
+			textFieldRenderer.setBlurChangeMode(true);
 			textFieldRenderer.addItemEditListener(event -> {
 					Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
 					SimplePojo pojo = (SimplePojo) event.getItem();
@@ -314,6 +322,8 @@ public class DemoUI extends UI {
 			grid.addColumn(SimplePojo::getNumber, decimalFieldRenderer).setCaption("Big decimal");
 
 			DateFieldRenderer<SimplePojo> dateFieldRenderer = new DateFieldRenderer<SimplePojo>(SimplePojo::setDate);
+			dateFieldRenderer.setBlurChangeMode(true);
+			dateFieldRenderer.setDateResolution(DateResolution.DAY);
 			dateFieldRenderer.addItemEditListener(event -> {
 				Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
 				SimplePojo pojo = (SimplePojo) event.getItem();
