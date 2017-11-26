@@ -10,10 +10,7 @@ import com.vaadin.event.MouseEvents.ClickEvent;
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
-import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.renderers.ClickableRenderer;
-import com.vaadin.ui.renderers.ClickableRenderer.RendererClickEvent;
-import com.vaadin.ui.renderers.ClickableRenderer.RendererClickListener;
 import com.vaadin.util.ReflectTools;
 
 public class DeleteButtonRenderer extends ClickableRenderer<Boolean> {
@@ -44,23 +41,23 @@ public class DeleteButtonRenderer extends ClickableRenderer<Boolean> {
      */
     public static class DeleteRendererClickEvent extends ClickEvent {
 
-        private final Object item;
+        private final Object itemId;
         private final Column column;
 
-        protected DeleteRendererClickEvent(Grid source, Object item,
+        protected DeleteRendererClickEvent(Grid source, Object itemId,
                 Column column, MouseEventDetails mouseEventDetails) {
             super(source, mouseEventDetails);
-            this.item = item;
+            this.itemId = itemId;
             this.column = column;
         }
 
         /**
-         * Returns the item of the row where the click event originated.
+         * Returns the itemId of the row where the click event originated.
          *
-         * @return the item of the clicked row
+         * @return the itemId of the clicked row
          */
-        public Object getItem() {
-            return item;
+        public Object getItemId() {
+            return itemId;
         }
 
         /**

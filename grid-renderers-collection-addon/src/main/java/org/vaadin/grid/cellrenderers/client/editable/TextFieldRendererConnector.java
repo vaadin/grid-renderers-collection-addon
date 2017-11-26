@@ -3,7 +3,6 @@ package org.vaadin.grid.cellrenderers.client.editable;
 import com.google.gwt.dom.client.Style;
 import com.vaadin.client.VConsole;
 import com.vaadin.client.annotations.OnStateChange;
-import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 
 import com.google.gwt.core.client.GWT; 
 import com.google.gwt.dom.client.BrowserEvents; 
@@ -26,7 +25,7 @@ import elemental.json.JsonObject;
 /**
  * @author Tatu Lund - Vaadin
  */
-@Connect(TextFieldRenderer.class)
+@Connect(org.vaadin.grid.cellrenderers.editable.TextFieldRenderer.class)
 public class TextFieldRendererConnector extends ClickableRendererConnector<String>  {
     TextFieldRendererServerRpc rpc = RpcProxy.create(
             TextFieldRendererServerRpc.class, this);
@@ -99,6 +98,32 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
                 }
             });
 
+            textField.addBlurHandler(new BlurHandler() {
+            	@Override
+            	public void onBlur(BlurEvent event) {
+            		if (getState().blurChangeMode) {
+            			VTextField textField = (VTextField) event.getSource();
+                        Element e = textField.getElement();
+                        rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
+                                e.getPropertyString(COLUMN_ID_PROPERTY),
+                                textField.getValue());
+            		}
+            	}
+            });
+            
+            textField.addKeyUpHandler(new KeyUpHandler() {
+            	@Override
+            	public void onKeyUp(KeyUpEvent event) {
+            		if (getState().eagerChangeMode) {
+            			VTextField textField = (VTextField) event.getSource();
+                        Element e = textField.getElement();
+                        rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
+                                e.getPropertyString(COLUMN_ID_PROPERTY),
+                                textField.getValue());
+            		}            		
+            	}
+            });
+            
             textField.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {

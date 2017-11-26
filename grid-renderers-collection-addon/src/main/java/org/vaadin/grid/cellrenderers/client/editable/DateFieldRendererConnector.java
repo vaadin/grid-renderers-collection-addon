@@ -92,7 +92,7 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 
             // Configuring the popup calendar panel for Day resolution
             // This is done in similar fashion than the regular connector does it
-            dateField.setCurrentResolution(Resolution.DAY);
+            dateField.setCurrentResolution(getState().dateResolution);
             dateField.calendar.setDateTimeService(dateField.getDateTimeService());
             dateField.calendar.setShowISOWeekNumbers(dateField
                     .isShowISOWeekNumbers());
@@ -130,7 +130,6 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             dateField.addDomHandler(new ChangeHandler() {
                 @Override
                 public void onChange(ChangeEvent changeEvent) {
-//                    VMyPopupCalendar dateField = (VMyPopupCalendar) changeEvent.getSource();
                     Element e = dateField.getElement();
                     rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
                             e.getPropertyString(COLUMN_ID_PROPERTY),
@@ -145,6 +144,18 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
                 }
             }, ClickEvent.getType());
 
+            dateField.text.addDomHandler(new BlurHandler() {
+            	@Override
+            	public void onBlur(BlurEvent event) {
+            		if (getState().blurChangeMode) {
+                        Element e = dateField.getElement();
+                        rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
+                                e.getPropertyString(COLUMN_ID_PROPERTY),
+                                dateField.getDate());
+            		}
+            	}
+            }, BlurEvent.getType());
+            
             dateField.addDomHandler(new MouseDownHandler() {
                 @Override
                 public void onMouseDown(MouseDownEvent event) {

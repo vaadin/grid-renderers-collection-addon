@@ -19,6 +19,9 @@ import com.vaadin.data.util.converter.StringToIntegerConverter;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickEvent;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickListener;
+import org.vaadin.grid.cellrenderers.action.HtmlButtonRenderer;
+import org.vaadin.grid.cellrenderers.action.HtmlButtonRenderer.HtmlButtonRendererClickEvent;
+import org.vaadin.grid.cellrenderers.action.HtmlButtonRenderer.HtmlButtonRendererClickListener;
 import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
 import org.vaadin.grid.cellrenderers.navigation.GridNavigationExtension;
 import org.vaadin.grid.cellrenderers.EditableRenderer.ItemEditEvent;
@@ -65,7 +68,7 @@ public class DemoUI extends UI {
     public class SparklineDemo extends VerticalLayout {
 
     	public class MyPojo {
-    		String foo = "foo";
+    		String foo = "<B>Java</B> "+FontAwesome.COFFEE.getHtml();
     		String bar = "bar";
     		int id = -1;
     		final Number[] numbers;
@@ -135,6 +138,15 @@ public class DemoUI extends UI {
     		grid.getColumn("numbers").setRenderer(sparkline);
     		grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5));
     		grid.getColumn("stars").setEditable(false);
+    		HtmlButtonRenderer htmlButtonRenderer = new HtmlButtonRenderer(new HtmlButtonRendererClickListener() {
+				@Override
+				public void click(HtmlButtonRendererClickEvent event) {
+					Notification.show("Java button was clicked");
+				}
+			});
+    		htmlButtonRenderer.setHtmlContentAllowed(true);
+    		grid.getColumn("foo").setRenderer(htmlButtonRenderer);
+    		grid.getColumn("foo").setEditable(false);
     		grid.setColumns("id", "foo", "bar", "stars", "numbers");
     		return grid;
     	}
@@ -270,7 +282,7 @@ public class DemoUI extends UI {
 			DeleteButtonRenderer deleteButton = new DeleteButtonRenderer(new DeleteRendererClickListener() {
 				@Override
 				public void click(DeleteRendererClickEvent event) {
-					container.removeItem(event.getItem());
+					container.removeItem(event.getItemId());
 				}
 				
 			},FontAwesome.TRASH.getHtml()+" Delete",FontAwesome.CHECK.getHtml()+" Confirm");
@@ -288,6 +300,7 @@ public class DemoUI extends UI {
 			grid.getColumn("truth").setRenderer(booleanRenderer);
 
 			TextFieldRenderer<String> textFieldRenderer = new TextFieldRenderer<String>();
+			textFieldRenderer.setEagerChangeMode(true);
 			textFieldRenderer.addItemEditListener(new ItemEditListener() {
 				@Override
 				public void itemEdited(ItemEditEvent event) {
@@ -306,8 +319,23 @@ public class DemoUI extends UI {
 				
 			} );
 			grid.getColumn("number").setRenderer(decimalFieldRenderer);
-			grid.getColumn("date").setRenderer(new DateFieldRenderer());
-			grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5));
+			DateFieldRenderer dateFieldRenderer = new DateFieldRenderer();
+			dateFieldRenderer.addItemEditListener(new ItemEditListener() {
+				@Override
+				public void itemEdited(ItemEditEvent event) {
+					Notification.show("Property " + event.getColumnPropertyId() + " edited with value " + event.getNewValue().toString());				
+				}				
+			} );			
+			grid.getColumn("date").setRenderer(dateFieldRenderer);
+
+			RatingStarsRenderer ratingStarsRenderer = new RatingStarsRenderer(5);
+			ratingStarsRenderer.addItemEditListener(new ItemEditListener() {
+				@Override
+				public void itemEdited(ItemEditEvent event) {
+					Notification.show("Property " + event.getColumnPropertyId() + " edited with value " + event.getNewValue().toString());				
+				}				
+			} );			
+			grid.getColumn("stars").setRenderer(ratingStarsRenderer);
 			
 			MyStringToIntegerConverter myConverter = new MyStringToIntegerConverter();
 			grid.getColumn("choice").setConverter(myConverter);
