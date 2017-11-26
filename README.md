@@ -54,6 +54,15 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+
+### Version 1.2.0
+* Added blurChangeMode to TextFieldRenderer and DateFieldRenderer to tackle issue #18.
+* Added eagerChangeMode to TextFieldRenderer to tackle issue #18.
+* Added support for different Resolution to DateFieldRenderer
+* Added HtmlButtonRenderer to collection
+* Corrected naming getItem -> getItemId in DeleteButtonRenderer 
+* Updated demo
+
 ### Version 1.1.2
 * DeleteButtonRenderer, made it boolean type, so that property underneath controls whether the button is enabled or not
 * Updated demo
@@ -139,9 +148,10 @@ Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.t
 
 Grid Renderers collection is initially written by Ilia Motornyi 
 
-SimpleSelectRenderer, BooleanSwitchRenderer, BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, SparklineRenderer & RatingStarsRenderer Contributed by Tatu Lund (tatu@vaadin.com corresponding author)
+SimpleSelectRenderer, BooleanSwitchRenderer, BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, HtmlButtonRenderer,
+DeleteButtonRenderer, SparklineRenderer & RatingStarsRenderer Contributed by Tatu Lund (tatu@vaadin.com corresponding author)
 
-ItemEditEvent contributed by Mikael Granqvist
+ItemEditEvent & GridNavigationExtension contributed by Mikael Granqvist
 
 # Developer Guide
 
@@ -154,6 +164,9 @@ Here is a simple example on how to try out the add-on component:
 For a more comprehensive examples, see org.vaadin.grid.cellrenderers.demo.DemoUI
 
 ## Features
+
+### HtmlButtonRenderer
+Alternative to the ButtonRenderer included to Vaadin framework. This one supports also HTML content and does not propagate click event when used.
 
 ### DeleteButtonRenderer
 Two stage (Delete & Confirm) Delete action button. Delete and Confirm texts can be configured e.g. for

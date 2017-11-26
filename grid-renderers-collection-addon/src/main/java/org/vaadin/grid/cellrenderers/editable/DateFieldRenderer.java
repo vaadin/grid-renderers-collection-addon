@@ -9,6 +9,7 @@ import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererState;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.renderers.ClickableRenderer;
 
 /**
@@ -16,17 +17,18 @@ import com.vaadin.ui.renderers.ClickableRenderer;
  * @author Tatu Lund
  *
  */
-public class DateFieldRenderer extends EditableRenderer<Date>
-{
-    public DateFieldRenderer()
-    {
+public class DateFieldRenderer extends EditableRenderer<Date> {
+
+    /**
+     * Constructor for new DateFieldRenderer 
+     * 
+     */
+	public DateFieldRenderer() {
         super(Date.class);
      
-        registerRpc(new DateFieldRendererServerRpc()
-        {
+        registerRpc(new DateFieldRendererServerRpc() {
 
-            public void onChange(String rowKey, String columnId, Date newValue)
-            {
+            public void onChange(String rowKey, String columnId, Date newValue) {
 
                 Object itemId = getItemId(rowKey);
                 Object columnPropertyId = getColumn(columnId).getPropertyId();
@@ -44,9 +46,31 @@ public class DateFieldRenderer extends EditableRenderer<Date>
         });
     }
 
+    /**
+     * Set the date resolution of the DateField to be rendered
+     *   valid values are Resolution.DAY, Resolution.MONTH and Resolution.YEAR. 
+     * 
+     * @param dateResolution The date resolution
+     */
+    public void setDateResolution(Resolution dateResolution) {
+    	if (dateResolution == Resolution.DAY || dateResolution == Resolution.MONTH || dateResolution ==  Resolution.YEAR) {
+    		getState().dateResolution = dateResolution;
+    	} else {
+            assert false : "Unexpected resolution argument " + dateResolution;
+    	}
+    }  
+    /**
+     * When blurChangeMode is set to true the text field emits value
+     *  change on blur event. Default is false. 
+     * 
+     * @param blurChangeMode Boolean value
+     */
+    public void setBlurChangeMode(boolean blurChangeMode) {
+    	getState().blurChangeMode = blurChangeMode;
+    }
+
     @Override
-    protected DateFieldRendererState getState()
-    {
+    protected DateFieldRendererState getState() {
     	return (DateFieldRendererState) super.getState();
     }
     

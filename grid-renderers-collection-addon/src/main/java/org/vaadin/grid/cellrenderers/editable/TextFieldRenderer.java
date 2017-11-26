@@ -15,7 +15,12 @@ import com.vaadin.ui.renderers.ClickableRenderer;
  *
  */
 public class TextFieldRenderer<T> extends EditableRenderer<T> {
-    public TextFieldRenderer() {
+
+    /**
+     * Constructor for new TextFieldRenderer 
+     * 
+     */
+	public TextFieldRenderer() {
         super((Class<T>) Object.class);
      
         registerRpc(new TextFieldRendererServerRpc() {
@@ -54,5 +59,42 @@ public class TextFieldRenderer<T> extends EditableRenderer<T> {
     protected TextFieldRendererState getState() {
     	return (TextFieldRendererState) super.getState();
     }
+
+    /**
+     * When eagerChangeMode is set to true the text field emits value
+     *  change after each key press. Default is false. 
+     * 
+     * @param eagerChangeMode Boolean value
+     */
+    public void setEagerChangeMode(boolean eagerChangeMode) {
+    	getState().eagerChangeMode = eagerChangeMode;
+    }
     
+    /**
+     * Get the current state of eagerChangeMode
+     * 
+     * @return State of eagerChangeMode
+     */
+    public boolean isEagerChangeMode() {
+    	return getState().eagerChangeMode;
+    }
+
+    /**
+     * When blurChangeMode is set to true the text field emits value
+     *  change on blur event. Default is false. 
+     * 
+     * @param blurChangeMode Boolean value
+     */
+    public void setBlurChangeMode(boolean blurChangeMode) {
+    	getState().blurChangeMode = blurChangeMode;
+    }
+    
+    /**
+     * Get the current state of blurChangeMode
+     * 
+     * @return State of blurChangeMode
+     */
+    public boolean isBlurChangeMode() {
+    	return getState().blurChangeMode;
+    }    
 }
