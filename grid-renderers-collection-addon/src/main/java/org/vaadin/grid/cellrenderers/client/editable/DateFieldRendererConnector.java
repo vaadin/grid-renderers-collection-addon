@@ -38,6 +38,7 @@ import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer; 
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler; 
 import com.vaadin.client.ui.VOverlay;
+import com.vaadin.client.ui.VTextField;
 import com.vaadin.client.widget.grid.RendererCellReference;
 import com.vaadin.client.widgets.Grid; 
 import com.vaadin.shared.ui.Connect; 
@@ -56,7 +57,8 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
     public class DateFieldClientRenderer extends ClickableRenderer<Date, VMyPopupCalendar> {
 
         private static final String ROW_KEY_PROPERTY = "rowKey";
-
+        private Date value = null;
+        
         private boolean doesTextFieldContainValue(VMyPopupCalendar dateField, Date value) {
             if(dateField.getDate().equals(value)) {
             	return true;
@@ -70,8 +72,6 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 
             Element e = dateField.getElement();
 
-            getState().value = selectedValue;
-            
             if(e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell.getRow())) {
                 e.setPropertyString(ROW_KEY_PROPERTY,
                         getRowKey((JsonObject) cell.getRow()));
@@ -149,13 +149,21 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
                 }
             }, ClickEvent.getType());
 
+            dateField.text.addFocusHandler(event -> {
+            	value = dateField.getDate();
+            });
+            
             dateField.text.addDomHandler(new BlurHandler() {
 				@Override
 				public void onBlur(BlurEvent event) {
                 	if (getState().blurChangeMode) {
-                		Element e = dateField.getElement();
-                		rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
-                            dateField.getDate());
+                		Date newValue = dateField.getDate();
+                		if (value != null && !value.equals(newValue)) {
+                			Element e = dateField.getElement();
+                			rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
+                					newValue);
+                			value = newValue;
+                		}
                 	}
 				}            	
             }, BlurEvent.getType());
