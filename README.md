@@ -54,6 +54,10 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 2.2.1
+* Fixing issue #22, BooleanSwitchRenderer.setReadOnly(..) did not work
+* Fix, The blurChangeMode did not work properly
+
 ### Version 2.2.0
 * Added blurChangeMode to TextFieldRenderer and DateFieldRenderer to tackle issue #18.
 * Added eagerChangeMode to TextFieldRenderer to tackle issue #18.

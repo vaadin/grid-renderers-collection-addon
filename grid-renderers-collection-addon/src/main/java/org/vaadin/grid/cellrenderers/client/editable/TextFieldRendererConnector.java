@@ -37,7 +37,8 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
     public class TextFieldClientRenderer extends ClickableRenderer<String, VTextField> {
 
         private static final String ROW_KEY_PROPERTY = "rowKey";
-
+        private String value = null;
+        
         private boolean doesTextFieldContainValue(VTextField textField, String value) {
             if(textField.getValue().equals(value)) {
             	return true;
@@ -49,7 +50,6 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
         public void render(RendererCellReference cell, String selectedValue,
                            VTextField textField) {
 
-        	getState().value = selectedValue;
             textField.setValue(selectedValue);
             
         	Element e = textField.getElement();
@@ -91,12 +91,21 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
                 }
             });
 
+            textField.addFocusHandler(event -> {
+        		VTextField field = (VTextField) event.getSource();
+            	value = field.getValue();
+            });
+            
             textField.addBlurHandler(event -> { 
             	if (getState().blurChangeMode) {
             		VTextField field = (VTextField) event.getSource();
-            		Element e = field.getElement();
-            		rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
-            				textField.getValue());
+            		String newValue = field.getValue();
+            		if (value != null && !value.equals(newValue)) {
+            			Element e = field.getElement();
+            			rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
+            					newValue);
+            			value = newValue;
+            		}
             	}            	            	
             });
             
