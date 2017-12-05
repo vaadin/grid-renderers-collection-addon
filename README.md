@@ -54,6 +54,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 2.2.2
+* Fixing issue #24, SimpleSelectRenderer conversion logic was flawed since Vaadin 8 migration was halfbaked
+
 ### Version 2.2.1
 * Fixing issue #22, BooleanSwitchRenderer.setReadOnly(..) did not work
 * Fix, The blurChangeMode did not work properly
