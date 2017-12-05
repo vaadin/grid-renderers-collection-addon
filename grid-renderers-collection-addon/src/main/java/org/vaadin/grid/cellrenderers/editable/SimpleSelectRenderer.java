@@ -16,6 +16,8 @@ import com.vaadin.server.Setter;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 
+import elemental.json.JsonValue;
+
 /**
  * Simple selection renderer to be used when the set of values to be selected is small. The renderer
  * has type parameter. The renderer uses ListBox GWT widget, which accepts only String as value.
@@ -32,6 +34,11 @@ public class SimpleSelectRenderer<T,A> extends EditableRenderer<T,A> {
 	private Converter<String,A> converter;
 	private List<A> dropDownList;
 	
+	/**
+	 * Set A Converter to be used in conversion between value and caption label of the listing.
+	 * 
+	 * @param converter The converter to be used
+	 */
 	public void setConverter(Converter<String,A> converter) {
 		this.converter = converter;
 		setItems(dropDownList);
@@ -105,7 +112,16 @@ public class SimpleSelectRenderer<T,A> extends EditableRenderer<T,A> {
              }
         });
     }
-
+	
+    @Override
+    public JsonValue encode(A value) {
+        if (converter == null) {
+            return encode((String) value, String.class);
+        } else {
+            return encode(converter.convertToPresentation(value, new ValueContext()), String.class);
+        }
+    }	
+	
     @Override
     protected SimpleSelectRendererState getState()  {
         return (SimpleSelectRendererState) super.getState();

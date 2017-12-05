@@ -299,7 +299,6 @@ public class DemoUI extends UI {
 
 			// Add column with Boolean check box and event 
 			BooleanSwitchRenderer<SimplePojo> booleanRenderer = new BooleanSwitchRenderer<>(SimplePojo::setTruth,"True","False");
-			booleanRenderer.setReadOnly(true);
 			booleanRenderer.addItemEditListener(event ->  {
 					Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());				
 				});

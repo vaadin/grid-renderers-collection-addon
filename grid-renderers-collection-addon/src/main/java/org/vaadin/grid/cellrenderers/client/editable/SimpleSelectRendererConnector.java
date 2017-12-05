@@ -64,18 +64,26 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
             }
             // Generics issue, need a correctly typed column.
 
-            if (getState().dropDownList.size() != listBox.getItemCount()) {
-                listBox.clear();
 
+            List<String> dropDownList = getState().dropDownList;
+            if (dropDownList.size() != listBox.getItemCount()) {
+                listBox.clear();
                 int currentIndex = 0;
-                List<String> dropDownList = getState().dropDownList;
                 for (String dropDownEntry : dropDownList) {
                     listBox.addItem(dropDownEntry);
-
                     if (dropDownEntry.equals(selectedValue)) {
                         listBox.setSelectedIndex(currentIndex);
                     }
 
+                    currentIndex++;
+                }
+            } else {           	
+                int currentIndex = 0;
+                for (String dropDownEntry : dropDownList) {
+                    if (dropDownEntry.equals(selectedValue)) {
+                        listBox.setSelectedIndex(currentIndex);
+                        break;
+                    }
                     currentIndex++;
                 }
             }
