@@ -3,6 +3,7 @@ package org.vaadin.grid.cellrenderers.client.editable;
 import org.vaadin.grid.cellrenderers.client.editable.common.CellId;
 import org.vaadin.grid.cellrenderers.client.editable.common.EditableRendererClientUtil;
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
@@ -33,182 +34,182 @@ import elemental.json.JsonObject;
 
 @Connect(TextFieldRenderer.class)
 public class TextFieldRendererConnector extends ClickableRendererConnector<String> {
-	TextFieldRendererServerRpc rpc = RpcProxy.create(TextFieldRendererServerRpc.class, this);
+    TextFieldRendererServerRpc rpc = RpcProxy.create(TextFieldRendererServerRpc.class, this);
 
-	public class TextFieldClientRenderer extends ClickableRenderer<String, VTextField> {
+    public class TextFieldClientRenderer extends ClickableRenderer<String, VTextField> {
 
-		@Override
-		public void render(RendererCellReference cell, String selectedValue, VTextField textField) {
+        @Override
+        public void render(final RendererCellReference cell, final String selectedValue, final VTextField textField) {
 
-			Element e = textField.getElement();
+            final Element e = textField.getElement();
 
-			getState().value = selectedValue;
+            getState().value = selectedValue;
 
-			if (e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell
-				.getRow())) {
-				e.setPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY, getRowKey((JsonObject) cell.getRow()));
-			}
-			// Generics issue, need a correctly typed column.
+            if (e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell
+                                                                                              .getRow())) {
+                e.setPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY, getRowKey((JsonObject) cell.getRow()));
+            }
+            // Generics issue, need a correctly typed column.
 
-			if (e
-				.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY) != getColumnId(EditableRendererClientUtil
-					.getGridFromParent(getParent())
-					.getColumn(cell.getColumnIndex()))) {
-				e.setPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY,
-									getColumnId(EditableRendererClientUtil.getGridFromParent(getParent())
-										.getColumn(cell.getColumnIndex())));
-			}
+            if (e
+                    .getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY) != getColumnId(EditableRendererClientUtil
+                                                                                                     .getGridFromParent(getParent())
+                                                                                                     .getColumn(cell.getColumnIndex()))) {
+                e.setPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY,
+                                    getColumnId(EditableRendererClientUtil.getGridFromParent(getParent())
+                                                .getColumn(cell.getColumnIndex())));
+            }
 
-			textField.setValue(selectedValue);
+            textField.setValue(selectedValue);
 
-			if (!cell.getColumn()
-				.isEditable()
-					|| !cell.getGrid()
-						.isEnabled()) {
-				textField.setEnabled(false);
-				return;
-			}
+            if (!cell.getColumn()
+                    .isEditable()
+                    || !cell.getGrid()
+                    .isEnabled()) {
+                textField.setEnabled(false);
+                return;
+            }
 
-			TextFieldRendererConnector.this.rpc
-				.onRender(new CellId(e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
-						e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY)));
-		}
+            TextFieldRendererConnector.this.rpc
+            .onRender(new CellId(e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
+                                 e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY)));
+        }
 
-		@Override
-		public VTextField createWidget() {
-			onUnregister();
+        @Override
+        public VTextField createWidget() {
+            onUnregister();
 
-			final VTextField textField = GWT.create(VTextField.class);
+            final VTextField textField = GWT.create(VTextField.class);
 
-			final Timer textChangeEventTrigger = new Timer() {
+            final Timer textChangeEventTrigger = new Timer() {
 
-				@Override
-				public void run() {
-					if (textField.isAttached()) {
-						Element e = textField.getElement();
-						TextFieldRendererConnector.this.rpc.onChange(
-																		e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
-																		e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
-																		textField.getValue(), textField.getCursorPos());
-					}
-				}
-			};
+                @Override
+                public void run() {
+                    if (textField.isAttached()) {
+                        final Element e = textField.getElement();
+                        TextFieldRendererConnector.this.rpc.onChange(
+                                                                     e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
+                                                                     e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
+                                                                     textField.getValue(), textField.getCursorPos());
+                    }
+                }
+            };
 
-			if (getState().maxLength > 0) {
-				textField.setMaxLength(getState().maxLength);
-			}
+            if (getState().maxLength > 0) {
+                textField.setMaxLength(getState().maxLength);
+            }
 
-			if (getState().fitToCell) {
-				textField.setWidth("100%");
+            if (getState().fitToCell) {
+                textField.setWidth("100%");
 
-				textField.getElement()
-					.getStyle()
-					.setPosition(Style.Position.RELATIVE);
-				textField.getElement()
-					.getStyle()
-					.setProperty("border-radius", "0");
-				textField.getElement()
-					.getStyle()
-					.setProperty("padding", "0 16px");
-				textField.getElement()
-					.getStyle()
-					.setLeft(-16.0, Style.Unit.PX);
-				textField.getElement()
-					.getStyle()
-					.setProperty("border", "none");
-				textField.getElement()
-					.getStyle()
-					.setTop(-1, Style.Unit.PX);
-			}
+                textField.getElement()
+                .getStyle()
+                .setPosition(Style.Position.RELATIVE);
+                textField.getElement()
+                .getStyle()
+                .setProperty("border-radius", "0");
+                textField.getElement()
+                .getStyle()
+                .setProperty("padding", "0 16px");
+                textField.getElement()
+                .getStyle()
+                .setLeft(-16.0, Style.Unit.PX);
+                textField.getElement()
+                .getStyle()
+                .setProperty("border", "none");
+                textField.getElement()
+                .getStyle()
+                .setTop(-1, Style.Unit.PX);
+            }
 
-			textField.addFocusHandler(new FocusHandler() {
+            textField.addFocusHandler(new FocusHandler() {
 
-				@Override
-				public void onFocus(FocusEvent event) {
-					VTextField textField = (VTextField) event.getSource();
-					textField.selectAll();
-				}
-			});
+                @Override
+                public void onFocus(final FocusEvent event) {
+                    final VTextField textField = (VTextField) event.getSource();
+                    textField.selectAll();
+                }
+            });
 
-			textField.addChangeHandler(new ChangeHandler() {
-				@Override
-				public void onChange(ChangeEvent changeEvent) {
-					textChangeEventTrigger.cancel();
+            textField.addChangeHandler(new ChangeHandler() {
+                @Override
+                public void onChange(final ChangeEvent changeEvent) {
+                    textChangeEventTrigger.cancel();
 
-					VTextField textField = (VTextField) changeEvent.getSource();
-					Element e = textField.getElement();
-					TextFieldRendererConnector.this.rpc.onChange(
-																	e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
-																	e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
-																	textField.getValue(), textField.getCursorPos());
-				}
-			});
+                    final VTextField textField = (VTextField) changeEvent.getSource();
+                    final Element e = textField.getElement();
+                    TextFieldRendererConnector.this.rpc.onChange(
+                                                                 e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
+                                                                 e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
+                                                                 textField.getValue(), textField.getCursorPos());
+                }
+            });
 
-			textField.addKeyDownHandler(new KeyDownHandler() {
+            textField.addKeyDownHandler(new KeyDownHandler() {
 
-				@Override
-				public void onKeyDown(KeyDownEvent keyDownEvent) {
-					textChangeEventTrigger.schedule(300);
-				}
-			});
+                @Override
+                public void onKeyDown(final KeyDownEvent keyDownEvent) {
+                    textChangeEventTrigger.schedule(1500);
+                }
+            });
 
-			textField.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					event.stopPropagation();
+            textField.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(final ClickEvent event) {
+                    event.stopPropagation();
 
-					VTextField textField = (VTextField) event.getSource();
-					Element e = textField.getElement();
-					getRpcProxy(RendererClickRpc.class)
-						.click(	e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
-								e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
-								MouseEventDetailsBuilder.buildMouseEventDetails(event.getNativeEvent()));
-				}
-			});
+                    final VTextField textField = (VTextField) event.getSource();
+                    final Element e = textField.getElement();
+                    getRpcProxy(RendererClickRpc.class)
+                    .click(	e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
+                           	e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
+                           	MouseEventDetailsBuilder.buildMouseEventDetails(event.getNativeEvent()));
+                }
+            });
 
-			textField.addMouseDownHandler(new MouseDownHandler() {
-				@Override
-				public void onMouseDown(MouseDownEvent event) {
-					event.stopPropagation();
-				}
-			});
+            textField.addMouseDownHandler(new MouseDownHandler() {
+                @Override
+                public void onMouseDown(final MouseDownEvent event) {
+                    event.stopPropagation();
+                }
+            });
 
-			registerRpc(TextFieldRendererClientRpc.class, new TextFieldRendererClientRpc() {
+            registerRpc(TextFieldRendererClientRpc.class, new TextFieldRendererClientRpc() {
 
-				@Override
-				public void setOnRenderSettings(boolean enabled, int cursorPos, CellId id) {
-					if (id.equals(EditableRendererClientUtil.getCellId(textField))) {
-						textField.setEnabled(enabled);
-						if (cursorPos != -1) {
-							textField.setCursorPos(cursorPos);
-						}
-					}
-				}
+                @Override
+                public void setOnRenderSettings(final boolean enabled, final int cursorPos, final CellId id) {
+                    if (id.equals(EditableRendererClientUtil.getCellId(textField))) {
+                        textField.setEnabled(enabled);
+                        if (cursorPos != -1) {
+                            textField.setCursorPos(cursorPos);
+                        }
+                    }
+                }
 
-			});
+            });
 
-			return textField;
-		}
-	}
+            return textField;
+        }
+    }
 
-	@Override
-	public TextFieldRendererState getState() {
-		return (TextFieldRendererState) super.getState();
-	}
+    @Override
+    public TextFieldRendererState getState() {
+        return (TextFieldRendererState) super.getState();
+    }
 
-	@Override
-	protected Renderer<String> createRenderer() {
-		return new TextFieldClientRenderer();
-	}
+    @Override
+    protected Renderer<String> createRenderer() {
+        return new TextFieldClientRenderer();
+    }
 
-	@Override
-	public TextFieldClientRenderer getRenderer() {
-		return (TextFieldClientRenderer) super.getRenderer();
-	}
+    @Override
+    public TextFieldClientRenderer getRenderer() {
+        return (TextFieldClientRenderer) super.getRenderer();
+    }
 
-	@Override
-	protected HandlerRegistration addClickHandler(RendererClickHandler<JsonObject> handler) {
-		return getRenderer().addClickHandler(handler);
-	}
+    @Override
+    protected HandlerRegistration addClickHandler(final RendererClickHandler<JsonObject> handler) {
+        return getRenderer().addClickHandler(handler);
+    }
 
 }
