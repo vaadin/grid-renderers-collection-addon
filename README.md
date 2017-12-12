@@ -55,6 +55,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
 ## Release notes
 
 ### Version 2.2.2
+* Added RowIndexRenderer
+
+### Version 2.2.2
 * Fixing issue #24, SimpleSelectRenderer conversion logic was flawed since Vaadin 8 migration was halfbaked
 
 ### Version 2.2.1
@@ -116,6 +119,9 @@ Here is a simple example on how to try out the add-on component:
 For a more comprehensive examples, see org.vaadin.grid.cellrenderers.demo.DemoUI
 
 ## Features
+
+### RowIndexRenderer
+A simple Renderer that renders the row index as a number. Not affected by sorting. 
 
 ### HtmlButtonRenderer
 Alternative to the ButtonRenderer included to Vaadin framework. This one supports also HTML content and
