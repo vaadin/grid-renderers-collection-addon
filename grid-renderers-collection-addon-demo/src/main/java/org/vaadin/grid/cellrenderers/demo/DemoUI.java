@@ -31,6 +31,7 @@ import org.vaadin.grid.cellrenderers.editable.SimpleSelectRenderer;
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 import org.vaadin.grid.cellrenderers.view.BlobImageRenderer;
 import org.vaadin.grid.cellrenderers.view.ConverterRenderer;
+import org.vaadin.grid.cellrenderers.view.RowIndexRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer.SparklineConfiguration;
 
@@ -148,6 +149,7 @@ public class DemoUI extends UI {
     		Grid<MyPojo> grid = new Grid<>();
     		grid.setItems(beanList);
     		grid.setSizeFull();
+    		grid.addColumn(value -> "", new RowIndexRenderer()).setCaption("Row index");;
     		grid.addColumn(MyPojo::getId, new NumberRenderer()).setCaption("Id");
 			HtmlButtonRenderer<MyPojo> htmlButton = new HtmlButtonRenderer<MyPojo>(clickEvent -> {
 				Notification.show("HTML button has been clicked");
