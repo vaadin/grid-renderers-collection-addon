@@ -40,7 +40,8 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 
         private static final String ROW_KEY_PROPERTY = "rowKey";
         private static final String COLUMN_ID_PROPERTY = "columnId";
-
+        private Date value = null;
+        
         private boolean doesTextFieldContainValue(VMyPopupCalendar dateField, Date value) {
             if(dateField.getDate().equals(value)) {
             	return true;
@@ -54,8 +55,6 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 
             Element e = dateField.getElement();
 
-            getState().value = selectedValue;
-            
             if(e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell.getRow())) {
                 e.setPropertyString(ROW_KEY_PROPERTY,
                         getRowKey((JsonObject) cell.getRow()));
@@ -144,14 +143,25 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
                 }
             }, ClickEvent.getType());
 
+            dateField.text.addFocusHandler(new FocusHandler() {
+            	@Override
+            	public void onFocus(FocusEvent event) {
+            		value = dateField.getDate();
+            	}
+            });
+            
             dateField.text.addDomHandler(new BlurHandler() {
             	@Override
             	public void onBlur(BlurEvent event) {
             		if (getState().blurChangeMode) {
-                        Element e = dateField.getElement();
-                        rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
+            			Date newValue = dateField.getDate();
+            			if (value != null && !value.equals(newValue)) {
+            				Element e = dateField.getElement();
+            				rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
                                 e.getPropertyString(COLUMN_ID_PROPERTY),
-                                dateField.getDate());
+                                newValue);
+            				value = newValue;
+            			}
             		}
             	}
             }, BlurEvent.getType());
