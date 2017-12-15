@@ -21,6 +21,9 @@ import com.vaadin.client.renderers.Renderer;
 import com.vaadin.client.widget.grid.RendererCellReference;
 import com.vaadin.client.widgets.Grid;
 import com.vaadin.shared.ui.Connect;
+
+import java.util.List;
+
 import org.vaadin.grid.cellrenderers.editable.SimpleSelectRenderer;
 import elemental.json.JsonObject;
 
@@ -67,11 +70,12 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
                         .getColumn(cell.getColumnIndex())));
             }
 
-            if (getState().dropDownList.size() != listBox.getItemCount()) {
+            List<String> dropDownList = getState().dropDownList;
+            if (dropDownList.size() != listBox.getItemCount()) {
                 listBox.clear();
 
                 int currentIndex = 0;
-                for (String dropDownEntry : getState().dropDownList) {
+                for (String dropDownEntry : dropDownList) {
                    listBox.addItem(dropDownEntry);
 
                     if (dropDownEntry.equals(selectedValue)) {
@@ -80,6 +84,15 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
 
                     currentIndex++;
                 }
+            } else {
+            	int currentIndex = 0;
+            	for (String dropDownEntry : dropDownList) {
+                    if (dropDownEntry.equals(selectedValue)) {
+                        listBox.setSelectedIndex(currentIndex);
+                        break;
+                    }
+                    currentIndex++;
+            	}
             }
 
             if (listBox.isEnabled() != cell.getColumn().isEditable()) {

@@ -11,7 +11,10 @@ import java.util.stream.IntStream;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.GeneratedPropertyContainer;
+import com.vaadin.data.util.PropertyValueGenerator;
 import com.vaadin.data.util.converter.StringToBigDecimalConverter;
 import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.data.util.converter.StringToIntegerConverter;
@@ -32,6 +35,7 @@ import org.vaadin.grid.cellrenderers.editable.RatingStarsRenderer;
 import org.vaadin.grid.cellrenderers.editable.SimpleSelectRenderer;
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 import org.vaadin.grid.cellrenderers.view.BlobImageRenderer;
+import org.vaadin.grid.cellrenderers.view.RowIndexRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer.SparklineConfiguration;
 
@@ -133,8 +137,12 @@ public class DemoUI extends UI {
     			container.addBean(new MyPojo(i));
     		}
 
-    		Grid grid = new Grid(container);
+    		Grid grid = new Grid();
     		grid.setSizeFull();
+    		RowIndexRenderer rowIndex = new RowIndexRenderer();
+    		GeneratedPropertyContainer gpc = rowIndex.addGeneratedProperty("index", container);
+    		grid.setContainerDataSource(gpc);
+    		grid.getColumn("index").setRenderer(rowIndex);
     		grid.getColumn("numbers").setRenderer(sparkline);
     		grid.getColumn("stars").setRenderer(new RatingStarsRenderer(5));
     		grid.getColumn("stars").setEditable(false);
@@ -147,7 +155,7 @@ public class DemoUI extends UI {
     		htmlButtonRenderer.setHtmlContentAllowed(true);
     		grid.getColumn("foo").setRenderer(htmlButtonRenderer);
     		grid.getColumn("foo").setEditable(false);
-    		grid.setColumns("id", "foo", "bar", "stars", "numbers");
+    		grid.setColumns("index", "id", "foo", "bar", "stars", "numbers");
     		return grid;
     	}
 

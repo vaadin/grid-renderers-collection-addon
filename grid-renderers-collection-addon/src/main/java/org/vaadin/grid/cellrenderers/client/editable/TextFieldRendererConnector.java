@@ -34,6 +34,7 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 
         private static final String ROW_KEY_PROPERTY = "rowKey";
         private static final String COLUMN_ID_PROPERTY = "columnId";
+        private String value = null;
 
         private boolean doesTextFieldContainValue(VTextField textField, String value) {
             if(textField.getValue().equals(value)) {
@@ -48,8 +49,6 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 
             Element e = textField.getElement();
 
-            getState().value = selectedValue;
-            
             if(e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell.getRow())) {
                 e.setPropertyString(ROW_KEY_PROPERTY,
                         getRowKey((JsonObject) cell.getRow()));
@@ -98,15 +97,27 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
                 }
             });
 
+            textField.addFocusHandler(new FocusHandler() {
+            	@Override
+            	public void onFocus(FocusEvent event) {
+            		VTextField field = (VTextField) event.getSource();
+            		value = field.getValue();
+            	}
+            });
+            
             textField.addBlurHandler(new BlurHandler() {
             	@Override
             	public void onBlur(BlurEvent event) {
             		if (getState().blurChangeMode) {
             			VTextField textField = (VTextField) event.getSource();
-                        Element e = textField.getElement();
-                        rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
+            			String newValue = textField.getValue();
+            			if (value != null && !value.equals(newValue)) {
+            				Element e = textField.getElement();
+            				rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
                                 e.getPropertyString(COLUMN_ID_PROPERTY),
-                                textField.getValue());
+                                newValue);
+            				value = newValue;
+            			}
             		}
             	}
             });
