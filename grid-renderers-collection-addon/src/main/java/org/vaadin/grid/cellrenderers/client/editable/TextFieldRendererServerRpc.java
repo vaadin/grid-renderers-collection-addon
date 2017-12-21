@@ -6,13 +6,13 @@ import com.vaadin.shared.communication.ServerRpc;
 
 public interface TextFieldRendererServerRpc extends ServerRpc {
 
-	public void onChange(String rowKey, String columnId, String newValue, int cursorPos);
+    public void onChange(String rowKey, String columnId, String newValue);
 
-	/**
-	 * workaround to set enabled of component correctly
-	 * 
-	 * @param id
-	 *            Cell identification
-	 */
-	void onRender(CellId id);
+    /**
+     * workaround to set enabled of component correctly
+     *
+     * @param id
+     *            Cell identification
+     */
+    void onRender(CellId id);
 }

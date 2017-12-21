@@ -7,17 +7,16 @@ import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.vaadin.client.MouseEventDetailsBuilder;
 import com.vaadin.client.communication.RpcProxy;
@@ -81,19 +80,6 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 
             final VTextField textField = GWT.create(VTextField.class);
 
-            final Timer textChangeEventTrigger = new Timer() {
-
-                @Override
-                public void run() {
-                    if (textField.isAttached()) {
-                        final Element e = textField.getElement();
-                        TextFieldRendererConnector.this.rpc.onChange(
-                                                                     e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
-                                                                     e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
-                                                                     textField.getValue(), textField.getCursorPos());
-                    }
-                }
-            };
 
             if (getState().maxLength > 0) {
                 textField.setMaxLength(getState().maxLength);
@@ -134,24 +120,29 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
             textField.addChangeHandler(new ChangeHandler() {
                 @Override
                 public void onChange(final ChangeEvent changeEvent) {
-                    textChangeEventTrigger.cancel();
 
                     final VTextField textField = (VTextField) changeEvent.getSource();
                     final Element e = textField.getElement();
                     TextFieldRendererConnector.this.rpc.onChange(
                                                                  e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
                                                                  e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
-                                                                 textField.getValue(), textField.getCursorPos());
+                                                                 textField.getValue());
                 }
             });
 
-            textField.addKeyDownHandler(new KeyDownHandler() {
+            textField.addBlurHandler(new BlurHandler() {
 
                 @Override
-                public void onKeyDown(final KeyDownEvent keyDownEvent) {
-                    textChangeEventTrigger.schedule(1500);
+                public void onBlur(final BlurEvent blurEvent) {
+                    final VTextField textField = (VTextField) blurEvent.getSource();
+                    final Element e = textField.getElement();
+                    TextFieldRendererConnector.this.rpc.onChange(
+                                                                 e.getPropertyString(EditableRendererClientUtil.ROW_KEY_PROPERTY),
+                                                                 e.getPropertyString(EditableRendererClientUtil.COLUMN_ID_PROPERTY),
+                                                                 textField.getValue());
                 }
             });
+
 
             textField.addClickHandler(new ClickHandler() {
                 @Override
@@ -177,16 +168,14 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
             registerRpc(TextFieldRendererClientRpc.class, new TextFieldRendererClientRpc() {
 
                 @Override
-                public void setOnRenderSettings(final boolean enabled, final int cursorPos, final CellId id) {
+                public void setEnabled(final boolean enabled, final CellId id) {
                     if (id.equals(EditableRendererClientUtil.getCellId(textField))) {
                         textField.setEnabled(enabled);
-                        if (cursorPos != -1) {
-                            textField.setCursorPos(cursorPos);
-                        }
                     }
                 }
 
             });
+
 
             return textField;
         }
