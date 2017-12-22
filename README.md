@@ -54,7 +54,10 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
-### Version 2.2.2
+### Version 2.2.4
+* Added support of ordinals to RowIndexRenderer
+
+### Version 2.2.3
 * Added RowIndexRenderer
 
 ### Version 2.2.2
