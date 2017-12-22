@@ -5,7 +5,7 @@
 	<groupId>com.vaadin</groupId>
 	<artifactId>grid-renderers-collection-addon-demo</artifactId>
 	<packaging>war</packaging>
-	<version>2.2.3</version>
+	<version>2.2.4</version>
 	<name>Grid Renderers collection For Vaadin7 Add-on Demo</name>
 
 	<properties>
@@ -164,7 +164,7 @@
 					<persistentunitcachedir>${basedir}/target/tmp/gwt-unitCache</persistentunitcachedir>
 					<compileReport>true</compileReport>
 					<strict>true</strict>
-					<style>DETAILED</style>
+					<style>OBF</style>
 					<runTarget>http://localhost:8080/</runTarget>
 				</configuration>
 				<executions>
