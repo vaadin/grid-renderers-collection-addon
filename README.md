@@ -54,6 +54,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 2.2.5
+* Minor change for Vaadin 8.2+ compatibility
+
 ### Version 2.2.4
 * Added support of ordinals to RowIndexRenderer
 
@@ -104,10 +107,12 @@ Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.t
 
 Grid Renderers collection is initially written by Ilia Motornyi 
 
-SimpleSelectRenderer, BooleanSwitchRenderer, BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, SparklineRenderer & RatingStarsRenderer, HtmlButtonRenderer, DeleteButtonRenderer, ConverterRenderer Contributed by Tatu Lund 
+SimpleSelectRenderer, BooleanSwitchRenderer, BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, SparklineRenderer,  RatingStarsRenderer, HtmlButtonRenderer, DeleteButtonRenderer, ConverterRenderer, RowIndexRenderer contributed by Tatu Lund 
 (tatu@vaadin.com corresponding author)
 
 ItemEditEvent, GridNavigationExtension contributed by Mikael Granqvist
+
+Major pieces of development of this add-on has been sponsored by multiple Support and Prime customers of Vaadin. See vaadin.com/support and Development on Demand for more details. 
 
 # Developer Guide
 
