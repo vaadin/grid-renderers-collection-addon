@@ -126,7 +126,7 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 
             // Set application connection
             dateField.client = getConnection();   
-            dateField.paintableId = getConnectorId();
+//            dateField.paintableId = getConnectorId();
 
             // Set date locale
             String locale = LocaleService.getDefaultLocale();
