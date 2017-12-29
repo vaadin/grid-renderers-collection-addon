@@ -7,4 +7,5 @@ import com.vaadin.shared.ui.grid.renderers.AbstractRendererState;
  */
 public final class RowIndexRendererState extends AbstractRendererState {
 	public boolean ordinalMode = false;
+	public int offset = 0;
 }
