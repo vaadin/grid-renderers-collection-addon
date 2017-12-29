@@ -54,9 +54,6 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
-### Version 2.2.6
-* Added setOffset to RowIndexRenderer, so that row index count can start from defined position
-
 ### Version 2.2.5
 * Minor change for Vaadin 8.2+ compatibility
 

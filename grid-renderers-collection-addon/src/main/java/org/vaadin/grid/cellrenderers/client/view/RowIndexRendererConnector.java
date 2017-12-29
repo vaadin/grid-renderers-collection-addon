@@ -32,7 +32,7 @@ public class RowIndexRendererConnector extends
 
         @Override
         public void render(RendererCellReference cell, String htmlString) {
-        	int rowIndex = cell.getRowIndex()+getState().offset;
+        	int rowIndex = cell.getRowIndex();
         	String content = null;
         	if (getState().ordinalMode) {
         		content = ordinal(rowIndex);

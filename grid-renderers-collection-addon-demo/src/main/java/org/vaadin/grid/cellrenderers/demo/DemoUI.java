@@ -149,9 +149,7 @@ public class DemoUI extends UI {
     		Grid<MyPojo> grid = new Grid<>();
     		grid.setItems(beanList);
     		grid.setSizeFull();
-    		RowIndexRenderer rowIndex = new RowIndexRenderer(true); 
-    		rowIndex.setOffset(1);
-    		grid.addColumn(value -> "", rowIndex).setCaption("Row index");;
+    		grid.addColumn(value -> "", new RowIndexRenderer(true)).setCaption("Row index");;
     		grid.addColumn(MyPojo::getId, new NumberRenderer()).setCaption("Id");
 			HtmlButtonRenderer<MyPojo> htmlButton = new HtmlButtonRenderer<MyPojo>(clickEvent -> {
 				Notification.show("HTML button has been clicked");
