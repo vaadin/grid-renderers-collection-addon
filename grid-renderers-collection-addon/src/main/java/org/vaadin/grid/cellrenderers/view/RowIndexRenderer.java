@@ -1,5 +1,7 @@
 package org.vaadin.grid.cellrenderers.view;
 
+import org.vaadin.grid.cellrenderers.client.view.RowIndexRendererState;
+
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.GeneratedPropertyContainer;
@@ -22,6 +24,42 @@ public class RowIndexRenderer extends AbstractRenderer {
         super(String.class);      
     }
 
+    
+    /**
+     * Constructor with ordinals / not ordinals.
+     * Set indeces to be ordinals, i.e. 1st, 2nd, 3rd, ...
+     * 
+     * @param ordinalMode True = ordinals used, False = just digits
+     */
+    public RowIndexRenderer(boolean ordinalMode) {
+        super(String.class);
+        getState().ordinalMode = ordinalMode;
+    }
+
+    /**
+     * Set indeces to be ordinals, i.e. 1st, 2nd, 3rd, ...
+     * 
+     * @param ordinalMode True = ordinals used, False = just digits
+     */
+    public void setOridnalMode(boolean ordinalMode) {
+     getState().ordinalMode = ordinalMode;    	
+     }
+
+    /**
+     * Set adjustment for row index, e.g. with offset = -1, row count starts from 0.
+     * 
+     * @param offset Adjustment to be used.
+     */
+    public void setOffset(int offset) {
+        getState().offset = offset;    	
+    }    
+    
+    @Override
+    protected RowIndexRendererState getState() {
+    	return (RowIndexRendererState) super.getState();
+    }
+    
+    
     /**
      * Helper method to add suitable dummy generated property for the row index
      * 

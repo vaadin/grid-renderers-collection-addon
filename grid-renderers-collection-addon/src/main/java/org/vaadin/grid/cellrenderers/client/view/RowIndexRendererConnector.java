@@ -13,14 +13,33 @@ import com.vaadin.shared.ui.Connect;
 public class RowIndexRendererConnector extends
         AbstractRendererConnector<String> {
 
-
+	// Helper method to create ordinal String
+	private static String ordinal(int i) {
+	    int mod100 = i % 100;
+	    int mod10 = i % 10;
+	    if (mod10 == 1 && mod100 != 11) {
+	        return i + "st";
+	    } else if(mod10 == 2 && mod100 != 12) {
+	        return i + "nd";
+	    } else if(mod10 == 3 && mod100 != 13) {
+	        return i + "rd";
+	    } else {
+	        return i + "th";
+	    }
+	}
+	
     public class RowIndexClientRenderer implements Renderer<String> {
 
         @Override
         public void render(RendererCellReference cell, String htmlString) {
-        	int rowIndex = cell.getRowIndex();
-        	String content = ""+rowIndex;
-            cell.getElement()
+        	int rowIndex = cell.getRowIndex()+getState().offset;
+        	String content = null;
+        	if (getState().ordinalMode) {
+        		content = ordinal(rowIndex);
+        	} else {
+        		content = ""+rowIndex;        		
+        	}
+        	cell.getElement()
                     .setInnerSafeHtml(SafeHtmlUtils.fromSafeConstant(content));
         }        
 
@@ -36,4 +55,8 @@ public class RowIndexRendererConnector extends
         return (RowIndexClientRenderer) super.getRenderer();
     }
 
+    @Override
+    public RowIndexRendererState getState() {
+    	return (RowIndexRendererState) super.getState();
+    }
  }
