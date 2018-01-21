@@ -54,6 +54,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 1.2.2
+* Added support for ordinals and setOffset method to RowIndexRenderer
+
 ### Version 1.2.1
 * Added RowIndexRenderer
 * Fixed blurChangeMode logic (backport from Vaadin8 branch)
