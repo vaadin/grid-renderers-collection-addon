@@ -16,6 +16,7 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.icons.VaadinIcons;
 
+import org.vaadin.grid.cellrenderers.action.BrowserOpenerRenderer;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickEvent;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickListener;
@@ -71,8 +72,8 @@ public class DemoUI extends UI {
     public class SparklineDemo extends VerticalLayout {
 
     	public class MyPojo {
-    		private String foo = "<B>Vaadin</B> "+VaadinIcons.VAADIN_H.getHtml();
-    		private String bar = "bar";
+    		private String foo = "http://vaadin.com";
+    		private String bar = "<B>Vaadin</B> "+VaadinIcons.VAADIN_H.getHtml();
     		private int id = -1;
     		private final Number[] numbers;
     		private final Random rand;
@@ -152,12 +153,19 @@ public class DemoUI extends UI {
     		grid.addColumn(value -> "", new RowIndexRenderer(true)).setCaption("Row index");;
     		RowIndexRenderer rowIndex = new RowIndexRenderer(true); 
     		rowIndex.setOffset(1);
-    		grid.addColumn(value -> "", rowIndex).setCaption("Row index");    		grid.addColumn(MyPojo::getId, new NumberRenderer()).setCaption("Id");
+    		grid.addColumn(value -> "", rowIndex).setCaption("Row index");
+    		grid.addColumn(MyPojo::getId, new NumberRenderer()).setCaption("Id");
+			BrowserOpenerRenderer<MyPojo> openButton = new BrowserOpenerRenderer<MyPojo>(VaadinIcons.BROWSER.getHtml() ,clickEvent -> {
+				MyPojo item = clickEvent.getItem();
+				Notification.show("Browser open button has been clicked: "+item.getFoo());
+			});
+			openButton.setHtmlContentAllowed(true);
+			grid.addColumn(MyPojo::getFoo, openButton).setCaption("Open Vaadin");
 			HtmlButtonRenderer<MyPojo> htmlButton = new HtmlButtonRenderer<MyPojo>(clickEvent -> {
 				Notification.show("HTML button has been clicked");
 			});
 			htmlButton.setHtmlContentAllowed(true);
-			grid.addColumn(MyPojo::getFoo, htmlButton).setCaption("Vaadin");
+			grid.addColumn(MyPojo::getBar, htmlButton).setCaption("Click Vaadin");
 
     		grid.addColumn(MyPojo::getNumber, new ConverterRenderer<MyPojo,BigDecimal>(new MyStringToBigDecimalConverter("Error message"))).setCaption("Number");
     		RatingStarsRenderer<MyPojo> ratingStars = new RatingStarsRenderer<>(MyPojo::setStars, 5);

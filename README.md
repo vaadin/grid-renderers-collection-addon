@@ -54,6 +54,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 2.2.7
+* Added BrowserOpenerRenderer. This is a button that opens a new browser window when clicked.
+
 ### Version 2.2.6
 * Added setOffset to RowIndexRenderer, so that row index count can start from defined position
 
@@ -110,8 +113,8 @@ Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.t
 
 Grid Renderers collection is initially written by Ilia Motornyi 
 
-SimpleSelectRenderer, BooleanSwitchRenderer, BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, SparklineRenderer,  RatingStarsRenderer, HtmlButtonRenderer, DeleteButtonRenderer, ConverterRenderer, RowIndexRenderer contributed by Tatu Lund 
-(tatu@vaadin.com corresponding author)
+SimpleSelectRenderer, BooleanSwitchRenderer, BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, SparklineRenderer,  RatingStarsRenderer, HtmlButtonRenderer, DeleteButtonRenderer, ConverterRenderer, RowIndexRenderer, BrowserOpenerRenderer
+contributed by Tatu Lund (tatu@vaadin.com corresponding author)
 
 ItemEditEvent, GridNavigationExtension contributed by Mikael Granqvist
 
@@ -130,6 +133,9 @@ Here is a simple example on how to try out the add-on component:
 For a more comprehensive examples, see org.vaadin.grid.cellrenderers.demo.DemoUI
 
 ## Features
+
+### BrowserOpenerRenderer
+A button which opens a new browser window with url in the Grid's cell. 
 
 ### RowIndexRenderer
 A simple Renderer that renders the row index as a number. Not affected by sorting. 

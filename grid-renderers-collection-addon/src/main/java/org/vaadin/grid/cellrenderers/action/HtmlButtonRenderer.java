@@ -21,7 +21,7 @@ public class HtmlButtonRenderer<T> extends ClickableRenderer<T,String> {
      * events}.
      *
      */
-    public interface HtmlButtonRendererClickListener extends ConnectorEventListener {
+    public interface HtmlButtonRendererClickListener<T> extends ConnectorEventListener {
 
         static final Method CLICK_METHOD = ReflectTools.findMethod(
         		HtmlButtonRendererClickListener.class, "click", HtmlButtonRendererClickEvent.class);
@@ -32,7 +32,7 @@ public class HtmlButtonRenderer<T> extends ClickableRenderer<T,String> {
          * @param event
          *            the event representing the click
          */
-        void click(HtmlButtonRendererClickEvent event);
+        void click(HtmlButtonRendererClickEvent<T> event);
     }
 
     /**
@@ -40,12 +40,12 @@ public class HtmlButtonRenderer<T> extends ClickableRenderer<T,String> {
      * clicked.
      *
      */
-    public static class HtmlButtonRendererClickEvent extends ClickEvent {
+    public static class HtmlButtonRendererClickEvent<T> extends ClickEvent {
 
-        private final Object item;
+        private final T item;
         private final Column column;
 
-        protected HtmlButtonRendererClickEvent(Grid source, Object item,
+        protected HtmlButtonRendererClickEvent(Grid source, T item,
                 Column column, MouseEventDetails mouseEventDetails) {
             super(source, mouseEventDetails);
             this.item = item;
@@ -57,7 +57,7 @@ public class HtmlButtonRenderer<T> extends ClickableRenderer<T,String> {
          *
          * @return the item of the clicked row
          */
-        public Object getItem() {
+        public T getItem() {
             return item;
         }
 
@@ -96,9 +96,9 @@ public class HtmlButtonRenderer<T> extends ClickableRenderer<T,String> {
     	registerRpc(new HtmlButtonRendererServerRpc() {
             public void onClick(String rowKey, MouseEventDetails mouseDetails) {
             	Grid<T> grid = getParentGrid();
-            	Object item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
+            	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
             	Column<T, String> column = getParent();
-            	fireEvent(new HtmlButtonRendererClickEvent(grid, item, column, mouseDetails));
+            	fireEvent(new HtmlButtonRendererClickEvent<T>(grid, item, column, mouseDetails));
     		}
     	});
     }
