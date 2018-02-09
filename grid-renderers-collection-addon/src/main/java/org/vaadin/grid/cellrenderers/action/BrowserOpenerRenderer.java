@@ -14,6 +14,78 @@ import com.vaadin.ui.UI;
 
 public class BrowserOpenerRenderer<T> extends HtmlButtonRenderer<T> {
 
+    private static class BrowserWindowOpenerUIProvider extends UIProvider {
+
+        private final String path;
+        private final Class<? extends UI> uiClass;
+
+        public BrowserWindowOpenerUIProvider(Class<? extends UI> uiClass,
+                String path) {
+            this.path = ensureInitialSlash(path);
+            this.uiClass = uiClass;
+        }
+
+        private static String ensureInitialSlash(String path) {
+            if (path == null) {
+                return null;
+            } else if (!path.startsWith("/")) {
+                return '/' + path;
+            } else {
+                return path;
+            }
+        }
+
+        @Override
+        public Class<? extends UI> getUIClass(UIClassSelectionEvent event) {
+            String requestPathInfo = event.getRequest().getPathInfo();
+            if (path.equals(requestPathInfo)) {
+                return uiClass;
+            } else {
+                return null;
+            }
+        }
+    }
+
+    private static String generateUIClassUrl(Class<? extends UI> uiClass) {
+        return "popup/" + uiClass.getSimpleName();
+    }
+    
+    private BrowserWindowOpenerUIProvider uiProvider;
+
+    @Override
+    public void attach() {
+        super.attach();
+        if (uiProvider != null
+                && !getSession().getUIProviders().contains(uiProvider)) {
+            getSession().addUIProvider(uiProvider);
+        }
+    }
+
+    @Override
+    public void detach() {
+        if (uiProvider != null) {
+            getSession().removeUIProvider(uiProvider);
+        }
+        super.detach();
+    }
+
+    
+    /**
+     * Creates a window opener button renderer that will open windows to the uri fragment provided in the
+     *  Grid cell and base UI given as constructor parameter. 
+     *
+     * @param uiClass
+     *            the UI class to be used in opening browser window.
+     * @param caption
+     *            the Caption of the button, Use setHtmlAllowed(true) to allow html e.g. VaadinIcons
+     * @param listener
+     *            the click listener to register
+     */
+    public BrowserOpenerRenderer(Class<? extends UI> uiClass, String caption, HtmlButtonRendererClickListener<T> listener) {
+    	this(caption, listener);
+    	getState().baseUrl = generateUIClassUrl(uiClass);
+        this.uiProvider = new BrowserWindowOpenerUIProvider(uiClass, getState().baseUrl);
+    }
 
     /**
      * Creates a window opener button renderer that will open windows to the url provided in the Grid cell.

@@ -54,6 +54,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 2.2.8
+* Added feature to BrowserOpenerRenderer. With alternative constructor open UI with URI fragment given in cell.
+
 ### Version 2.2.7
 * Added BrowserOpenerRenderer. This is a button that opens a new browser window when clicked.
 

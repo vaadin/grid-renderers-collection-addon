@@ -12,5 +12,7 @@ public class BrowserOpenerRendererState extends HtmlButtonRendererState {
     public String caption;
     
     public Map<String, String> parameters = new HashMap<>();
+    
+    public String baseUrl = null;
 
 }
