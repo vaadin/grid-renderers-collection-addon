@@ -48,7 +48,11 @@ public class BrowserOpenerRendererConnector extends ClickableRendererConnector<S
         			Element e = b.getElement();
         			rpc.onClick(e.getPropertyString("rowKey"),mouseEventDetails);
             		event.stopPropagation();
-                    String url = urlString;
+            		String url = null;
+            		if (getState().baseUrl == null) 
+            			url = urlString;
+            		else
+            			url = getState().baseUrl;
                     url = addParametersAndFragment(url);
                     if (url != null) {
                         Window.open(url, getState().target, getState().features);
@@ -91,6 +95,10 @@ public class BrowserOpenerRendererConnector extends ClickableRendererConnector<S
                 url = SharedUtil.addGetParameters(url, params.toString());
             }
 
+            if (getState().baseUrl != null) {
+                // Replace previous fragment or just add to the end of the url
+                url = url.replaceFirst("#.*|$", "#" + urlString);
+            }            
             return url;
         }
         
