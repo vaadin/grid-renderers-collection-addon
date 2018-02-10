@@ -160,6 +160,7 @@ public class DemoUI extends UI {
 				Notification.show("Browser open button has been clicked: "+item.getFoo());
 			});
 			openButton.setHtmlContentAllowed(true);
+			openButton.setTooltipEnabled(true);
 			grid.addColumn(MyPojo::getFoo, openButton).setCaption("Open Vaadin");
 			HtmlButtonRenderer<MyPojo> htmlButton = new HtmlButtonRenderer<MyPojo>(clickEvent -> {
 				Notification.show("HTML button has been clicked");
