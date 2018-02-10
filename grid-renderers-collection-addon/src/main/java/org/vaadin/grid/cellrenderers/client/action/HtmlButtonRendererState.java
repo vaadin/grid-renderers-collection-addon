@@ -4,4 +4,8 @@ import com.vaadin.shared.ui.grid.renderers.ClickableRendererState;
 
 public class HtmlButtonRendererState extends ClickableRendererState {
     public boolean htmlContentAllowed = false;
+
+    public String tooltip = null;
+
+    public boolean enableTooltip = false;
 }

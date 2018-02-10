@@ -54,6 +54,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 2.2.9
+* Added tooltip support to HtmlButtonRenderer and BrowserOpenerRenderer.
+
 ### Version 2.2.8
 * Added feature to BrowserOpenerRenderer. With alternative constructor open UI with URI fragment given in cell.
 

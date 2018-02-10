@@ -120,7 +120,18 @@ public class BrowserOpenerRendererConnector extends ClickableRendererConnector<S
         	} else {
         		button.setText(caption);    		
             }
-        	button.setEnabled(true);
+        	if (getState().enableTooltip) {
+        		String title = getState().tooltip;
+        		if (title == null) { 
+        			if (getState().baseUrl == null) 
+        				title= urlString;
+        			else
+        				title = getState().baseUrl;
+        			title = addParametersAndFragment(title);
+        		}
+        		button.setTitle(title);
+        	}
+    		button.setEnabled(true);
         }
    	}
 

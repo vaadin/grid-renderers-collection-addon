@@ -103,6 +103,48 @@ public class HtmlButtonRenderer<T> extends ClickableRenderer<T,String> {
     	});
     }
 
+    /**
+     * Set tooltip text for the button
+     * 
+     * @param tooltip The tooltip text to be used
+     */
+    public void setDescription(String tooltip) {
+    	if (tooltip != null || !tooltip.equals("")) {
+    		getState().tooltip = tooltip;
+    		getState().enableTooltip = true;
+    	} else {
+    		getState().enableTooltip = false;
+    	}
+    }
+
+    /**
+     * Get current tooltip. 
+     * 
+     * @return The tooltip as string.
+     */
+    public String getDescription() {
+   		return getState().tooltip;    	
+    }    
+
+    /**
+     * Toggle tooltip on/off
+     * 
+     * @param enableTooltip If set to true tooltip is shown
+     */
+    public void setTooltipEnabled(boolean enableTooltip) {
+   		getState().enableTooltip = enableTooltip;    	
+    }    
+    
+    /**
+     * Check if tooltip is enable
+     * 
+     * @return Current state of tooltip
+     */
+    public boolean isTooltipEnabled() {
+   		return getState().enableTooltip;    	
+    }    
+    
+    
     @Override
     protected HtmlButtonRendererState getState() {
         return (HtmlButtonRendererState) super.getState();

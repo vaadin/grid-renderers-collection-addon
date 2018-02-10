@@ -67,6 +67,7 @@ public class HtmlButtonRendererConnector extends ClickableRendererConnector<Stri
         	} else {
         		button.setText(text);    		
             }
+        	if (getState().enableTooltip) button.setTitle(getState().tooltip);
         	button.setEnabled(true);
         }
    	}

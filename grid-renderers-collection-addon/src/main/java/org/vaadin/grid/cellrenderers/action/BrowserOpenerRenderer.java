@@ -69,7 +69,21 @@ public class BrowserOpenerRenderer<T> extends HtmlButtonRenderer<T> {
         super.detach();
     }
 
-    
+    /**
+     * Set tooltip text for the button
+     * 
+     * @param tooltip The tooltip text to be used, if null or "", the url will be used for tooltip
+     */
+    @Override
+    public void setDescription(String tooltip) {
+    	if (tooltip != null || !tooltip.equals("")) {
+    		getState().tooltip = tooltip;
+    		getState().enableTooltip = true;
+    	} else {
+    		getState().tooltip = null;    		
+    	}
+    }    
+
     /**
      * Creates a window opener button renderer that will open windows to the uri fragment provided in the
      *  Grid cell and base UI given as constructor parameter. 
