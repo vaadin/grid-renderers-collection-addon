@@ -54,6 +54,11 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 1.2.3
+* Added BrowserOpenerRenederer to collection, same features as in Vaadin 8 version
+* Added tooltip support to HtmlButtonRenderer
+* Updated demo
+
 ### Version 1.2.2
 * Added support for ordinals and setOffset method to RowIndexRenderer
 
@@ -155,10 +160,12 @@ Add-on is distributed under Apache License 2.0. For license terms, see LICENSE.t
 
 Grid Renderers collection is initially written by Ilia Motornyi 
 
-SimpleSelectRenderer, BooleanSwitchRenderer, BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, HtmlButtonRenderer,
-DeleteButtonRenderer, SparklineRenderer & RatingStarsRenderer Contributed by Tatu Lund (tatu@vaadin.com corresponding author)
+SimpleSelectRenderer, BooleanSwitchRenderer, BlobImageRenderer, DateFieldRenderer, TextFieldRenderer, HtmlButtonRenderer, BrowserOpenerRenderer, DeleteButtonRenderer, SparklineRenderer & RatingStarsRenderer Contributed by
+Tatu Lund (tatu@vaadin.com corresponding author)
 
 ItemEditEvent & GridNavigationExtension contributed by Mikael Granqvist
+
+Major pieces of development of this add-on has been sponsored by multiple Support and Prime customers of Vaadin. See vaadin.com/support and Development on Demand for more details.
 
 # Developer Guide
 
@@ -171,6 +178,9 @@ Here is a simple example on how to try out the add-on component:
 For a more comprehensive examples, see org.vaadin.grid.cellrenderers.demo.DemoUI
 
 ## Features
+
+### BrowserOpenerRenderer
+A button which opens a new browser window with URL in the Grid's cell or alternatively UI with URI fragment in Grid's cell.
 
 ### HtmlButtonRenderer
 Alternative to the ButtonRenderer included to Vaadin framework. This one supports also HTML content and does not propagate click event when used.
