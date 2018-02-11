@@ -19,6 +19,7 @@ import com.vaadin.data.util.converter.StringToBigDecimalConverter;
 import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.data.util.converter.StringToIntegerConverter;
 
+import org.vaadin.grid.cellrenderers.action.BrowserOpenerRenderer;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickEvent;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickListener;
@@ -73,7 +74,7 @@ public class DemoUI extends UI {
 
     	public class MyPojo {
     		String foo = "<B>Java</B> "+FontAwesome.COFFEE.getHtml();
-    		String bar = "bar";
+    		String bar = "http://vaadin.com";
     		int id = -1;
     		final Number[] numbers;
     		final Random rand;
@@ -155,6 +156,17 @@ public class DemoUI extends UI {
     		htmlButtonRenderer.setHtmlContentAllowed(true);
     		grid.getColumn("foo").setRenderer(htmlButtonRenderer);
     		grid.getColumn("foo").setEditable(false);
+    		BrowserOpenerRenderer openButton = new BrowserOpenerRenderer(FontAwesome.FOLDER_OPEN.getHtml(), new HtmlButtonRendererClickListener() {
+				@Override
+				public void click(HtmlButtonRendererClickEvent event) {
+					MyPojo item = (MyPojo) event.getItem();
+					Notification.show("Open button was clicked: "+item.getBar());
+				}    			
+    		});
+    		openButton.setHtmlContentAllowed(true);
+    		openButton.setTooltipEnabled(true);
+    		grid.getColumn("bar").setRenderer(openButton);
+    		grid.getColumn("bar").setEditable(false);
     		grid.setColumns("index", "id", "foo", "bar", "stars", "numbers");
     		return grid;
     	}
