@@ -87,6 +87,7 @@ public class DemoUI extends UI {
     			rand = new Random(id);
     			stars =  (double) rand.nextInt(10) / 2.0;
     			setNumber(BigDecimal.valueOf(rand.nextDouble()*100));
+    			foo = foo+"/"+i;
     		}
 
     		public byte[] getImage() {
@@ -155,7 +156,7 @@ public class DemoUI extends UI {
     		rowIndex.setOffset(1);
     		grid.addColumn(value -> "", rowIndex).setCaption("Row index");
     		grid.addColumn(MyPojo::getId, new NumberRenderer()).setCaption("Id");
-			BrowserOpenerRenderer<MyPojo> openButton = new BrowserOpenerRenderer<MyPojo>(VaadinIcons.BROWSER.getHtml() ,clickEvent -> {
+			BrowserOpenerRenderer<MyPojo> openButton = new BrowserOpenerRenderer<MyPojo>(DemoUI.class, VaadinIcons.BROWSER.getHtml() ,clickEvent -> {
 				MyPojo item = clickEvent.getItem();
 				Notification.show("Browser open button has been clicked: "+item.getFoo());
 			});

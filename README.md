@@ -54,6 +54,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 2.2.10
+* Fixing issue #36, BrowserOpenerRenderer url fetching was not made correctly
+
 ### Version 2.2.9
 * Added tooltip support to HtmlButtonRenderer and BrowserOpenerRenderer.
 
