@@ -72,7 +72,7 @@ public class DemoUI extends UI {
     public class SparklineDemo extends VerticalLayout {
 
     	public class MyPojo {
-    		private String foo = "http://vaadin.com";
+    		private String foo = "fragment";
     		private String bar = "<B>Vaadin</B> "+VaadinIcons.VAADIN_H.getHtml();
     		private int id = -1;
     		private final Number[] numbers;
@@ -87,7 +87,7 @@ public class DemoUI extends UI {
     			rand = new Random(id);
     			stars =  (double) rand.nextInt(10) / 2.0;
     			setNumber(BigDecimal.valueOf(rand.nextDouble()*100));
-    			foo = foo+"/"+i;
+    			foo = foo+i;
     		}
 
     		public byte[] getImage() {
@@ -380,5 +380,7 @@ public class DemoUI extends UI {
         tabSheet.setSizeFull();
         setContent(tabSheet);
     	
+        String uriFragment = UI.getCurrent().getPage().getUriFragment();
+        if (uriFragment != null) Notification.show("Page opened with BrowserOpenerRenderer, URI fragment: "+uriFragment);
     }
 }
