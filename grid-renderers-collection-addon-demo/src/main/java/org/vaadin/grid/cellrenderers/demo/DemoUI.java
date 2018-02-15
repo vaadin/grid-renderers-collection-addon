@@ -74,7 +74,7 @@ public class DemoUI extends UI {
 
     	public class MyPojo {
     		String foo = "<B>Java</B> "+FontAwesome.COFFEE.getHtml();
-    		String bar = "http://vaadin.com";
+    		String bar = "fragment";
     		int id = -1;
     		final Number[] numbers;
     		final Random rand;
@@ -86,6 +86,7 @@ public class DemoUI extends UI {
     			numbers = new Number[60];
     			rand = new Random(id);
     			stars =  (double) rand.nextInt(10) / 2.0;
+    			bar = bar+i;
     		}
 
     		public byte[] getImage() {
@@ -156,7 +157,7 @@ public class DemoUI extends UI {
     		htmlButtonRenderer.setHtmlContentAllowed(true);
     		grid.getColumn("foo").setRenderer(htmlButtonRenderer);
     		grid.getColumn("foo").setEditable(false);
-    		BrowserOpenerRenderer openButton = new BrowserOpenerRenderer(FontAwesome.FOLDER_OPEN.getHtml(), new HtmlButtonRendererClickListener() {
+    		BrowserOpenerRenderer openButton = new BrowserOpenerRenderer(DemoUI.class,FontAwesome.FOLDER_OPEN.getHtml(), new HtmlButtonRendererClickListener() {
 				@Override
 				public void click(HtmlButtonRendererClickEvent event) {
 					MyPojo item = (MyPojo) event.getItem();
@@ -386,6 +387,8 @@ public class DemoUI extends UI {
         tabSheet.addTab(new SparklineDemo(), "Sparkline renderer");
         tabSheet.setSizeFull();
         setContent(tabSheet);
-    	
+
+        String uriFragment = UI.getCurrent().getPage().getUriFragment();
+        if (uriFragment != null) Notification.show("Page opened with BrowserOpenerRenderer, URI fragment: "+uriFragment);
     }
 }

@@ -54,6 +54,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 1.2.4
+* Fixing issue #36
+
 ### Version 1.2.3
 * Added BrowserOpenerRenederer to collection, same features as in Vaadin 8 version
 * Added tooltip support to HtmlButtonRenderer
