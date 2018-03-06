@@ -7,3 +7,7 @@
 .classpath
 
 rebel.xml
+
+#Intellij IDEA
+.idea
+*.iml
