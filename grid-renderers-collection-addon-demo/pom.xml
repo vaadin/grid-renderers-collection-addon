@@ -5,7 +5,7 @@
 	<groupId>com.vaadin</groupId>
 	<artifactId>grid-renderers-collection-addon-demo</artifactId>
 	<packaging>war</packaging>
-	<version>0.95-bp</version>
+	<version>0.96-bp-SNAPSHOT</version>
 	<name>Grid Renderers collection For Vaadin7 Add-on Demo</name>
 
 	<properties>

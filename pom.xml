@@ -5,7 +5,7 @@
 	<groupId>com.vaadin</groupId>
 	<artifactId>grid-renderers-collection-addon-root</artifactId>
 	<packaging>pom</packaging>
-	<version>0.95-bp</version>
+	<version>0.96-bp-SNAPSHOT</version>
 	<name>Grid Renderers collection For Vaadin7</name>
 
 	<modules>
