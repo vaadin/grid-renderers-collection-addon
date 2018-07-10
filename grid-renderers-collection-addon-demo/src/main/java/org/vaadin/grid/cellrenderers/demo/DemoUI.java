@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
 import org.vaadin.grid.cellrenderers.editable.RatingStarsRenderer;
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
+import org.vaadin.grid.cellrenderers.editable.TimeValidator;
 import org.vaadin.grid.cellrenderers.editable.common.EditableRendererEnabled;
 import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
@@ -117,6 +118,7 @@ public class DemoUI extends UI {
                 .setRenderer(sparkline);
             grid.getColumn("stars")
                 .setRenderer(new RatingStarsRenderer(5, true));
+
             grid.setColumns("id", "foo", "bar", "stars", "numbers");
             return grid;
         }
@@ -185,18 +187,27 @@ public class DemoUI extends UI {
         public CheckBoxDemo() {
             final Random random = new Random(4837291937l);
             final BeanItemContainer<SimplePojo> container = new BeanItemContainer<SimplePojo>(SimplePojo.class);
-            container.addBean(new SimplePojo(0, "Me", true, new Date(), BigDecimal.valueOf(random.nextDouble() * 100), Double.valueOf(random.nextInt(5))));
-            container.addBean(new SimplePojo(1, "You", false, new Date(), BigDecimal.valueOf(random.nextDouble() * 100), Double.valueOf(random.nextInt(5))));
-            container.addBean(new SimplePojo(2, "He", true, new Date(), BigDecimal.valueOf(random.nextDouble() * 100), Double.valueOf(random.nextInt(5))));
+            container
+                .addBean(new SimplePojo(0, "Me", true, new Date(), BigDecimal.valueOf(random.nextDouble() * 100), Double.valueOf(random.nextInt(5)), "13:34"));
+            container.addBean(new SimplePojo(1, "You", false, new Date(), BigDecimal.valueOf(random.nextDouble() * 100), Double.valueOf(random.nextInt(5)),
+                    "09:25"));
+            container
+                .addBean(new SimplePojo(2, "He", true, new Date(), BigDecimal.valueOf(random.nextDouble() * 100), Double.valueOf(random.nextInt(5)), "09:25"));
 
             final Grid grid = new Grid(container);
-            grid.setColumns("description", "yes", "truth", "date", "number");
+            grid.setColumns("description", "yes", "truth", "date", "number", "stars", "breakfastTime");
             grid.setSizeFull();
             grid.setEditorEnabled(true);
             grid.setEditorBuffered(false);
             final Grid.Column yes = grid.getColumn("yes");
             yes.setRenderer(new CheckboxRenderer());
             yes.setEditable(true);
+
+            final Grid.Column rating = grid.getColumn("stars");
+            rating.setRenderer(new RatingStarsRenderer(2, false));
+
+            final Grid.Column breakfastTime = grid.getColumn("breakfastTime");
+            breakfastTime.setRenderer(new TextFieldRenderer<String>(new TimeValidator()));
 
             final Grid.Column truth = grid.getColumn("truth");
             truth.setRenderer(new HtmlRenderer(), new StringToBooleanConverter() {
@@ -226,12 +237,13 @@ public class DemoUI extends UI {
             final Random random = new Random(4837291937l);
             final BeanItemContainer<SimplePojo> container = new BeanItemContainer<SimplePojo>(SimplePojo.class);
             for (int i = 0; i < 1000; i++) {
-                container
-                    .addBean(new SimplePojo(i, "Bean", true, new Date(), BigDecimal.valueOf(random.nextDouble() * 100), Double.valueOf(random.nextInt(5))));
+                container.addBean(new SimplePojo(i, "Bean", true, new Date(), BigDecimal.valueOf(random.nextDouble() * 100), Double.valueOf(random.nextInt(5)),
+                        "12:30"));
             }
 
             final Grid grid = new Grid(container);
-            grid.setColumns("description", "stars", "truth", "date", "number");
+
+            grid.setColumns("description", "stars", "truth", "date", "number", "breakfastTime");
             grid.setSizeFull();
             grid.setEditorEnabled(false);
             final Grid.Column yes = grid.getColumn("yes");
@@ -275,6 +287,8 @@ public class DemoUI extends UI {
                 }, Resolution.SECOND));
             grid.getColumn("stars")
                 .setRenderer(new RatingStarsRenderer(5, false));
+            grid.getColumn("breakfastTime")
+                .setRenderer(new TextFieldRenderer<String>(new TimeValidator()));
 
             setStyleName("demoContentLayout");
             setSizeFull();
