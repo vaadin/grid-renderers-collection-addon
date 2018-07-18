@@ -11,13 +11,18 @@ public class TimeValidator implements Converter<String, String> {
 
     @Override
     public String convertToModel(final String value, final Class<? extends String> targetType, final Locale locale) throws ConversionException {
-        return returnValueIfMatchTime(value);
-
+        if(returnValueIfMatchTime(value)) {
+            return value;
+        }
+        throw new ConversionException();
     }
 
     @Override
     public String convertToPresentation(final String value, final Class<? extends String> targetType, final Locale locale) throws ConversionException {
-        return returnValueIfMatchTime(value);
+        if(returnValueIfMatchTime(value)) {
+            return value;
+        }
+        throw new ConversionException();
     }
 
     @Override
@@ -30,11 +35,8 @@ public class TimeValidator implements Converter<String, String> {
         return String.class;
     }
 
-    private String returnValueIfMatchTime(final String value) {
-        if (value.trim().matches(TimeValidator.TIME_PATTERN.toString())) {
-            return value;
-        }
-        throw new ConversionException();
+    private boolean returnValueIfMatchTime(final String value) {
+        return TimeValidator.TIME_PATTERN.matcher(value.trim()).matches();
     }
 
 }
