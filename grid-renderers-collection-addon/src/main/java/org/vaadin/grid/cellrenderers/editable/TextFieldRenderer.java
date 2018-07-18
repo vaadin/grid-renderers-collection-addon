@@ -16,19 +16,23 @@ public class TextFieldRenderer<T> extends EditableRenderer<T> {
 
     private final EditableRendererEnabled editableRendererEnabled;
 
+    public TextFieldRenderer(final Converter<String, T> preconfiguredConverter) {
+        this(-1, null, preconfiguredConverter);
+    }
+
     public TextFieldRenderer() {
-        this(-1, null);
+        this(-1, null, null);
     }
 
     public TextFieldRenderer(final int maxLength) {
-        this(maxLength, null);
+        this(maxLength, null, null);
     }
 
     public TextFieldRenderer(final EditableRendererEnabled editableRendererEnabled) {
-        this(-1, editableRendererEnabled);
+        this(-1, editableRendererEnabled, null);
     }
 
-    public TextFieldRenderer(final int maxLength, final EditableRendererEnabled editableRendererEnabled) {
+    public TextFieldRenderer(final int maxLength, final EditableRendererEnabled editableRendererEnabled, final Converter<String, T> preconfiguredConverter) {
         super((Class<T>) Object.class);
 
         getState().maxLength = maxLength;
@@ -43,18 +47,18 @@ public class TextFieldRenderer<T> extends EditableRenderer<T> {
                 final Object columnPropertyId = getColumn(columnId).getPropertyId();
 
                 final Item row = getParentGrid().getContainerDataSource()
-                        .getItem(itemId);
+                    .getItem(itemId);
 
                 @SuppressWarnings("unchecked")
-                final
-                Property<Object> cell = row.getItemProperty(columnPropertyId);
+                final Property<Object> cell = row.getItemProperty(columnPropertyId);
 
                 final Class<T> targetType = (Class<T>) cell.getType();
-                final Converter<String, T> converter = (Converter<String, T>) getColumn(columnId).getConverter();
                 T value = null;
+                final Converter<String, T> converter = getConverter(columnId, preconfiguredConverter);
                 if (converter != null) {
                     value = converter.convertToModel(newValue, targetType, getParentGrid().getLocale());
-                } else if (targetType == String.class) {
+                }
+                else if (targetType == String.class) {
                     value = (T) newValue;
                 }
 
@@ -64,18 +68,27 @@ public class TextFieldRenderer<T> extends EditableRenderer<T> {
 
             @Override
             public void onRender(final CellId id) {
-                getRpcProxy(TextFieldRendererClientRpc.class)
-                .setEnabled(	EditableRendererUtil.isColumnComponentEnabled(getItemId(id.getRowId()),
-                            	                                              getParentGrid(),
-                            	                                              TextFieldRenderer.this.editableRendererEnabled), id);
+                getRpcProxy(TextFieldRendererClientRpc.class).setEnabled(EditableRendererUtil
+                    .isColumnComponentEnabled(getItemId(id.getRowId()), getParentGrid(), TextFieldRenderer.this.editableRendererEnabled), id);
             }
 
         });
     }
 
+    protected Converter<String, T> getConverter(final String columnId, final Converter<String, T> preconfiguredConverter) {
+        if (preconfiguredConverter != null) {
+            return preconfiguredConverter;
+        }
+        return (Converter<String, T>) getColumn(columnId).getConverter();
+    }
+
     @Override
     protected TextFieldRendererState getState() {
         return (TextFieldRendererState) super.getState();
+    }
+
+    public EditableRendererEnabled getEditableRendererEnabled() {
+        return this.editableRendererEnabled;
     }
 
 }
