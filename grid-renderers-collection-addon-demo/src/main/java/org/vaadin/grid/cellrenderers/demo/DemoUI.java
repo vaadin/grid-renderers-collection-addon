@@ -7,7 +7,6 @@ import java.util.Random;
 import javax.servlet.annotation.WebServlet;
 
 import org.vaadin.grid.cellrenderers.editable.DateFieldRenderer;
-import org.vaadin.grid.cellrenderers.editable.RatingStarsRenderer;
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 import org.vaadin.grid.cellrenderers.editable.TimeValidator;
 import org.vaadin.grid.cellrenderers.editable.common.EditableRendererEnabled;
@@ -116,10 +115,8 @@ public class DemoUI extends UI {
             grid.setSizeFull();
             grid.getColumn("numbers")
                 .setRenderer(sparkline);
-            grid.getColumn("stars")
-                .setRenderer(new RatingStarsRenderer(5, true));
 
-            grid.setColumns("id", "foo", "bar", "stars", "numbers");
+            grid.setColumns("id", "foo", "bar", "numbers");
             return grid;
         }
 
@@ -195,16 +192,13 @@ public class DemoUI extends UI {
                 .addBean(new SimplePojo(2, "He", true, new Date(), BigDecimal.valueOf(random.nextDouble() * 100), Double.valueOf(random.nextInt(5)), "09:25"));
 
             final Grid grid = new Grid(container);
-            grid.setColumns("description", "yes", "truth", "date", "number", "stars", "breakfastTime");
+            grid.setColumns("description", "yes", "truth", "date", "number", "breakfastTime");
             grid.setSizeFull();
             grid.setEditorEnabled(true);
             grid.setEditorBuffered(false);
             final Grid.Column yes = grid.getColumn("yes");
             yes.setRenderer(new CheckboxRenderer());
             yes.setEditable(true);
-
-            final Grid.Column rating = grid.getColumn("stars");
-            rating.setRenderer(new RatingStarsRenderer(2, false));
 
             final Grid.Column breakfastTime = grid.getColumn("breakfastTime");
             breakfastTime.setRenderer(new TextFieldRenderer<String>(new TimeValidator()));
@@ -243,7 +237,7 @@ public class DemoUI extends UI {
 
             final Grid grid = new Grid(container);
 
-            grid.setColumns("description", "stars", "truth", "date", "number", "breakfastTime");
+            grid.setColumns("description", "truth", "date", "number", "breakfastTime");
             grid.setSizeFull();
             grid.setEditorEnabled(false);
             final Grid.Column yes = grid.getColumn("yes");
@@ -285,8 +279,6 @@ public class DemoUI extends UI {
                     }
 
                 }, Resolution.SECOND));
-            grid.getColumn("stars")
-                .setRenderer(new RatingStarsRenderer(5, false));
             grid.getColumn("breakfastTime")
                 .setRenderer(new TextFieldRenderer<String>(new TimeValidator()));
 
