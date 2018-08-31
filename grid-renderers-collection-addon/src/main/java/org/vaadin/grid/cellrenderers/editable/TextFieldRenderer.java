@@ -11,6 +11,8 @@ import org.vaadin.grid.cellrenderers.editable.common.EditableRendererUtil;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.converter.Converter;
+import com.vaadin.data.util.converter.Converter.ConversionException;
+import com.vaadin.ui.Notification;
 
 public class TextFieldRenderer<T> extends EditableRenderer<T> {
 
@@ -53,17 +55,25 @@ public class TextFieldRenderer<T> extends EditableRenderer<T> {
                 final Property<Object> cell = row.getItemProperty(columnPropertyId);
 
                 final Class<T> targetType = (Class<T>) cell.getType();
-                T value = null;
+                T value = (T) cell.getValue(); // set the old value as default.
                 final Converter<String, T> converter = getConverter(columnId, preconfiguredConverter);
                 if (converter != null) {
-                    value = converter.convertToModel(newValue, targetType, getParentGrid().getLocale());
+                    try {
+                        value = converter.convertToModel(newValue, targetType, getParentGrid().getLocale());
+                        cell.setValue(value);
+                    }
+                    catch (ConversionException e) {
+                        Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+                        // in this case refresh the row to show the current (=old) cell value.
+                        getParentGrid().refreshRows(itemId);
+                    }
                 }
                 else if (targetType == String.class) {
-                    value = (T) newValue;
+                    cell.setValue(newValue);
                 }
 
-                cell.setValue(value);
                 fireItemEditEvent(itemId, row, columnPropertyId, value);
+
             }
 
             @Override

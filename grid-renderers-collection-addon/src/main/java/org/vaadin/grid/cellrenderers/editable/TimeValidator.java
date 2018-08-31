@@ -11,18 +11,19 @@ public class TimeValidator implements Converter<String, String> {
 
     @Override
     public String convertToModel(final String value, final Class<? extends String> targetType, final Locale locale) throws ConversionException {
-        if(returnValueIfMatchTime(value)) {
+        if (returnValueIfMatchTime(value)) {
             return value;
         }
-        throw new ConversionException();
+        throw new ConversionException("Can not convert '" + value + "' to time (hh:mm)");
     }
 
     @Override
     public String convertToPresentation(final String value, final Class<? extends String> targetType, final Locale locale) throws ConversionException {
-        if(returnValueIfMatchTime(value)) {
+        if (returnValueIfMatchTime(value)) {
             return value;
         }
-        throw new ConversionException();
+        // should never happen:
+        throw new ConversionException("Can not convert '" + value + "' to presentation (hh:mm)");
     }
 
     @Override
@@ -36,7 +37,8 @@ public class TimeValidator implements Converter<String, String> {
     }
 
     private boolean returnValueIfMatchTime(final String value) {
-        return TimeValidator.TIME_PATTERN.matcher(value.trim()).matches();
+        return TimeValidator.TIME_PATTERN.matcher(value.trim())
+            .matches();
     }
 
 }
