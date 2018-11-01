@@ -7,5 +7,6 @@ import com.vaadin.shared.communication.ServerRpc;
  */
 public interface BooleanSwitchRendererServerRpc extends ServerRpc {
     public void onChange(String rowKey, Boolean newValue);
+    public void applyIsEnabledCheck(String rowKey);
 
 }

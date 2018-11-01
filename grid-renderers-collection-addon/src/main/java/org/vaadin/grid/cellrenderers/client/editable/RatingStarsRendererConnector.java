@@ -86,7 +86,17 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
                 }
             });
 
-            
+			registerRpc(RatingStarsRendererClientRpc.class,
+					new RatingStarsRendererClientRpc() {
+						@Override
+						public void setEnabled(boolean enabled, String rowKey) {
+	                		Element e = ratingStars.getElement();
+							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
+								ratingStars.setReadOnly(!enabled);
+							}
+						}
+			});
+                       
    	 		return ratingStars;
    	 	}
 
@@ -94,7 +104,6 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
    	 	public void render(RendererCellReference cell, Double data,
     	            RatingStarsWidget widget) {
 
-   	 		// widget.setReadOnly(!(cell.getColumn().isEditable() && cell.getGrid().isEnabled()));
    	 		widget.setReadOnly(getState().readOnly);
    	 		Element e = widget.getElement();
    	 		
@@ -110,6 +119,7 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
                 e.setPropertyString(ROW_KEY_PROPERTY,
                         getRowKey((JsonObject) cell.getRow()));
             }
+			if (getState().hasIsEnabledProvider) rpc.applyIsEnabledCheck(e.getPropertyString(ROW_KEY_PROPERTY));
    	 		
    	 	}
 

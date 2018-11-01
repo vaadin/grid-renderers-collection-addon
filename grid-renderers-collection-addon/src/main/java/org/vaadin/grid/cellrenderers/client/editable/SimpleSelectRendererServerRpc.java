@@ -9,4 +9,5 @@ import com.vaadin.shared.communication.ServerRpc;
 public interface SimpleSelectRendererServerRpc extends ServerRpc {
 
     public void onChange(String rowKey, String newValue);
+    public void applyIsEnabledCheck(String rowKey);
 }

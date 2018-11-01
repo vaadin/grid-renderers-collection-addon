@@ -1,10 +1,9 @@
 package org.vaadin.grid.cellrenderers.client.editable;
 
-import com.vaadin.shared.ui.grid.renderers.ClickableRendererState;
+import org.vaadin.grid.cellrenderers.client.shared.EditableRendererState;
 
-public class BooleanSwitchRendererState  extends ClickableRendererState {
+public class BooleanSwitchRendererState  extends EditableRendererState {
 	public String txtFalse = null;
 	public String txtTrue = null;
-	public boolean readOnly = false;
 
 }

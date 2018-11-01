@@ -10,4 +10,5 @@ import com.vaadin.shared.communication.ServerRpc;
 public interface DateFieldRendererServerRpc extends ServerRpc {
 
     public void onChange(String rowKey, Date newValue);
+    public void applyIsEnabledCheck(String rowKey);
 }

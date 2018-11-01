@@ -1,5 +1,8 @@
 package org.vaadin.grid.cellrenderers.action;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.vaadin.grid.cellrenderers.action.HtmlButtonRenderer.HtmlButtonRendererClickListener;
 import org.vaadin.grid.cellrenderers.client.action.BrowserOpenerRendererState;
 import org.vaadin.grid.cellrenderers.client.action.HtmlButtonRendererState;
@@ -8,6 +11,7 @@ import com.vaadin.server.ExternalResource;
 import com.vaadin.server.Resource;
 import com.vaadin.server.UIClassSelectionEvent;
 import com.vaadin.server.UIProvider;
+import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ApplicationConstants;
 import com.vaadin.shared.ui.BrowserWindowOpenerState;
 import com.vaadin.ui.UI;
@@ -170,4 +174,78 @@ public class BrowserOpenerRenderer<T> extends HtmlButtonRenderer<T> {
         return (BrowserOpenerRendererState) super.getState(markAsDirty);
     }
 
+    /**
+     * Sets a parameter that will be added to the query string of the opened
+     * URI. If the window is opened to contain a Vaadin UI, the parameter will
+     * be available using {@link VaadinRequest#getParameter(String)} e.g. using
+     * the request instance passed to {@link UI#init(VaadinRequest)}.
+     * <p>
+     * Setting a parameter with the same name as a previously set parameter will
+     * replace the previous value.
+     *
+     * @param name
+     *            the name of the parameter to add, not <code>null</code>
+     * @param value
+     *            the value of the parameter to add, not <code>null</code>
+     *
+     * @see #removeParameter(String)
+     * @see #getParameterNames()
+     * @see #getParameter(String)
+     */
+    public void setParameter(String name, String value) {
+        if (name == null || value == null) {
+            throw new IllegalArgumentException("Null not allowed");
+        }
+        getState().parameters.put(name, value);
+    }
+
+    /**
+     * Removes a parameter that has been set using
+     * {@link #setParameter(String, String)}. Removing a parameter that has not
+     * been set has no effect.
+     *
+     * @param name
+     *            the name of the parameter to remove, not <code>null</code>
+     *
+     * @see #setParameter(String, String)
+     */
+    public void removeParameter(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null not allowed");
+        }
+        getState().parameters.remove(name);
+    }
+
+    /**
+     * Gets the names of all parameters set using
+     * {@link #setParameter(String, String)}.
+     *
+     * @return an unmodifiable set of parameter names
+     *
+     * @see #setParameter(String, String)
+     * @see #getParameter(String)
+     */
+    public Set<String> getParameterNames() {
+        return Collections.unmodifiableSet(getState().parameters.keySet());
+    }
+
+    /**
+     * Gets the value of a parameter set using
+     * {@link #setParameter(String, String)}. If there is no parameter with the
+     * given name, <code>null</code> is returned.
+     *
+     * @param name
+     *            the name of the parameter to get, not <code>null</code>
+     * @return the value of the parameter, or <code>null</code> there is no
+     *         parameter
+     *
+     * @see #setParameter(String, String)
+     * @see #getParameter(String)
+     */
+    public String getParameter(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null not allowed");
+        }
+        return getState(false).parameters.get(name);
+    }
 }
