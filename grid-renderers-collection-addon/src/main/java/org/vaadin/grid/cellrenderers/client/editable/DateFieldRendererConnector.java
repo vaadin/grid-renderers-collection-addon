@@ -83,6 +83,7 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             dateField.buildDate();
             
             dateField.setEnabled(!getState().readOnly);
+			if (getState().hasIsEnabledProvider) rpc.applyIsEnabledCheck(e.getPropertyString(ROW_KEY_PROPERTY));
         }
 
         @Override
@@ -126,7 +127,6 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 
             // Set application connection
             dateField.client = getConnection();   
-//            dateField.paintableId = getConnectorId();
 
             // Set date locale
             String locale = LocaleService.getDefaultLocale();
@@ -186,6 +186,17 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
                     rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),date);
                 }
             });
+            
+			registerRpc(DateFieldRendererClientRpc.class,
+					new DateFieldRendererClientRpc() {
+						@Override
+						public void setEnabled(boolean enabled, String rowKey) {
+	                		Element e = dateField.getElement();
+							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
+								dateField.setEnabled(enabled);
+							}
+						}
+			});
             
             return dateField;
         }

@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector;
 import com.vaadin.client.renderers.ClickableRenderer;
@@ -31,12 +32,21 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
 	public class BooleanSwitchClientRenderer extends ClickableRenderer<Boolean, VCheckBox> {
 
         private static final String ROW_KEY_PROPERTY = "rowKey";
-
+        private boolean readOnly;
+        
 		@Override
 		public void render(RendererCellReference rendererCellReference, Boolean value, VCheckBox checkBox) {
 			checkBox.setValue(value);		
 
-			checkBox.setEnabled(!getState().readOnly);
+        	Element e = checkBox.getElement();
+
+            if(e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) rendererCellReference.getRow())) {
+                e.setPropertyString(ROW_KEY_PROPERTY,
+                        getRowKey((JsonObject) rendererCellReference.getRow()));
+            }
+
+			checkBox.setEnabled(!getState().readOnly && !readOnly);
+			if (getState().hasIsEnabledProvider) rpc.applyIsEnabledCheck(e.getPropertyString(ROW_KEY_PROPERTY));
 			
 			rendererCellReference.getElement().addClassName("unselectable");
 			if (getState().txtTrue != null) {
@@ -54,17 +64,11 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
 		        }				
 			}
 
-        	Element e = checkBox.getElement();
-            
-            if(e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) rendererCellReference.getRow())) {
-                e.setPropertyString(ROW_KEY_PROPERTY,
-                        getRowKey((JsonObject) rendererCellReference.getRow()));
-            }
-
 		}
 
 		@Override
 		public VCheckBox createWidget() {
+			readOnly = getState().readOnly;
 			VCheckBox checkBox = new VCheckBox();
 			checkBox.addClickHandler(this);
 			checkBox.getElement().removeAttribute("tabindex");
@@ -75,7 +79,7 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
 			checkBox.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                	if (!getState().readOnly) {
+                	if (!readOnly && !getState().readOnly) {
                 		VCheckBox checkBox = (VCheckBox) event.getSource();
                 		Element e = checkBox.getElement();
                 		checkBox.setValue(!checkBox.getValue());
@@ -90,6 +94,19 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
                     event.stopPropagation();
                 }
             });			
+
+			registerRpc(BooleanSwitchRendererClientRpc.class,
+					new BooleanSwitchRendererClientRpc() {
+						@Override
+						public void setEnabled(boolean enabled, String rowKey) {
+	                		Element e = checkBox.getElement();
+							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
+								checkBox.setEnabled(enabled);
+								readOnly = !enabled;
+							}
+						}
+			});
+				
 			return checkBox;
 		}
 	}

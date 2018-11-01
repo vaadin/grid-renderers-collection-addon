@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -37,6 +38,7 @@ import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer.SparklineConfiguration;
 
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.shared.ui.datefield.DateResolution;
@@ -59,6 +61,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import javax.servlet.annotation.WebServlet;
 
+@Push
 @Theme("valo")
 @Title("Grid Renderers collection For Vaadin7 Demo")
 @SuppressWarnings("serial")
@@ -162,6 +165,7 @@ public class DemoUI extends UI {
 			});
 			openButton.setHtmlContentAllowed(true);
 			openButton.setTooltipEnabled(true);
+			openButton.setParameter("name", "tatu");
 			grid.addColumn(MyPojo::getFoo, openButton).setCaption("Open Vaadin");
 			HtmlButtonRenderer<MyPojo> htmlButton = new HtmlButtonRenderer<MyPojo>(clickEvent -> {
 				Notification.show("HTML button has been clicked");
@@ -267,13 +271,13 @@ public class DemoUI extends UI {
 					, new HtmlRenderer())
 					.setCaption("Truth");
 
-			grid.addColumn(SimplePojo::getImage, new BlobImageRenderer(30,30,"image/png"))
+			grid.addColumn(SimplePojo::getImage, new BlobImageRenderer(40,40,"image/png"))
 				.setCaption("Image");
 			
 			grid.setSizeFull();
 			grid.getEditor().setEnabled(true);
-			grid.getEditor().setBuffered(false);
- 
+			grid.getEditor().setBuffered(true);
+			grid.setRowHeight(50);
     
 			setStyleName("demoContentLayout");
 			setSizeFull();
@@ -316,6 +320,7 @@ public class DemoUI extends UI {
 			booleanRenderer.addItemEditListener(event ->  {
 					Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());				
 				});
+			
 			grid.addColumn(SimplePojo::isTruth, booleanRenderer).setCaption("Truth");
 			
 			TextFieldRenderer<SimplePojo,String> textFieldRenderer = new TextFieldRenderer<>(SimplePojo::setDescription);
@@ -379,8 +384,9 @@ public class DemoUI extends UI {
         tabSheet.addTab(new SparklineDemo(), "Sparkline renderer");
         tabSheet.setSizeFull();
         setContent(tabSheet);
-    	
-        String uriFragment = UI.getCurrent().getPage().getUriFragment();
-        if (uriFragment != null) Notification.show("Page opened with BrowserOpenerRenderer, URI fragment: "+uriFragment);
+
+        String uriFragment = Page.getCurrent().getUriFragment();
+        String name = request.getParameter("name");
+        if (uriFragment != null) Notification.show("Page opened with BrowserOpenerRenderer, URI fragment: "+uriFragment+" Parameter name="+name);
     }
 }

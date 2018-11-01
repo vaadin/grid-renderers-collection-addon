@@ -1,14 +1,15 @@
 package org.vaadin.grid.cellrenderers.editable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.vaadin.grid.cellrenderers.EditableRenderer;
+import org.vaadin.grid.cellrenderers.client.editable.SimpleSelectRendererClientRpc;
 import org.vaadin.grid.cellrenderers.client.editable.SimpleSelectRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.SimpleSelectRendererState;
+import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererClientRpc;
 
 import com.vaadin.data.Converter;
 import com.vaadin.data.ValueContext;
@@ -19,14 +20,20 @@ import com.vaadin.ui.Grid.Column;
 import elemental.json.JsonValue;
 
 /**
+ * @author Tatu Lund
+ * 
  * Simple selection renderer to be used when the set of values to be selected is small. The renderer
  * has type parameter. The renderer uses ListBox GWT widget, which accepts only String as value.
  * Since there is many times need for select to be used with discrete numbers, enum, etc. other 
  * types than String, this renderer can be used with Converter that takes care of converting values
  * to Strings used in selection popup and real type in the Container. The renderer fires edit
  * event when value has been modified.
+ *
+ * @see Grid#addColumn(String, com.vaadin.ui.renderers.AbstractRenderer)
+ * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
+ * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
  * 
- * @author Tatu Lund
+ * @param <T> Bean type of the Grid where this Renderer is being used
  */
 public class SimpleSelectRenderer<T,A> extends EditableRenderer<T,A> {
 
@@ -110,9 +117,22 @@ public class SimpleSelectRenderer<T,A> extends EditableRenderer<T,A> {
 
             	fireItemEditEvent(item, column, newValue);
              }
+
+			@Override
+			public void applyIsEnabledCheck(String rowKey) {
+            	Grid<T> grid = getParentGrid();
+            	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
+            	if (item != null) {
+            		boolean result = isEnabledProvider.apply(item);
+    				getRPC().setEnabled(result,rowKey);				
+            	}
+			}
         });
     }
 	
+	/**
+	 * Used internally
+	 */
     @Override
     public JsonValue encode(A value) {
         if (converter == null) {
@@ -126,23 +146,8 @@ public class SimpleSelectRenderer<T,A> extends EditableRenderer<T,A> {
     protected SimpleSelectRendererState getState()  {
         return (SimpleSelectRendererState) super.getState();
     }
-
-    /**
-     * Toggle Renderer to be editable / non-editable (=true). Default is editable. 
-     * 
-     * @param readOnly Boolean value
-     */
-    public void setReadOnly(boolean readOnly) {
-    	getState().readOnly = readOnly;
-    }
     
-    /**
-     * Returns if Renderer is editable or non-editable at the moment.
-     * 
-     * @return Boolean value
-     */
-    public boolean isReadOnly() {
-    	return getState().readOnly;
+    private SimpleSelectRendererClientRpc getRPC() {
+        return getRpcProxy(SimpleSelectRendererClientRpc.class);
     }
-    
 }

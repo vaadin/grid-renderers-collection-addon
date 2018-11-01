@@ -1,25 +1,48 @@
 package org.vaadin.grid.cellrenderers.editable;
 
 import org.vaadin.grid.cellrenderers.EditableRenderer;
+import org.vaadin.grid.cellrenderers.client.editable.RatingStarsRendererClientRpc;
 import org.vaadin.grid.cellrenderers.client.editable.RatingStarsRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.RatingStarsRendererState;
+import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererClientRpc;
 
 import com.vaadin.server.Setter;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 
 /**
- * 
  * @author Tatu Lund
- *
+ * 
+ * RatingStarsRenderer is renderer for rating stars selection of {@link EditableRenderer} type.
+ * It creates editable RatingStars field column in Grid. 
+ * 
+ * @see Grid#addColumn(String, com.vaadin.ui.renderers.AbstractRenderer)
+ * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
+ * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
+ * 
+ * @param <T> Bean type of the Grid where this Renderer is being used
  */
 public class RatingStarsRenderer<T> extends EditableRenderer<T,Double> {
 
+	/**
+	 * Constructor for RatingStarsRenderer
+	 * 
+	 * @param setter Setter function from underlying Bean which sets the value
+	 * @param stars Number of stars used
+	 */
     public RatingStarsRenderer(Setter<T, Double> setter, int stars) {
         super(Double.class);
         setupRatingStarsRenderer(setter, stars, -1, -1);
     }
     
+    /**
+	 * Constructor for RatingStarsRenderer with more parameters
+     * 
+	 * @param setter Setter function from underlying Bean which sets the value
+	 * @param stars Number of stars used
+     * @param width Width of the field in pixels
+     * @param height Height of the field in pixels
+     */
     public RatingStarsRenderer(Setter<T, Double> setter, int stars, int width, int height) {
         super(Double.class);
         setupRatingStarsRenderer(setter, stars, width, height);
@@ -43,6 +66,16 @@ public class RatingStarsRenderer<T> extends EditableRenderer<T,Double> {
                 fireItemEditEvent(item, column, newValue);
             }
 
+			@Override
+			public void applyIsEnabledCheck(String rowKey) {
+            	Grid<T> grid = getParentGrid();
+            	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
+            	if (item != null) {
+            		boolean result = isEnabledProvider.apply(item);
+    				getRPC().setEnabled(result,rowKey);				
+            	}				
+			}
+
         });
     }
 
@@ -50,23 +83,8 @@ public class RatingStarsRenderer<T> extends EditableRenderer<T,Double> {
     protected RatingStarsRendererState getState() {
     	return (RatingStarsRendererState) super.getState();
     }
-
-    /**
-     * Toggle Renderer to be editable / non-editable (=true). Default is editable. 
-     * 
-     * @param readOnly Boolean value
-     */
-    public void setReadOnly(boolean readOnly) {
-    	getState().readOnly = readOnly;
-    }
     
-    /**
-     * Returns if Renderer is editable or non-editable at the moment.
-     * 
-     * @return Boolean value
-     */
-    public boolean isReadOnly() {
-    	return getState().readOnly;
+    private RatingStarsRendererClientRpc getRPC() {
+        return getRpcProxy(RatingStarsRendererClientRpc.class);
     }
-    
 }

@@ -89,6 +89,7 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
             }
 
             listBox.setEnabled(!getState().readOnly);
+			if (getState().hasIsEnabledProvider) rpc.applyIsEnabledCheck(e.getPropertyString(ROW_KEY_PROPERTY));
         }
 
         @Override
@@ -129,6 +130,17 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
                 }
             });
 
+			registerRpc(SimpleSelectRendererClientRpc.class,
+					new SimpleSelectRendererClientRpc() {
+						@Override
+						public void setEnabled(boolean enabled, String rowKey) {
+	                		Element e = listBox.getElement();
+							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
+								listBox.setEnabled(enabled);
+							}
+						}
+			});
+            
             return listBox;
         }
     }

@@ -1,3 +1,6 @@
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/grid-renderers-collection-for-vaadin7)
+[![Stars on Vaadin Directory](https://img.shields.io/vaadin-directory/star/grid-renderers-collection-for-vaadin7.svg)](https://vaadin.com/directory/component/grid-renderers-collection-for-vaadin7)
+
 # Grid Renderers Add-on for Vaadin 8
 
 Grid Renderers collection is a set of renderers for Vaadin 8 Grid. It is possible to use Table as editable
@@ -53,6 +56,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
 
  
 ## Release notes
+
+### Version 2.3.0
+* Added setIsEnabledProvider(..) method to EditableRenderer and implemented it in its subclasses, See issue #46
 
 ### Version 2.2.10
 * Fixing issue #36, BrowserOpenerRenderer url fetching was not made correctly
@@ -191,7 +197,7 @@ shared state. Most of the settings have immediate effect, see the demo.
 
 ### RatingStarsRenderer
 
-RatingStarsRenderer is based on Widget in RatingStars add-on by Teemu Pöntelin. You can use 
+RatingStarsRenderer is based on Widget in RatingStars add-on by Teemu PÃ¶ntelin. You can use 
 
 RatingStarsRenderer both as a view only or editable field renderer. The max number of stars can
 be also configured.

@@ -7,5 +7,6 @@ import com.vaadin.shared.communication.ServerRpc;
  */
 public interface RatingStarsRendererServerRpc extends ServerRpc {
     public void onChange(String rowKey, Double newValue);
+    public void applyIsEnabledCheck(String rowKey);
 
 }

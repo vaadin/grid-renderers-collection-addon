@@ -2,6 +2,7 @@ package org.vaadin.grid.cellrenderers.client.editable;
 
 import com.google.gwt.dom.client.Style;
 import com.vaadin.client.VConsole;
+
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 
 import com.google.gwt.core.client.GWT; 
@@ -61,6 +62,8 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
             // Generics issue, need a correctly typed column.
 
             textField.setEnabled(!getState().readOnly);
+			if (getState().hasIsEnabledProvider) rpc.applyIsEnabledCheck(e.getPropertyString(ROW_KEY_PROPERTY));
+            
         }
 
         @Override
@@ -132,6 +135,17 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
                 }
             });
 
+			registerRpc(TextFieldRendererClientRpc.class,
+					new TextFieldRendererClientRpc() {
+						@Override
+						public void setEnabled(boolean enabled, String rowKey) {
+	                		Element e = textField.getElement();
+							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
+								textField.setEnabled(enabled);
+							}
+						}
+			});
+            
             return textField;
         }
     }

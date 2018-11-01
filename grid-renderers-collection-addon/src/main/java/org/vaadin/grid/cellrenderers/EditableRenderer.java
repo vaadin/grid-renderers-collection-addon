@@ -1,6 +1,8 @@
 package org.vaadin.grid.cellrenderers;
 
+import com.vaadin.data.ValueProvider;
 import com.vaadin.event.ConnectorEventListener;
+import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.Registration;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
@@ -10,18 +12,41 @@ import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
 
-/**
- * @author Mikael Grankvist - Vaadin
- */
-public class EditableRenderer<A,T> extends ClickableRenderer<A,T> {
+import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererState;
+import org.vaadin.grid.cellrenderers.client.shared.EditableRendererState;
 
-    protected EditableRenderer(Class<T> presentationType) {
+/**
+ * @author Mikael Grankvist and Tatu Lund - Vaadin
+ *
+ * Superclass for editable renderers (e.g. TextFieldRenderer, DateFieldRenderer)
+ *
+ * This a base class for EditableRenderers defining some common methods and
+ * edit eventing mechanism
+ * 
+ * @see EditableRenderer#addItemEditListener(ItemEditListener)
+ * @see EditableRenderer#setIsEnabledProvider(ValueProvider)
+ * @see EditableRenderer#setReadOnly(boolean)
+ * @see EditableRenderer#isReadOnly()
+ *  
+ * @param <A> Bean type of the Grid
+ * @param <T> Type of the Rendered value
+ */
+public abstract class EditableRenderer<A,T> extends ClickableRenderer<A,T> {
+
+    protected ValueProvider<A,Boolean> isEnabledProvider;
+
+    /**
+     * Constructor
+     *  
+     * @param presentationType Presentation type
+     */
+	protected EditableRenderer(Class<T> presentationType) {
         super(presentationType);
     }
 
     /**
-     * Superclass for editable renderers (e.g. TextFieldRenderer, DateFieldRenderer)
-     * 
+     * Constructor
+     *  
      * @param presentationType Presentation type
      * @param nullRepresentation Null presentation
      */
@@ -102,4 +127,49 @@ public class EditableRenderer<A,T> extends ClickableRenderer<A,T> {
         fireEvent(new ItemEditEvent(getParentGrid(), item, column, newValue));
     }
 
+    /**
+     * Toggle Renderer to be editable / non-editable (=true). Default is editable. 
+     * 
+     * @param readOnly Boolean value
+     */
+    public void setReadOnly(boolean readOnly) {
+    	getState().readOnly = readOnly;
+    }
+    
+    /**
+     * Returns if Renderer is editable or non-editable at the moment.
+     * 
+     * @return Boolean value
+     */
+    public boolean isReadOnly() {
+    	return getState().readOnly;
+    }
+
+    /**
+     * Set a provider function for the renderer to control whether the field is enable
+     * or not based on function return value. This method makes it possible to have
+     * selected fields to be dynamically controlled.
+     * 
+     * Note: Using the function will add an additional server round trip in the rendering
+     * process and with slow network connections may impact Grid rendering performance.
+     * 
+     * @param isEnabledProvider Lambda expression or function reference of boolean type
+     */
+    public void setIsEnabledProvider(ValueProvider<A,Boolean> isEnabledProvider) {
+    	if (isEnabledProvider != null) {
+    		this.isEnabledProvider = isEnabledProvider;
+    		getState().hasIsEnabledProvider = true;
+    	} else {
+    		this.isEnabledProvider = null;
+    		getState().hasIsEnabledProvider = false;    		
+    	}
+    }
+    
+    
+    @Override
+    protected EditableRendererState getState() {
+    	return (EditableRendererState) super.getState();
+    }
+    
+    
 }

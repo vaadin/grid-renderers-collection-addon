@@ -7,8 +7,10 @@ import java.time.ZoneOffset;
 import java.util.Date;
 
 import org.vaadin.grid.cellrenderers.EditableRenderer;
+import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererClientRpc;
 import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.DateFieldRendererState;
+import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererClientRpc;
 
 import com.vaadin.server.Setter;
 import com.vaadin.shared.ui.datefield.DateResolution;
@@ -18,12 +20,24 @@ import com.vaadin.ui.Grid.Column;
 import elemental.json.JsonValue;
 
 /**
- * 
  * @author Tatu Lund
- *
+ * 
+ * DateFieldRenderer is renderer for DateField of {@link EditableRenderer} type.
+ * It creates editable DateField with calendar popup column in Grid. 
+ * 
+ * @see Grid#addColumn(String, com.vaadin.ui.renderers.AbstractRenderer)
+ * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
+ * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
+ * 
+ * @param <T> Bean type of the Grid where this Renderer is being used
  */
 public class DateFieldRenderer<T> extends EditableRenderer<T,LocalDate> {
 
+	/**
+	 * A Constructor for DateFieldRenderer
+	 * 
+	 * @param setter Setter function from underlying Bean which sets the value
+	 */
 	public DateFieldRenderer(final Setter<T, LocalDate> setter) {
 
 		super(LocalDate.class);
@@ -49,6 +63,16 @@ public class DateFieldRenderer<T> extends EditableRenderer<T,LocalDate> {
                 fireItemEditEvent(item, column, newLocalDate);
             }
 
+			@Override
+			public void applyIsEnabledCheck(String rowKey) {
+            	Grid<T> grid = getParentGrid();
+            	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
+            	if (item != null) {
+            		boolean result = isEnabledProvider.apply(item);
+    				getRPC().setEnabled(result,rowKey);				
+            	}				
+			}
+
         });
     }
 
@@ -59,7 +83,9 @@ public class DateFieldRenderer<T> extends EditableRenderer<T,LocalDate> {
         return Date.from(date.atStartOfDay(ZoneOffset.UTC).toInstant());
     }
 
-
+    /**
+     * Used internally
+     */
     @Override
     public JsonValue encode(LocalDate value) {
         if (value == null) {
@@ -88,6 +114,10 @@ public class DateFieldRenderer<T> extends EditableRenderer<T,LocalDate> {
      * Set the date resolution of the DateField to be rendered
      *   valid values are DateResolution.DAY, DateResolution.MONTH and DateResolution.YEAR. 
      * 
+     * @see DateResolution#DAY
+     * @see DateResolution#MONTH
+     * @see DateResolution#YEAR
+     * 
      * @param dateResolution The date resolution
      */
     public void setDateResolution(DateResolution dateResolution) {
@@ -97,22 +127,8 @@ public class DateFieldRenderer<T> extends EditableRenderer<T,LocalDate> {
             assert false : "Unexpected resolution argument " + dateResolution;
     	}
     }
-
-    /**
-     * Toggle Renderer to be editable / non-editable (=true). Default is editable. 
-     * 
-     * @param readOnly Boolean value
-     */
-    public void setReadOnly(boolean readOnly) {
-    	getState().readOnly = readOnly;
-    }
     
-    /**
-     * Returns if Renderer is editable or non-editable at the moment.
-     * 
-     * @return Boolean value
-     */
-    public boolean isReadOnly() {
-    	return getState().readOnly;        
-    }    
+    private DateFieldRendererClientRpc getRPC() {
+        return getRpcProxy(DateFieldRendererClientRpc.class);
+    }
 }

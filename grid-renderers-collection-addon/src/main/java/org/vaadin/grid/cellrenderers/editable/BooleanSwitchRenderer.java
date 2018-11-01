@@ -1,13 +1,10 @@
 package org.vaadin.grid.cellrenderers.editable;
 
 import org.vaadin.grid.cellrenderers.EditableRenderer;
+import org.vaadin.grid.cellrenderers.client.editable.BooleanSwitchRendererClientRpc;
 import org.vaadin.grid.cellrenderers.client.editable.BooleanSwitchRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.BooleanSwitchRendererState;
-import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererServerRpc;
-import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererState;
 
-import com.google.gwt.editor.client.Editor;
-import com.vaadin.data.HasValue;
 import com.vaadin.server.Page;
 import com.vaadin.server.Setter;
 import com.vaadin.ui.Grid;
@@ -15,6 +12,17 @@ import com.vaadin.ui.Grid.Column;
 
 /**
  * @author Tatu Lund
+ * 
+ * BooleanSwitchRenderer is renderer for CheckBox of {@link EditableRenderer} type.
+ * It creates editable CheckBox column in Grid. 
+ * 
+ * @see Grid#addColumn(String, com.vaadin.ui.renderers.AbstractRenderer)
+ * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
+ * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
+ * 
+ * There is also Editor aware org.vaadin.grid.cellrenderers.editoraware.CheckBoxRenderer
+ * 
+ * @param <T> Bean type of the Grid where this Renderer is being used
  */
 public class BooleanSwitchRenderer<T> extends EditableRenderer<T,Boolean> {
 
@@ -68,6 +76,16 @@ public class BooleanSwitchRenderer<T> extends EditableRenderer<T,Boolean> {
     			}
 
     		}
+
+			@Override
+			public void applyIsEnabledCheck(String rowKey) {
+            	Grid<T> grid = getParentGrid();
+            	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
+            	if (item != null) {
+            		boolean result = isEnabledProvider.apply(item);
+    				getRPC().setEnabled(result,rowKey);				
+            	}
+			}
     	});
 
     }
@@ -87,24 +105,9 @@ public class BooleanSwitchRenderer<T> extends EditableRenderer<T,Boolean> {
     protected BooleanSwitchRendererState getState() {
     	return (BooleanSwitchRendererState) super.getState();
     }
-    
-    /**
-     * Toggle Renderer to be editable / non-editable (=true). Default is editable. 
-     * 
-     * @param readOnly Boolean value
-     */
-    public void setReadOnly(boolean readOnly) {
-    	getState().readOnly = readOnly;
-    }
-    
-    /**
-     * Returns if Renderer is editable or non-editable at the moment.
-     * 
-     * @return Boolean value
-     */
-    public boolean isReadOnly() {
-    	return getState().readOnly;
-    }
-    
 
+    private BooleanSwitchRendererClientRpc getRPC() {
+        return getRpcProxy(BooleanSwitchRendererClientRpc.class);
+    }
+    
 }

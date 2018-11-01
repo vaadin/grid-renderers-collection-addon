@@ -8,4 +8,5 @@ import com.vaadin.shared.communication.ServerRpc;
 public interface TextFieldRendererServerRpc extends ServerRpc {
 
     public void onChange(String rowKey, String newValue);
+    public void applyIsEnabledCheck(String rowKey);
 }

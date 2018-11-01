@@ -1,9 +1,7 @@
 package org.vaadin.grid.cellrenderers.editable;
 
-import java.time.LocalDate;
-import java.util.Date;
-
 import org.vaadin.grid.cellrenderers.EditableRenderer;
+import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererClientRpc;
 import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererServerRpc;
 import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererState;
 
@@ -17,18 +15,35 @@ import com.vaadin.ui.Grid.Column;
 import elemental.json.JsonValue;
 
 /**
- * 
  * @author Tatu Lund
- *
+ * 
+ * TextFieldRenderer is renderer for TextField of {@link EditableRenderer} type.
+ * It creates editable TextField column in Grid. 
+ * 
+ * @see Grid#addColumn(String, com.vaadin.ui.renderers.AbstractRenderer)
+ * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
+ * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
+ * 
+ * @param <T> Bean type of the Grid where this Renderer is being used
+ * @param <A> Type of the value, if other than String a converter needs to be set with {@link TextFieldRenderer#setConverter(Converter)}
  */
 public class TextFieldRenderer<T,A> extends EditableRenderer<T,A> {
 	private Converter<String,A> converter;
 
+	/**
+	 * Set Converter for the Field if the underlying value is other than String
+	 * 
+	 * @param converter A converter
+	 */
 	public void setConverter(Converter<String,A> converter) {
 		this.converter = converter;
 	}
 	
-	
+	/**
+	 * A Constructor for TextFieldRenderer
+	 * 
+	 * @param setter Setter function from underlying Bean which sets the value
+	 */
 	public TextFieldRenderer(final Setter<T,A> setter) {
     
         super((Class<A>) Object.class);
@@ -60,6 +75,16 @@ public class TextFieldRenderer<T,A> extends EditableRenderer<T,A> {
             	
             }
 
+			@Override
+			public void applyIsEnabledCheck(String rowKey) {
+            	Grid<T> grid = getParentGrid();
+            	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
+            	if (item != null) {
+            		boolean result = isEnabledProvider.apply(item);
+    				getRPC().setEnabled(result,rowKey);				
+            	}
+			}
+
         });
     }
 
@@ -79,7 +104,7 @@ public class TextFieldRenderer<T,A> extends EditableRenderer<T,A> {
     
     /**
      * When eagerChangeMode is set to true the text field emits value
-     *  change after each key press. Default is false. 
+     *  change after each key press. The default value is false. 
      * 
      * @param eagerChangeMode Boolean value
      */
@@ -89,6 +114,8 @@ public class TextFieldRenderer<T,A> extends EditableRenderer<T,A> {
     
     /**
      * Get the current state of eagerChangeMode
+     * 
+     * @see TextFieldRenderer#setEagerChangeMode(boolean)
      * 
      * @return State of eagerChangeMode
      */
@@ -114,23 +141,8 @@ public class TextFieldRenderer<T,A> extends EditableRenderer<T,A> {
     public boolean isBlurChangeMode() {
     	return getState().blurChangeMode;
     }
-
-    /**
-     * Toggle Renderer to be editable / non-editable (=true). Default is editable. 
-     * 
-     * @param readOnly Boolean value
-     */
-    public void setReadOnly(boolean readOnly) {
-    	getState().readOnly = readOnly;
-    }
     
-    /**
-     * Returns if Renderer is editable or non-editable at the moment.
-     * 
-     * @return Boolean value
-     */
-    public boolean isReadOnly() {
-    	return getState().readOnly;
+    private TextFieldRendererClientRpc getRPC() {
+        return getRpcProxy(TextFieldRendererClientRpc.class);
     }
-    
 }
