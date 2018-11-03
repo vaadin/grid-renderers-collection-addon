@@ -61,7 +61,7 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
             }
             // Generics issue, need a correctly typed column.
 
-            textField.setEnabled(!getState().readOnly);
+            textField.setReadOnly(getState().readOnly);
 			if (getState().hasIsEnabledProvider) rpc.applyIsEnabledCheck(e.getPropertyString(ROW_KEY_PROPERTY));
             
         }
@@ -69,7 +69,7 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
         @Override
         public VTextField createWidget() {
             final VTextField textField = GWT.create(VTextField.class);
-
+            
             if(getState().fitToCell) {
                 textField.setWidth("100%");
 
@@ -141,7 +141,7 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 						public void setEnabled(boolean enabled, String rowKey) {
 	                		Element e = textField.getElement();
 							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
-								textField.setEnabled(enabled);
+								textField.setReadOnly(!enabled);
 							}
 						}
 			});

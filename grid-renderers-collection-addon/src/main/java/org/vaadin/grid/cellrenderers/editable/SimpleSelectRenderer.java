@@ -20,8 +20,6 @@ import com.vaadin.ui.Grid.Column;
 import elemental.json.JsonValue;
 
 /**
- * @author Tatu Lund
- * 
  * Simple selection renderer to be used when the set of values to be selected is small. The renderer
  * has type parameter. The renderer uses ListBox GWT widget, which accepts only String as value.
  * Since there is many times need for select to be used with discrete numbers, enum, etc. other 
@@ -34,6 +32,8 @@ import elemental.json.JsonValue;
  * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
  * 
  * @param <T> Bean type of the Grid where this Renderer is being used
+ * 
+ * @author Tatu Lund
  */
 public class SimpleSelectRenderer<T,A> extends EditableRenderer<T,A> {
 

@@ -11,8 +11,6 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 
 /**
- * @author Tatu Lund
- * 
  * BooleanSwitchRenderer is renderer for CheckBox of {@link EditableRenderer} type.
  * It creates editable CheckBox column in Grid. 
  * 
@@ -23,6 +21,8 @@ import com.vaadin.ui.Grid.Column;
  * There is also Editor aware org.vaadin.grid.cellrenderers.editoraware.CheckBoxRenderer
  * 
  * @param <T> Bean type of the Grid where this Renderer is being used
+ * 
+ * @author Tatu Lund
  */
 public class BooleanSwitchRenderer<T> extends EditableRenderer<T,Boolean> {
 

@@ -1,0 +1,27 @@
+@import "../valo/valo.scss";
+
+$gray: #d1d1cf;
+$green: #40b527;
+$darkgreen: darken($green, 30%);
+
+// Prefix all selectors in your theme with .demo
+.demo {
+
+	// Include valo theme styles in your theme
+	@include valo;
+
+	// You can style your demo app right here
+	.demoContentLayout {
+		background-color: $gray;
+		background-image: url(images/radial-gradient.png);
+		background-size: 90%;
+		background-position: center center;
+		background-repeat: no-repeat;
+	}
+
+    // Demoing styling of delete button confirm stage
+   	.delete-confirm {
+   	    background: red;
+   	    outline-color: black;
+    }	
+}
