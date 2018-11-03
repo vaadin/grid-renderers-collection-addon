@@ -88,6 +88,9 @@ public class DemoUI extends UI {
     			id = i;
     			numbers = new Number[60];
     			rand = new Random(id);
+    			for (int j=0;j<60;j++) {
+        			numbers[j] = rand.nextInt()/10000.0;    				
+    			}
     			stars =  (double) rand.nextInt(10) / 2.0;
     			setNumber(BigDecimal.valueOf(rand.nextDouble()*100));
     			foo = foo+i;
@@ -110,9 +113,6 @@ public class DemoUI extends UI {
     		}
     		    		
     		public Number[] getNumbers() {
-    			for (int i=0;i<60;i++) {
-        			numbers[i] = rand.nextInt()/10000.0;    				
-    			}
     			return numbers;
     		}
 
@@ -183,7 +183,7 @@ public class DemoUI extends UI {
     	}
 
     	public SparklineDemo() {
-    		SparklineRenderer<MyPojo> sparkline = new SparklineRenderer<>(200,30); 
+    		SparklineRenderer<MyPojo> sparkline = new SparklineRenderer<>(200,30,"Chart"); 
     		final SparklineConfiguration config = sparkline.getConfiguration();
 
     		config.setPathWidth(2);
@@ -236,6 +236,7 @@ public class DemoUI extends UI {
     		HorizontalLayout buttonsLayout = new HorizontalLayout();
     		buttonsLayout.addComponents(normalRangeBtn, minMaxBtn, averageBtn, valueBtn, valueDotBtn, minmaxDotBtn);
     		addComponent(buttonsLayout);
+			setStyleName("demoContentLayout");
     		setMargin(true);
     		setSpacing(true);
     	}
@@ -368,6 +369,7 @@ public class DemoUI extends UI {
 			grid.addColumn(SimplePojo::getChoice, choiceFieldRenderer).setCaption("Choice");			
 
 			setSizeFull();
+			setStyleName("demoContentLayout");
 			addComponent(grid);
 			setComponentAlignment(grid
 					, Alignment.MIDDLE_CENTER);
