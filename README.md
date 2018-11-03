@@ -57,6 +57,10 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 2.3.1
+* Fixed TextFieldRenderer to have proper style when not editable
+* Added more configuration options to DeleteButtonRenderer
+
 ### Version 2.3.0
 * Added setIsEnabledProvider(..) method to EditableRenderer and implemented it in its subclasses, See issue #46
 

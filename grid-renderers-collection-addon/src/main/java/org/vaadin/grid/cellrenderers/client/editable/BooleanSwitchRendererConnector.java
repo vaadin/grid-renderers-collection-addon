@@ -102,7 +102,7 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
 	                		Element e = checkBox.getElement();
 							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
 								checkBox.setEnabled(enabled);
-								readOnly = !enabled;
+								readOnly = !enabled;								
 							}
 						}
 			});

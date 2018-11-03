@@ -15,8 +15,6 @@ import com.vaadin.ui.Grid.Column;
 import elemental.json.JsonValue;
 
 /**
- * @author Tatu Lund
- * 
  * TextFieldRenderer is renderer for TextField of {@link EditableRenderer} type.
  * It creates editable TextField column in Grid. 
  * 
@@ -26,6 +24,8 @@ import elemental.json.JsonValue;
  * 
  * @param <T> Bean type of the Grid where this Renderer is being used
  * @param <A> Type of the value, if other than String a converter needs to be set with {@link TextFieldRenderer#setConverter(Converter)}
+ * 
+ * @author Tatu Lund
  */
 public class TextFieldRenderer<T,A> extends EditableRenderer<T,A> {
 	private Converter<String,A> converter;

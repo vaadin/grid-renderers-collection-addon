@@ -11,12 +11,23 @@ import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.shared.Registration;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
-import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.renderers.ClickableRenderer;
-import com.vaadin.ui.renderers.ClickableRenderer.RendererClickEvent;
-import com.vaadin.ui.renderers.ClickableRenderer.RendererClickListener;
 import com.vaadin.util.ReflectTools;
 
+/**
+ * DeleteButtonRenderer creates two stage Delete button. Clicking the delete button
+ * will turn it to confirm mode, where it stays next XX seconds (default = 10) before
+ * going back to normal mode. If button is clicked second time in confrim mode
+ * the action {@link DeleteRendererClickEvent} is triggered.  
+ * 
+ * @see Grid#addColumn(String, com.vaadin.ui.renderers.AbstractRenderer)
+ * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
+ * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
+ * 
+ * @author Tatu Lund
+ *
+ * @param <T> Bean type of the Grid where the renderer is being used
+ */
 public class DeleteButtonRenderer<T> extends ClickableRenderer<T,Boolean> {
 
     /**
@@ -40,7 +51,7 @@ public class DeleteButtonRenderer<T> extends ClickableRenderer<T,Boolean> {
 
     /**
      * An event fired when a clickable widget rendered by a DeleteButtonRenderer is
-     * clicked.
+     * clicked in confirm state.
      *
      */
     public static class DeleteRendererClickEvent extends ClickEvent {
@@ -139,6 +150,9 @@ public class DeleteButtonRenderer<T> extends ClickableRenderer<T,Boolean> {
     	});
     }
     
+    /**
+     *  Get null presentation string
+     */
     @Override
     public String getNullRepresentation() {
         return super.getNullRepresentation();
@@ -192,4 +206,42 @@ public class DeleteButtonRenderer<T> extends ClickableRenderer<T,Boolean> {
         		DeleteRendererClickListener.CLICK_METHOD);
     }
 
+    /**
+     * Set style name for Delete button when in normal state, default "v-deletebutton" 
+     * 
+     * @param styleName A style name String 
+     */
+    public void setStyleName(String styleName) {
+    	if (styleName == null) throw new IllegalArgumentException("Style cannot be null");
+    	getState().normalStyle = styleName;
+    }
+    
+    /**
+     * Set style name for Delete button when in confirm state, default "delete-confirm" 
+     * 
+     * @param styleName A style name String
+     */
+    public void setDeleteStyleName(String styleName) {
+    	if (styleName == null) throw new IllegalArgumentException("Delete style cannot be null");
+    	getState().deleteStyle = styleName;
+    }
+    
+    /**
+     * Set the time out before button goes back to normal mode (default 10 seconds) 
+     * 
+     * @param seconds Time out in seconds
+     */
+    public void setTimeout(int seconds) {
+    	getState().timeOut = seconds;
+    }
+    
+    /**
+     * Get the current timeout
+     * 
+     * @return The current timeout
+     */
+    public int getTimeout() {
+    	return getState().timeOut;
+    }
+    
 }

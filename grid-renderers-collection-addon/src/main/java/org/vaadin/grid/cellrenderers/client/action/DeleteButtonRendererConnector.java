@@ -42,11 +42,11 @@ public class DeleteButtonRendererConnector extends ClickableRendererConnector<Bo
             	public void onClick(ClickEvent event) {
                     Timer t = null;
             		String style = b.getStyleName();
-            		if (style != null && style.contains("delete-confirm")) {
+            		if (style != null && style.contains(getState().deleteStyle)) {
             			// If button is in cofirmed state, timer needs to be stopped
             			// and click event needs to be emitted
             			if (t != null) t.cancel();
-            			b.removeStyleName("delete-confirm");
+            			b.removeStyleName(getState().deleteStyle);
     		        	if (htmlContentAllowed) {
     		                b.setHTML(getState().delete);
     		        	} else {
@@ -66,13 +66,13 @@ public class DeleteButtonRendererConnector extends ClickableRendererConnector<Bo
     		        	} else {
     		        		b.setText(getState().confirm);    		
     		            }
-            			b.setStyleName("delete-confirm");
-            			// Set timer 10 sec, if not clicked by then, go
+            			b.addStyleName(getState().deleteStyle);
+            			// Set timer (default 10 sec), if not clicked by then, go
             			// back to normal mode
             			t = new Timer() {
             				@Override
             				public void run() {
-            					b.removeStyleName("delete-confirm");
+            					b.removeStyleName(getState().deleteStyle);
             		        	if (htmlContentAllowed) {
             		                b.setHTML(getState().delete);
             		        	} else {
@@ -81,12 +81,12 @@ public class DeleteButtonRendererConnector extends ClickableRendererConnector<Bo
             					Element e = b.getElement();
             				}
             			};
-            			t.schedule(10000);
+            			t.schedule(getState().timeOut*1000);
             		}
             		event.stopPropagation();
             	}
             });
-            b.setStylePrimaryName("v-deletebutton");
+            b.setStylePrimaryName(getState().normalStyle);
             return b;
         }
 
@@ -109,8 +109,8 @@ public class DeleteButtonRendererConnector extends ClickableRendererConnector<Bo
             }
 
             String style = button.getStyleName();
-    		if (style != null && style.contains("delete-confirm")) {
-    			button.removeStyleName("delete-confirm");
+    		if (style != null && style.contains(getState().deleteStyle)) {
+    			button.removeStyleName(getState().deleteStyle);
     		}
         	if (htmlContentAllowed) {
                 button.setHTML(getState().delete);

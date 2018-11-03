@@ -20,8 +20,6 @@ import com.vaadin.ui.Grid.Column;
 import elemental.json.JsonValue;
 
 /**
- * @author Tatu Lund
- * 
  * DateFieldRenderer is renderer for DateField of {@link EditableRenderer} type.
  * It creates editable DateField with calendar popup column in Grid. 
  * 
@@ -30,6 +28,8 @@ import elemental.json.JsonValue;
  * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
  * 
  * @param <T> Bean type of the Grid where this Renderer is being used
+ * 
+ * @author Tatu Lund
  */
 public class DateFieldRenderer<T> extends EditableRenderer<T,LocalDate> {
 

@@ -16,8 +16,6 @@ import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererState;
 import org.vaadin.grid.cellrenderers.client.shared.EditableRendererState;
 
 /**
- * @author Mikael Grankvist and Tatu Lund - Vaadin
- *
  * Superclass for editable renderers (e.g. TextFieldRenderer, DateFieldRenderer)
  *
  * This a base class for EditableRenderers defining some common methods and
@@ -30,6 +28,8 @@ import org.vaadin.grid.cellrenderers.client.shared.EditableRendererState;
  *  
  * @param <A> Bean type of the Grid
  * @param <T> Type of the Rendered value
+ *
+ * @author Mikael Grankvist and Tatu Lund - Vaadin
  */
 public abstract class EditableRenderer<A,T> extends ClickableRenderer<A,T> {
 

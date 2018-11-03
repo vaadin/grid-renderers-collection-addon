@@ -11,8 +11,6 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 
 /**
- * @author Tatu Lund
- * 
  * RatingStarsRenderer is renderer for rating stars selection of {@link EditableRenderer} type.
  * It creates editable RatingStars field column in Grid. 
  * 
@@ -21,6 +19,8 @@ import com.vaadin.ui.Grid.Column;
  * @see Grid#addColumn(com.vaadin.data.ValueProvider, com.vaadin.data.ValueProvider, com.vaadin.ui.renderers.AbstractRenderer)
  * 
  * @param <T> Bean type of the Grid where this Renderer is being used
+ * 
+ * @author Tatu Lund
  */
 public class RatingStarsRenderer<T> extends EditableRenderer<T,Double> {
 

@@ -62,7 +62,7 @@ import org.apache.commons.codec.binary.Base64;
 import javax.servlet.annotation.WebServlet;
 
 @Push
-@Theme("valo")
+@Theme("demo")
 @Title("Grid Renderers collection For Vaadin7 Demo")
 @SuppressWarnings("serial")
 public class DemoUI extends UI {
@@ -320,7 +320,7 @@ public class DemoUI extends UI {
 			booleanRenderer.addItemEditListener(event ->  {
 					Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());				
 				});
-			
+			booleanRenderer.setIsEnabledProvider(item -> {return item.getStars() < 5.0;});
 			grid.addColumn(SimplePojo::isTruth, booleanRenderer).setCaption("Truth");
 			
 			TextFieldRenderer<SimplePojo,String> textFieldRenderer = new TextFieldRenderer<>(SimplePojo::setDescription);
