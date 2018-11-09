@@ -57,6 +57,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 2.3.2
+* Fixing timing issue in BooleanSwitchRenderer
+
 ### Version 2.3.1
 * Fixed TextFieldRenderer to have proper style when not editable
 * Added more configuration options to DeleteButtonRenderer

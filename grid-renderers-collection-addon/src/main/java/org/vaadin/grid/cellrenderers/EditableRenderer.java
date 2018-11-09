@@ -123,12 +123,15 @@ public abstract class EditableRenderer<A,T> extends ClickableRenderer<A,T> {
         return reg;
     }
 
+    // Used internally
     public void fireItemEditEvent(A item, Column<A,T> column, T newValue) {
         fireEvent(new ItemEditEvent(getParentGrid(), item, column, newValue));
     }
 
     /**
      * Toggle Renderer to be editable / non-editable (=true). Default is editable. 
+     * 
+     * Note: Setting this to true will have priority over {@link EditableRenderer#setIsEnabledProvider(ValueProvider)}
      * 
      * @param readOnly Boolean value
      */

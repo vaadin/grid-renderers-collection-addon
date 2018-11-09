@@ -347,7 +347,6 @@ public class DemoUI extends UI {
 			dateFieldRenderer.addItemEditListener(event -> {
 				Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
 				SimplePojo pojo = (SimplePojo) event.getItem();
-				pojo.setTruth(!pojo.isTruth());
 			});
 			grid.addColumn(SimplePojo::getDate, dateFieldRenderer).setCaption("Date");
 
@@ -355,7 +354,6 @@ public class DemoUI extends UI {
 			ratingStarsRenderer.addItemEditListener(event -> {
 				Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
 				SimplePojo pojo = (SimplePojo) event.getItem();
-				pojo.setTruth(!pojo.isTruth());
 			});
 			grid.addColumn(SimplePojo::getStars, ratingStarsRenderer).setCaption("Rating");
 			
