@@ -79,8 +79,8 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
 			checkBox.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                	if (!readOnly && !getState().readOnly) {
-                		VCheckBox checkBox = (VCheckBox) event.getSource();
+                	VCheckBox checkBox = (VCheckBox) event.getSource();
+                	if (checkBox.isEnabled()) {
                 		Element e = checkBox.getElement();
                 		checkBox.setValue(!checkBox.getValue());
                 		rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
