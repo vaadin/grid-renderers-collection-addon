@@ -12,6 +12,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector;
+import com.vaadin.client.connectors.grid.ColumnConnector;
 import com.vaadin.client.renderers.ClickableRenderer;
 import com.vaadin.client.renderers.Renderer;
 import com.vaadin.client.ui.VCheckBox;
@@ -45,7 +46,7 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
                         getRowKey((JsonObject) rendererCellReference.getRow()));
             }
 
-			checkBox.setEnabled(!getState().readOnly && !readOnly);
+			checkBox.setEnabled(getGrid().isEnabled() && !getState().readOnly && !readOnly);
 			if (getState().hasIsEnabledProvider) rpc.applyIsEnabledCheck(e.getPropertyString(ROW_KEY_PROPERTY));
 			
 			rendererCellReference.getElement().addClassName("unselectable");
@@ -101,7 +102,7 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
 						public void setEnabled(boolean enabled, String rowKey) {
 	                		Element e = checkBox.getElement();
 							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
-								checkBox.setEnabled(enabled);
+								checkBox.setEnabled(getGrid().isEnabled() && enabled);
 								readOnly = !enabled;								
 							}
 						}
@@ -131,4 +132,8 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
     	return (BooleanSwitchRendererState) super.getState();
     }
     
+    private Grid<JsonObject> getGrid() {
+    	ColumnConnector column = (ColumnConnector) getParent();
+        return column.getParent().getWidget();
+    }
 }

@@ -82,7 +82,7 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             dateField.setCurrentDate(selectedValue);
             dateField.buildDate();
             
-            dateField.setEnabled(!getState().readOnly);
+            dateField.setEnabled(!getState().readOnly && getGrid().isEnabled());
 			if (getState().hasIsEnabledProvider) rpc.applyIsEnabledCheck(e.getPropertyString(ROW_KEY_PROPERTY));
         }
 
@@ -224,7 +224,8 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
     }
 
     private Grid<JsonObject> getGrid() {
-        return ((GridConnector) getParent()).getWidget();
+    	ColumnConnector column = (ColumnConnector) getParent();
+        return column.getParent().getWidget();
     }
 
 }

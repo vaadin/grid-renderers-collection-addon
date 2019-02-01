@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -192,11 +191,8 @@ public class DemoUI extends UI {
     		Grid grid = createGrid(sparkline);
     		addComponent(grid);
     		Button normalRangeBtn = new Button("Normal range");
-    		normalRangeBtn.addClickListener(new ClickListener() {
-    			@Override
-    			public void buttonClick(ClickEvent event) {
-					config.setNormalRangeVisible(!config.isNormalRangeVisible());
-    			}
+    		normalRangeBtn.addClickListener(event -> {
+				config.setNormalRangeVisible(!config.isNormalRangeVisible());
     		});
     		Button averageBtn = new Button("Average");
     		averageBtn.addClickListener(new ClickListener() {
@@ -306,7 +302,7 @@ public class DemoUI extends UI {
 			
 			grid.setSizeFull();
 			grid.getEditor().setEnabled(false);
-
+			
 			// Add column with Delete button and event
 			DeleteButtonRenderer<SimplePojo> deleteButton = new DeleteButtonRenderer<SimplePojo>(clickEvent -> {
 				beanList.remove(clickEvent.getItem());

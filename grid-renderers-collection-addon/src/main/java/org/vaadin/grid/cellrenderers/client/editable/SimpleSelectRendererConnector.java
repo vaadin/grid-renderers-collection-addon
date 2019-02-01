@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector;
+import com.vaadin.client.connectors.grid.ColumnConnector;
 import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer;
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler;
@@ -88,7 +89,7 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
                 }
             }
 
-            listBox.setEnabled(!getState().readOnly);
+            listBox.setEnabled(getGrid().isEnabled() && !getState().readOnly);
 			if (getState().hasIsEnabledProvider) rpc.applyIsEnabledCheck(e.getPropertyString(ROW_KEY_PROPERTY));
         }
 
@@ -136,7 +137,7 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
 						public void setEnabled(boolean enabled, String rowKey) {
 	                		Element e = listBox.getElement();
 							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
-								listBox.setEnabled(enabled);
+								listBox.setEnabled(getGrid().isEnabled() && enabled);
 							}
 						}
 			});
@@ -167,7 +168,8 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
     }
 
     private Grid<JsonObject> getGrid() {
-        return ((GridConnector) getParent()).getWidget();
+    	ColumnConnector column = (ColumnConnector) getParent();
+        return column.getParent().getWidget();
     }
 
 }
