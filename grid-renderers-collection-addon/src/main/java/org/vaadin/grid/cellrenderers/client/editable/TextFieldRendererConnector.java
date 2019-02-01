@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.vaadin.client.communication.RpcProxy; 
 import com.vaadin.client.connectors.ClickableRendererConnector; 
+import com.vaadin.client.connectors.grid.ColumnConnector;
 import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer; 
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler; 
@@ -61,7 +62,7 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
             }
             // Generics issue, need a correctly typed column.
 
-            textField.setReadOnly(getState().readOnly);
+            textField.setReadOnly(!getGrid().isEnabled() || getState().readOnly);
 			if (getState().hasIsEnabledProvider) rpc.applyIsEnabledCheck(e.getPropertyString(ROW_KEY_PROPERTY));
             
         }
@@ -141,7 +142,7 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 						public void setEnabled(boolean enabled, String rowKey) {
 	                		Element e = textField.getElement();
 							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
-								textField.setReadOnly(!enabled);
+								textField.setReadOnly(!getGrid().isEnabled() || !enabled);
 							}
 						}
 			});
@@ -172,7 +173,8 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
     }
 
     private Grid<JsonObject> getGrid() {
-        return ((GridConnector) getParent()).getWidget();
+    	ColumnConnector column = (ColumnConnector) getParent();
+        return column.getParent().getWidget();
     }
 
 }

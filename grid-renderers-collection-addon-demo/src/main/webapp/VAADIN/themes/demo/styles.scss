@@ -19,6 +19,27 @@ $darkgreen: darken($green, 30%);
 		background-repeat: no-repeat;
 	}
 
+    .v-tabsheet-deco {
+		height: 200px !important;
+		width: 200px !important;
+		box-sizing: border-box;
+		border: 10px solid rgba(255, 125, 25, 0.2);
+		border-top-color: #e17d19;
+		border-right-color: #e17d19;
+		border-radius: 100%;
+		-webkit-animation: v-rotate-360 500ms infinite linear;
+		-moz-animation: v-rotate-360 500ms infinite linear;
+		animation: v-rotate-360 500ms infinite linear;
+		pointer-events: none;
+		display: none;
+		position: absolute;
+		z-index: 1;
+		bottom: 50%;
+		margin-bottom: -29px;
+		left: 50%;
+		margin-left: -10px;
+	}
+
     // Demoing styling of delete button confirm stage
    	.delete-confirm {
    	    background: red;

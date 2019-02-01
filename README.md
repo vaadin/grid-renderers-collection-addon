@@ -14,7 +14,7 @@ Try the add-on demo at *TBD*
 
 ## Download release
 
-Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to https://vaadin.com/directory#!addon/grid-renderers-collection-for-vaadin7
+Official releases of this add-on are available at Vaadin Directory. For Maven instructions, download and reviews, go to https://vaadin.com/directory/component/grid-renderers-collection-for-vaadin7
 
 ## Building and running demo
 
@@ -56,6 +56,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
 
  
 ## Release notes
+
+### Version 2.3.3
+* Fixing bug EditableRenderers did not honor grid.setEnabled(false), see issue #53
 
 ### Version 2.3.2
 * Fixing timing issue in BooleanSwitchRenderer
@@ -153,6 +156,12 @@ Here is a simple example on how to try out the add-on component:
     grid.addColumn(MyPojo::getText, renderer);
 
 For a more comprehensive examples, see org.vaadin.grid.cellrenderers.demo.DemoUI
+
+## Documentation
+
+See JavaDoc online here
+
+https://vaadin.com/directory/component/grid-renderers-collection-for-vaadin7/api
 
 ## Features
 

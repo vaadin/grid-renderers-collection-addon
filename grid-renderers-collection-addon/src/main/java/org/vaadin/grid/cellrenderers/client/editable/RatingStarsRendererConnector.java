@@ -15,6 +15,7 @@ import com.google.gwt.user.client.DOM;
 import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector;
+import com.vaadin.client.connectors.grid.ColumnConnector;
 import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer;
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler;
@@ -92,7 +93,7 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
 						public void setEnabled(boolean enabled, String rowKey) {
 	                		Element e = ratingStars.getElement();
 							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
-								ratingStars.setReadOnly(!enabled);
+								ratingStars.setReadOnly(getGrid().isEnabled() || !enabled);
 							}
 						}
 			});
@@ -104,7 +105,7 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
    	 	public void render(RendererCellReference cell, Double data,
     	            RatingStarsWidget widget) {
 
-   	 		widget.setReadOnly(getState().readOnly);
+   	 		widget.setReadOnly(!getGrid().isEnabled() || getState().readOnly);
    	 		Element e = widget.getElement();
    	 		
             getState().value = data;
@@ -146,9 +147,10 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
         return getRenderer().addClickHandler(handler);
     }
     
-	private Grid<JsonObject> getGrid() {
-		return ((GridConnector) getParent()).getWidget();
-	}
+    private Grid<JsonObject> getGrid() {
+    	ColumnConnector column = (ColumnConnector) getParent();
+        return column.getParent().getWidget();
+    }
     	
 
 }
