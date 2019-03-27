@@ -3,20 +3,17 @@ package org.vaadin.grid.cellrenderers.action;
 import java.util.Collections;
 import java.util.Set;
 
-import org.vaadin.grid.cellrenderers.action.HtmlButtonRenderer.HtmlButtonRendererClickListener;
 import org.vaadin.grid.cellrenderers.client.action.BrowserOpenerRendererState;
-import org.vaadin.grid.cellrenderers.client.action.HtmlButtonRendererState;
 
 import com.vaadin.server.ExternalResource;
-import com.vaadin.server.Resource;
 import com.vaadin.server.UIClassSelectionEvent;
 import com.vaadin.server.UIProvider;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.shared.ApplicationConstants;
-import com.vaadin.shared.ui.BrowserWindowOpenerState;
 import com.vaadin.ui.UI;
 
-public class BrowserOpenerRenderer<T> extends HtmlButtonRenderer<T> {
+import elemental.json.JsonValue;
+
+public class BrowserOpenerRenderer<T, A> extends AbstractHtmlButtonRenderer<T, A> {
 
     private static class BrowserWindowOpenerUIProvider extends UIProvider {
 
@@ -247,5 +244,20 @@ public class BrowserOpenerRenderer<T> extends HtmlButtonRenderer<T> {
             throw new IllegalArgumentException("Null not allowed");
         }
         return getState(false).parameters.get(name);
+    }
+
+    @Override
+    public JsonValue encode(A value) {
+        if (value == null) {
+            return encode(getNullRepresentation(), String.class);
+        } else if (value instanceof ExternalResource) {
+        	ExternalResource resource = (ExternalResource) value;
+            return encode(resource.getURL(), String.class);
+        } else if (value instanceof String) {
+        	String string = (String) value;
+            return encode(string, String.class);        	
+        } else {
+        	throw new IllegalArgumentException("BrowserOpenerRenderer works only with String and Resource type columns");
+        }
     }
 }

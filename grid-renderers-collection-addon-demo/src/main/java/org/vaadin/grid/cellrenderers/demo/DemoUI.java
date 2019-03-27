@@ -20,6 +20,7 @@ import org.vaadin.grid.cellrenderers.action.BrowserOpenerRenderer;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickEvent;
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickListener;
+import org.vaadin.grid.cellrenderers.action.AbstractHtmlButtonRenderer;
 import org.vaadin.grid.cellrenderers.action.HtmlButtonRenderer;
 import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
 import org.vaadin.grid.cellrenderers.navigation.GridNavigationExtension;
@@ -158,7 +159,7 @@ public class DemoUI extends UI {
     		rowIndex.setOffset(1);
     		grid.addColumn(value -> "", rowIndex).setCaption("Row index");
     		grid.addColumn(MyPojo::getId, new NumberRenderer()).setCaption("Id");
-			BrowserOpenerRenderer<MyPojo> openButton = new BrowserOpenerRenderer<MyPojo>(DemoUI.class, VaadinIcons.BROWSER.getHtml() ,clickEvent -> {
+			BrowserOpenerRenderer<MyPojo,String> openButton = new BrowserOpenerRenderer<>(DemoUI.class, VaadinIcons.BROWSER.getHtml() ,clickEvent -> {
 				MyPojo item = clickEvent.getItem();
 				Notification.show("Browser open button has been clicked: "+item.getFoo());
 			});
