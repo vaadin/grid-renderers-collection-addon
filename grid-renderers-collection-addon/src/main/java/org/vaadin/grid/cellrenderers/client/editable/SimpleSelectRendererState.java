@@ -3,14 +3,14 @@ package org.vaadin.grid.cellrenderers.client.editable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vaadin.shared.communication.SharedState;
+import org.vaadin.grid.cellrenderers.client.shared.EditableRendererState;
 
 /**
  * 
  * @author Tatu Lund
  *
  */
-public class SimpleSelectRendererState extends SharedState {
+public class SimpleSelectRendererState extends EditableRendererState {
     public List<String> dropDownList = new ArrayList<String>();
     public String title;
 }

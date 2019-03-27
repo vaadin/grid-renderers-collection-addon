@@ -57,6 +57,10 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 1.3.0
+* Fixing bug EditableRenderers did not honor grid.setEnabled(false), see issue #53
+* Added support for Resource in column for BrowserOpenerRenderer
+
 ### Version 1.2.4
 * Fixing issue #36
 

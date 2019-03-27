@@ -13,6 +13,8 @@ import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.renderers.ClickableRenderer;
 
 /**
+ * DateFieldRenderer is renderer for DateField of {@link EditableRenderer} type.
+ * It creates editable DateField with calendar popup column in Grid. 
  * 
  * @author Tatu Lund
  *
@@ -49,6 +51,10 @@ public class DateFieldRenderer extends EditableRenderer<Date> {
     /**
      * Set the date resolution of the DateField to be rendered
      *   valid values are Resolution.DAY, Resolution.MONTH and Resolution.YEAR. 
+     * 
+     * @see Resolution#DAY
+     * @see Resolution#MONTH
+     * @see Resolution#YEAR
      * 
      * @param dateResolution The date resolution
      */

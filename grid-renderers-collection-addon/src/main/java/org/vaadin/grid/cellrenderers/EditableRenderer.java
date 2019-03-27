@@ -9,8 +9,21 @@ import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
 
+import org.vaadin.grid.cellrenderers.client.shared.EditableRendererState;
+
 /**
- * @author Mikael Grankvist - Vaadin
+ * Superclass for editable renderers (e.g. TextFieldRenderer, DateFieldRenderer)
+ *
+ * This a base class for EditableRenderers defining some common methods and
+ * edit eventing mechanism
+ * 
+ * @see EditableRenderer#addItemEditListener(ItemEditListener)
+ * @see EditableRenderer#setReadOnly(boolean)
+ * @see EditableRenderer#isReadOnly()
+ *  
+ * @param <T> Type of the Rendered value
+ *
+ * @author Mikael Grankvist and Tatu Lund - Vaadin
  */
 public class EditableRenderer<T> extends ClickableRenderer<T> {
 
@@ -118,4 +131,29 @@ public class EditableRenderer<T> extends ClickableRenderer<T> {
     public void fireItemEditEvent(Object itemId, Item item, Object columnPropertyId, T newValue) {
         fireEvent(new ItemEditEvent(getParentGrid(), itemId, item, columnPropertyId, newValue));
     }
+    
+    /**
+     * Toggle Renderer to be editable / non-editable (=true). Default is editable. 
+     * 
+     * @param readOnly Boolean value
+     */
+    public void setReadOnly(boolean readOnly) {
+    	getState().readOnly = readOnly;
+    }
+    
+    /**
+     * Returns if Renderer is editable or non-editable at the moment.
+     * 
+     * @return Boolean value
+     */
+    public boolean isReadOnly() {
+    	return getState().readOnly;
+    }
+
+    
+    @Override
+    protected EditableRendererState getState() {
+    	return (EditableRendererState) super.getState();
+    }
+
 }

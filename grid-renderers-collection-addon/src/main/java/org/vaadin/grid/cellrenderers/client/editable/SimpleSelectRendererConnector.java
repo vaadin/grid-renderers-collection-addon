@@ -95,9 +95,7 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
             	}
             }
 
-            if (listBox.isEnabled() != cell.getColumn().isEditable()) {
-                listBox.setEnabled(cell.getColumn().isEditable());
-            }
+            listBox.setEnabled(!getState().readOnly && cell.getColumn().isEditable() && getGrid().isEnabled());
         }
 
         @Override

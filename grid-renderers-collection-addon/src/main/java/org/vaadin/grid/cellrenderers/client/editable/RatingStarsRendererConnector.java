@@ -96,7 +96,7 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
    	 	public void render(RendererCellReference cell, Double data,
     	            RatingStarsWidget widget) {
 
-   	 		widget.setReadOnly(!(cell.getColumn().isEditable() && cell.getGrid().isEnabled()));
+   	 		widget.setReadOnly(getState().readOnly || !(cell.getColumn().isEditable() && cell.getGrid().isEnabled()));
    	 		Element e = widget.getElement();
    	 		
             getState().value = data;
