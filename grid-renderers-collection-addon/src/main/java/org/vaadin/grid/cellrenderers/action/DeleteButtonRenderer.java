@@ -13,6 +13,14 @@ import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.renderers.ClickableRenderer;
 import com.vaadin.util.ReflectTools;
 
+/**
+ * DeleteButtonRenderer creates two stage Delete button. Clicking the delete button
+ * will turn it to confirm mode, where it stays next XX seconds (default = 10) before
+ * going back to normal mode. If button is clicked second time in confrim mode
+ * the action {@link DeleteRendererClickEvent} is triggered.  
+ * 
+ * @author Tatu Lund
+ */
 public class DeleteButtonRenderer extends ClickableRenderer<Boolean> {
 
     /**

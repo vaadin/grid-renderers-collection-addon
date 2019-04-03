@@ -7,6 +7,8 @@ import com.vaadin.data.Property;
 import com.vaadin.data.Item;
 
 /**
+ * RatingStarsRenderer is renderer for rating stars selection of {@link EditableRenderer} type.
+ * It creates editable RatingStars field column in Grid.
  * 
  * @author Tatu Lund
  *
@@ -15,28 +17,28 @@ public class RatingStarsRenderer extends EditableRenderer<Double> {
 
 	@Deprecated
     public RatingStarsRenderer(int stars, boolean readOnly) {
-        super(Double.class);   	
-        setupRatingStarsRenderer(stars, readOnly, -1, -1);
+        super(Double.class);
+        setReadOnly(readOnly);
+        setupRatingStarsRenderer(stars, -1, -1);
     }
     
 	
     public RatingStarsRenderer(int stars) {
         super(Double.class);
-        setupRatingStarsRenderer(stars, false, -1, -1);
+        setupRatingStarsRenderer(stars, -1, -1);
     }
     
     public RatingStarsRenderer(int stars, int width, int height) {
         super(Double.class);
-        setupRatingStarsRenderer(stars, false, width, height);
+        setupRatingStarsRenderer(stars, width, height);
     }
     
-    public void setupRatingStarsRenderer(int stars, boolean readOnly, int width, int height) {
+    private void setupRatingStarsRenderer(int stars, int width, int height) {
 
         getState().stars = stars;
-        getState().readOnly = readOnly;
 
     	// Use RPC only if needed
-        if (!readOnly) registerRpc(new RatingStarsRendererServerRpc() {
+        registerRpc(new RatingStarsRendererServerRpc() {
 
             public void onChange(String rowKey, String columnId, Double newValue) {
 

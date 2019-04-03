@@ -9,6 +9,9 @@ import com.vaadin.data.Property;
 import com.vaadin.server.Page;
 
 /**
+ * BooleanSwitchRenderer is renderer for CheckBox of {@link EditableRenderer} type.
+ * It creates editable CheckBox column in Grid. 
+ * 
  * @author Tatu Lund
  */
 public class BooleanSwitchRenderer extends EditableRenderer<Boolean> {

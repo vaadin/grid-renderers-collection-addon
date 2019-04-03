@@ -20,6 +20,7 @@ import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler;
 import com.vaadin.client.widget.grid.RendererCellReference;
 import com.vaadin.client.widgets.Grid;
 import com.vaadin.shared.MouseEventDetails;
+import com.vaadin.shared.ui.BrowserWindowOpenerState;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.shared.util.SharedUtil;
 
@@ -126,7 +127,12 @@ public class BrowserOpenerRendererConnector extends ClickableRendererConnector<S
         public void render(RendererCellReference cell, String text, UrlButton button) {
 
 			Element e = button.getElement();
-			button.setUrl(text);
+			if (getState().isResource) { 
+		        String url = getResourceUrl(text);
+				button.setUrl(url);
+			} else { 
+				button.setUrl(text);
+			}
 			
             if(e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell.getRow())) {
                 e.setPropertyString(ROW_KEY_PROPERTY,

@@ -63,9 +63,7 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 
             textField.setValue(selectedValue);
             
-            if(textField.isEnabled() != cell.getColumn().isEditable()) {
-                textField.setEnabled(cell.getColumn().isEditable());
-            }
+            textField.setEnabled(!getState().readOnly && cell.getColumn().isEditable() && getGrid().isEnabled());
         }
 
         @Override

@@ -2,11 +2,26 @@ package org.vaadin.grid.cellrenderers.action;
 
 import org.vaadin.grid.cellrenderers.client.action.BrowserOpenerRendererState;
 
+import com.vaadin.server.ConnectorResource;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.server.UIClassSelectionEvent;
 import com.vaadin.server.UIProvider;
 import com.vaadin.ui.UI;
 
-public class BrowserOpenerRenderer extends HtmlButtonRenderer {
+import elemental.json.JsonValue;
+
+/**
+ * BrowserOpenerRenderer creates a button in Grid column. This button behaves in
+ * similar fashion as normal button in UI when extended by BrowserWindowOpener
+ * extension. If the underlying column is of String type, it is used as URL
+ * for the opener (or uri fragment if renderer was instantiated with UI). Alternatively
+ * if the underlying column is of ExternalResource or ConnectorResource type, the renderer
+ * uses it in similar way than BrowserWindowOpener using Resource. Note, the logic 
+ * cannot handle mixed types in the column.
+ * 
+ * @author Tatu Lund
+ */
+public class BrowserOpenerRenderer<T> extends AbstractHtmlButtonRenderer<T> {
 
     private static class BrowserWindowOpenerUIProvider extends UIProvider {
 
@@ -148,7 +163,8 @@ public class BrowserOpenerRenderer extends HtmlButtonRenderer {
      * Gets the window features.
      *
      * @see #setFeatures(String)
-     * @return
+     * 
+     * @return Currently set features as string
      */
     public String getFeatures() {
         return getState(false).features;
@@ -164,4 +180,25 @@ public class BrowserOpenerRenderer extends HtmlButtonRenderer {
         return (BrowserOpenerRendererState) super.getState(markAsDirty);
     }
 
+    @Override
+    public JsonValue encode(T value) {
+        if (value == null) {
+            return encode(getNullRepresentation(), String.class);
+        } else if (value instanceof ExternalResource) {
+        	ExternalResource resource = (ExternalResource) value;
+            return encode(resource.getURL(), String.class);
+        } else if (value instanceof ConnectorResource) {
+        	getState().isResource = true;
+        	ConnectorResource resource = (ConnectorResource) value;
+            String key = resource.getFilename();
+            setResource(key, resource);
+            return encode(key, String.class);
+        } else if (value instanceof String) {
+        	String string = (String) value;
+            return encode(string, String.class);        	
+        } else {
+        	throw new IllegalArgumentException("BrowserOpenerRenderer works only with String, ConnectorResource and ExternalResource type columns");
+        }
+    }
+    
 }

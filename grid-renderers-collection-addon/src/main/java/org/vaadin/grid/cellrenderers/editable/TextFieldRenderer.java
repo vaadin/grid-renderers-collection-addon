@@ -10,6 +10,8 @@ import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.renderers.ClickableRenderer;
 
 /**
+ * TextFieldRenderer is renderer for TextField of {@link EditableRenderer} type.
+ * It creates editable TextField column in Grid. 
  * 
  * @author Tatu Lund
  *

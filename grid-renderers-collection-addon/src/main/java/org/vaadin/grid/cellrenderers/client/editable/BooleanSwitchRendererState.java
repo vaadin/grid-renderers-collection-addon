@@ -1,8 +1,8 @@
 package org.vaadin.grid.cellrenderers.client.editable;
 
-import com.vaadin.shared.communication.SharedState;
+import org.vaadin.grid.cellrenderers.client.shared.EditableRendererState;
 
-public class BooleanSwitchRendererState  extends SharedState {
+public class BooleanSwitchRendererState extends EditableRendererState {
 	public String txtFalse = null;
 	public String txtTrue = null;
 

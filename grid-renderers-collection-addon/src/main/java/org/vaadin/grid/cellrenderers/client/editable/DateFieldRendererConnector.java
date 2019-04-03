@@ -71,9 +71,7 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             dateField.setCurrentDate(selectedValue);
             dateField.buildDate();
             
-            if(dateField.isEnabled() != cell.getColumn().isEditable()) {
-                dateField.setEnabled(cell.getColumn().isEditable());
-            }
+            dateField.setEnabled(!getState().readOnly && cell.getColumn().isEditable() && getGrid().isEnabled());
         }
 
         @Override

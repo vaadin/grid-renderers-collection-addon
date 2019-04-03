@@ -20,7 +20,7 @@ import com.vaadin.shared.ui.Connect;
 
 import elemental.json.JsonObject;
 
-@Connect(org.vaadin.grid.cellrenderers.action.HtmlButtonRenderer.class)
+@Connect(org.vaadin.grid.cellrenderers.action.AbstractHtmlButtonRenderer.class)
 public class HtmlButtonRendererConnector extends ClickableRendererConnector<String> {
 	HtmlButtonRendererServerRpc rpc = RpcProxy.create(HtmlButtonRendererServerRpc.class, this);
 

@@ -1,14 +1,13 @@
 package org.vaadin.grid.cellrenderers.client.editable;
 
-import com.vaadin.shared.communication.SharedState;
+import org.vaadin.grid.cellrenderers.client.shared.EditableRendererState;
 
 /**
  * @author Tatu Lund - Vaadin
  */
-public class RatingStarsRendererState extends SharedState {
+public class RatingStarsRendererState extends EditableRendererState {
 	public int stars = 0;
 	public Double value = null;
-	public boolean readOnly = true;
 	public int width = -1;
 	public int height = -1;
 }
