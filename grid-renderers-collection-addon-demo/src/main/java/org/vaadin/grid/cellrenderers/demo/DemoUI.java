@@ -37,6 +37,7 @@ import org.vaadin.grid.cellrenderers.view.RowIndexRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer.SparklineConfiguration;
 
+import com.vaadin.server.ClassResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
@@ -83,6 +84,7 @@ public class DemoUI extends UI {
     		private Double stars;
     		private byte[] image;
     		private BigDecimal number;
+    		private ClassResource file;
     		
     		public MyPojo(int i) {
     			id = i;
@@ -94,6 +96,7 @@ public class DemoUI extends UI {
     			stars =  (double) rand.nextInt(10) / 2.0;
     			setNumber(BigDecimal.valueOf(rand.nextDouble()*100));
     			foo = foo+i;
+    			file = new ClassResource("/lorem_ipsum.pdf");
     		}
 
     		public byte[] getImage() {
@@ -124,6 +127,14 @@ public class DemoUI extends UI {
     			this.foo = foo;
     		}
 
+    		public ClassResource getFile() {
+    			return file;
+    		}
+
+    		public void setFile(ClassResource file) {
+    			this.file = file;
+    		}
+    		
     		public String getBar() {
     			return bar;
     		}
@@ -173,6 +184,11 @@ public class DemoUI extends UI {
 			htmlButton.setHtmlContentAllowed(true);
 			grid.addColumn(MyPojo::getBar, htmlButton).setCaption("Click Vaadin");
 
+    		BrowserOpenerRenderer openButton2 = new BrowserOpenerRenderer(VaadinIcons.FILE.getHtml(), clickEvent-> {});
+    		openButton2.setHtmlContentAllowed(true);
+    		openButton2.setTooltipEnabled(true);
+			grid.addColumn(MyPojo::getFile, openButton2).setCaption("Open File");
+    		
     		grid.addColumn(MyPojo::getNumber, new ConverterRenderer<MyPojo,BigDecimal>(new MyStringToBigDecimalConverter("Error message"))).setCaption("Number");
     		RatingStarsRenderer<MyPojo> ratingStars = new RatingStarsRenderer<>(MyPojo::setStars, 5);
     		ratingStars.setReadOnly(true);

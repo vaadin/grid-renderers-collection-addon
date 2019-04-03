@@ -121,8 +121,12 @@ public class BrowserOpenerRendererConnector extends ClickableRendererConnector<S
         public void render(RendererCellReference cell, String text, UrlButton button) {
 
 			Element e = button.getElement();
-			button.setUrl(text);
-            if(e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell.getRow())) {
+			if (getState().isResource) { 
+		        String url = getResourceUrl(text);
+				button.setUrl(url);
+			} else { 
+				button.setUrl(text);
+			}            if(e.getPropertyString(ROW_KEY_PROPERTY) != getRowKey((JsonObject) cell.getRow())) {
                 e.setPropertyString(ROW_KEY_PROPERTY,
                         getRowKey((JsonObject) cell.getRow()));
             }
