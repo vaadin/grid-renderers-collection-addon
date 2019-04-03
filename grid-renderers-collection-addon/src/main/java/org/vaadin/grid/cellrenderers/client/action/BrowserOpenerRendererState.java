@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BrowserOpenerRendererState extends HtmlButtonRendererState {
-    public static final String locationResource = "url";
 
 	public String target = "_blank";
 
@@ -15,5 +14,7 @@ public class BrowserOpenerRendererState extends HtmlButtonRendererState {
     public Map<String, String> parameters = new HashMap<String, String>();
 
     public String baseUrl = null;
+
+	public boolean isResource = false;
 
 }

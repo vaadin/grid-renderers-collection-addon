@@ -1,7 +1,6 @@
 package org.vaadin.grid.cellrenderers.demo;
 
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
@@ -36,9 +35,8 @@ import org.vaadin.grid.cellrenderers.view.RowIndexRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer.SparklineConfiguration;
 
-import com.vaadin.server.FileResource;
+import com.vaadin.server.ClassResource;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.StreamResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
@@ -77,7 +75,7 @@ public class DemoUI extends UI {
     		final Random rand;
     		Double stars;
     		byte[] image;
-			private FileResource file;
+			private ClassResource file;
     		
     		public MyPojo(int i) {
     			id = i;
@@ -85,8 +83,7 @@ public class DemoUI extends UI {
     			rand = new Random(id);
     			stars =  (double) rand.nextInt(10) / 2.0;
     			bar = bar+i;
-    			File localFile = new File("C:/Users/Tatu/epassi_doorikseen.pdf");
-    			file = new FileResource(localFile);
+    			file = new ClassResource("/lorem_ipsum.pdf");
     		}
 
     		public byte[] getImage() {
@@ -120,11 +117,11 @@ public class DemoUI extends UI {
     			this.foo = foo;
     		}
 
-    		public FileResource getFile() {
+    		public ClassResource getFile() {
     			return file;
     		}
 
-    		public void setFile(FileResource file) {
+    		public void setFile(ClassResource file) {
     			this.file = file;
     		}
 
@@ -176,11 +173,9 @@ public class DemoUI extends UI {
     		openButton.setTooltipEnabled(true);
     		grid.getColumn("bar").setRenderer(openButton);
     		grid.getColumn("bar").setEditable(false);
-    		BrowserOpenerRenderer openButton2 = new BrowserOpenerRenderer(FontAwesome.VIDEO_CAMERA.getHtml(), new HtmlButtonRendererClickListener() {
+    		BrowserOpenerRenderer openButton2 = new BrowserOpenerRenderer(FontAwesome.FILE.getHtml(), new HtmlButtonRendererClickListener() {
 				@Override
 				public void click(HtmlButtonRendererClickEvent event) {
-					MyPojo item = (MyPojo) event.getItem();
-					Notification.show("Open button was clicked: "+item.getBar());
 				}    			
     		});
     		openButton2.setHtmlContentAllowed(true);
@@ -242,6 +237,7 @@ public class DemoUI extends UI {
     				config.setMinMaxDotsVisible(!config.isMinMaxDotsVisible());
     			}
     		});
+
     		HorizontalLayout buttonsLayout = new HorizontalLayout();
     		buttonsLayout.addComponents(normalRangeBtn, minMaxBtn, averageBtn, valueBtn, valueDotBtn, minmaxDotBtn);
     		addComponent(buttonsLayout);
