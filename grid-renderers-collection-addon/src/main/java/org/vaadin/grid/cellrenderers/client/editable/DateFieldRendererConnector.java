@@ -10,39 +10,21 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.BrowserEvents; 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.vaadin.client.LocaleService;
-import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector; 
 import com.vaadin.client.connectors.grid.ColumnConnector;
 import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer; 
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler; 
-import com.vaadin.client.ui.VOverlay;
-import com.vaadin.client.ui.VTextField;
 import com.vaadin.client.widget.grid.RendererCellReference;
 import com.vaadin.client.widgets.Grid; 
 import com.vaadin.shared.ui.Connect; 
-import com.vaadin.shared.ui.datefield.DateResolution;
 
 import elemental.json.JsonObject;
 
@@ -133,13 +115,14 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             dateField.setCurrentLocale(locale);
 
             // Add change handler (for textual date input)
-            dateField.addDomHandler(new ChangeHandler() {
-                @Override
-                public void onChange(ChangeEvent changeEvent) {
-                    Element e = dateField.getElement();
-                    rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
-                            dateField.getDate());
-                }
+            dateField.addDomHandler(changeEvent -> {
+                Element e = dateField.getElement();
+           		Date newValue = dateField.getDate();
+           		if (value != null && !value.equals(newValue)) {
+           			rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
+           					newValue);
+           			value = newValue;
+           		}
             }, ChangeEvent.getType());
 
             dateField.addDomHandler(new ClickHandler() {
@@ -153,38 +136,30 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
             	value = dateField.getDate();
             });
             
-            dateField.text.addDomHandler(new BlurHandler() {
-				@Override
-				public void onBlur(BlurEvent event) {
-                	if (getState().blurChangeMode) {
-                		Date newValue = dateField.getDate();
-                		if (value != null && !value.equals(newValue)) {
-                			Element e = dateField.getElement();
-                			rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
-                					newValue);
-                			value = newValue;
-                		}
-                	}
-				}            	
+            dateField.text.addDomHandler(event ->  {
+               	if (getState().blurChangeMode) {
+               		Date newValue = dateField.getDate();
+               		if (value != null && !value.equals(newValue)) {
+               			Element e = dateField.getElement();
+               			rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
+               					newValue);
+               			value = newValue;
+               		}
+               	}
             }, BlurEvent.getType());
             
-            dateField.addDomHandler(new MouseDownHandler() {
-                @Override
-                public void onMouseDown(MouseDownEvent event) {
-                    event.stopPropagation();
-                }
-            }, MouseDownEvent.getType() );
+            dateField.addDomHandler(event -> {
+                   event.stopPropagation();
+            }, MouseDownEvent.getType());
 
             // Add close handler to popup calendar panel
             // This is needed to get value change when user selects date from popup
             // Note: Popup doesn't update currentDate automatically
-            dateField.popup.addCloseHandler(new CloseHandler<PopupPanel>() {
-            	@Override
-                public void onClose(CloseEvent<PopupPanel> closeEvent) {
-                    Element e = dateField.getElement();
-                    Date date = dateField.calendar.getDate();
-                    rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),date);
-                }
+            dateField.popup.addCloseHandler(closeEvent ->  {
+                Element e = dateField.getElement();
+                Date newValue = dateField.calendar.getDate();
+      			rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
+           					newValue);
             });
             
 			registerRpc(DateFieldRendererClientRpc.class,
@@ -196,8 +171,16 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 								dateField.setEnabled(enabled);
 							}
 						}
+
+						@Override
+						public void switchEnabled(String rowKey) {
+	                		Element e = dateField.getElement();
+							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
+								dateField.setEnabled(!dateField.isEnabled());
+							}
+						}
 			});
-            
+			
             return dateField;
         }
     }

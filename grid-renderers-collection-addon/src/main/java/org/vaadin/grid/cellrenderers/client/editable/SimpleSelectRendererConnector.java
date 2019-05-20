@@ -6,19 +6,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ListBox;
-import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector;
 import com.vaadin.client.connectors.grid.ColumnConnector;
-import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer;
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler;
 import com.vaadin.client.widget.grid.RendererCellReference;
@@ -39,7 +31,8 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
 
     SimpleSelectRendererServerRpc rpc = RpcProxy.create(
             SimpleSelectRendererServerRpc.class, this);
-
+    private String value = null;
+    
     public class SimpleSelectClientRenderer extends ClickableRenderer<String, ListBox> {
 
         private static final String ROW_KEY_PROPERTY = "rowKey";
@@ -107,30 +100,30 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
             listBox.sinkBitlessEvent(BrowserEvents.CLICK);
             listBox.sinkBitlessEvent(BrowserEvents.MOUSEDOWN);
 
-            listBox.addChangeHandler(new ChangeHandler() {
-                @Override
-                public void onChange(ChangeEvent changeEvent) {
-                    ListBox listBox = (ListBox) changeEvent.getSource();
-                    Element e = listBox.getElement();
-                    rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),
-                            listBox.getSelectedValue());
-                }
+            listBox.addChangeHandler(event -> {
+            	ListBox lb = (ListBox) event.getSource();
+            	Element e = lb.getElement();
+        		String newValue = lb.getSelectedValue();
+        		if (value != null && !value.equals(newValue)) {
+        			rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
+        					newValue);
+        			value = newValue;
+        		}
             });
 
-            listBox.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    event.stopPropagation();
-                }
+            listBox.addClickHandler(event -> {
+                event.stopPropagation();
             });
 
-            listBox.addMouseDownHandler(new MouseDownHandler() {
-                @Override
-                public void onMouseDown(MouseDownEvent event) {
-                    event.stopPropagation();
-                }
+            listBox.addMouseDownHandler(event -> {
+                event.stopPropagation();
             });
 
+            listBox.addFocusHandler(event -> {
+            	ListBox field = (ListBox) event.getSource();
+        		value = field.getSelectedValue();
+            });            
+            
 			registerRpc(SimpleSelectRendererClientRpc.class,
 					new SimpleSelectRendererClientRpc() {
 						@Override
@@ -138,6 +131,14 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
 	                		Element e = listBox.getElement();
 							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
 								listBox.setEnabled(getGrid().isEnabled() && enabled);
+							}
+						}
+
+						@Override
+						public void switchEnabled(String rowKey) {
+	                		Element e = listBox.getElement();
+							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
+								listBox.setEnabled(getGrid().isEnabled() && !listBox.isEnabled());
 							}
 						}
 			});

@@ -36,6 +36,7 @@ public class SimplePojo implements Serializable {
     private Integer choice;
     private byte[] image;
     private boolean action = false;
+	private boolean starsChanged;
     
     public SimplePojo() {
     }
@@ -75,6 +76,18 @@ public class SimplePojo implements Serializable {
 		if (stars > 1.0) this.action = true;
 		else this.action = false;
 		this.stars = stars;
+		setStarsChanged();
+	}
+	
+	
+	public void setStarsChanged() {
+		this.starsChanged = true;		
+	}
+	
+	public boolean isStarsChanged() {
+		boolean isChanged = starsChanged;
+		starsChanged = false; 
+		return isChanged;
 	}
 	
     public long getId() {

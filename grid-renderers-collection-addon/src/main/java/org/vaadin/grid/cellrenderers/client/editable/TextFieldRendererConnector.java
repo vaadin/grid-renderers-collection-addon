@@ -1,24 +1,16 @@
 package org.vaadin.grid.cellrenderers.client.editable;
 
 import com.google.gwt.dom.client.Style;
-import com.vaadin.client.VConsole;
 
 import org.vaadin.grid.cellrenderers.editable.TextFieldRenderer;
 
 import com.google.gwt.core.client.GWT; 
 import com.google.gwt.dom.client.BrowserEvents; 
 import com.google.gwt.dom.client.Element; 
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.vaadin.client.communication.RpcProxy; 
 import com.vaadin.client.connectors.ClickableRendererConnector; 
 import com.vaadin.client.connectors.grid.ColumnConnector;
-import com.vaadin.client.connectors.grid.GridConnector;
 import com.vaadin.client.renderers.ClickableRenderer; 
 import com.vaadin.client.renderers.ClickableRenderer.RendererClickHandler; 
 import com.vaadin.client.ui.VTextField;
@@ -85,14 +77,15 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
             textField.sinkBitlessEvent(BrowserEvents.CLICK);
             textField.sinkBitlessEvent(BrowserEvents.MOUSEDOWN);
 
-            textField.addChangeHandler(new ChangeHandler() {
-                @Override
-                public void onChange(ChangeEvent changeEvent) {
-                    VTextField textField = (VTextField) changeEvent.getSource();
-                    Element e = textField.getElement();
-                    rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
-                            textField.getValue());
-                }
+            textField.addChangeHandler(changeEvent -> {
+            	VTextField field = (VTextField) changeEvent.getSource();
+        		String newValue = field.getValue();
+        		if (value != null && !value.equals(newValue)) {
+        			Element e = field.getElement();
+        			rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
+        					newValue);
+        			value = newValue;
+        		}
             });
 
             textField.addFocusHandler(event -> {
@@ -116,24 +109,22 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
             textField.addKeyUpHandler(event -> {
             	if (getState().eagerChangeMode) {
             		VTextField field = (VTextField) event.getSource();
-            		Element e = field.getElement();
-            		rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
-            				textField.getValue());
+            		String newValue = field.getValue();
+            		if (value != null && !value.equals(newValue)) {
+            			Element e = field.getElement();
+            			rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
+            					newValue);
+            			value = newValue;
+            		}
             	}            	
             });
             
-            textField.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    event.stopPropagation();
-                }
+            textField.addClickHandler(event -> {
+                event.stopPropagation();
             });
 
-            textField.addMouseDownHandler(new MouseDownHandler() {
-                @Override
-                public void onMouseDown(MouseDownEvent event) {
-                    event.stopPropagation();
-                }
+            textField.addMouseDownHandler(event -> {
+                event.stopPropagation();
             });
 
 			registerRpc(TextFieldRendererClientRpc.class,
@@ -143,6 +134,14 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 	                		Element e = textField.getElement();
 							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
 								textField.setReadOnly(!getGrid().isEnabled() || !enabled);
+							}
+						}
+
+						@Override
+						public void switchEnabled(String rowKey) {
+	                		Element e = textField.getElement();
+							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
+								textField.setReadOnly(!getGrid().isEnabled() || !textField.isReadOnly());
 							}
 						}
 			});

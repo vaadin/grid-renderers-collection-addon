@@ -2,21 +2,12 @@ package org.vaadin.grid.cellrenderers.client.editable;
 
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.connectors.ClickableRendererConnector;
 import com.vaadin.client.connectors.grid.ColumnConnector;
 import com.vaadin.client.renderers.ClickableRenderer;
-import com.vaadin.client.renderers.Renderer;
 import com.vaadin.client.ui.VCheckBox;
-import com.vaadin.client.ui.VTextField;
 import com.vaadin.client.widget.grid.RendererCellReference;
 import com.vaadin.client.widgets.Grid;
 import com.vaadin.shared.ui.Connect;
@@ -46,7 +37,7 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
                         getRowKey((JsonObject) rendererCellReference.getRow()));
             }
 
-			checkBox.setEnabled(getGrid().isEnabled() && !getState().readOnly && !readOnly);
+			checkBox.setEnabled(getGrid().isEnabled() && !getState().readOnly);
 			if (getState().hasIsEnabledProvider) rpc.applyIsEnabledCheck(e.getPropertyString(ROW_KEY_PROPERTY));
 			
 			rendererCellReference.getElement().addClassName("unselectable");
@@ -77,23 +68,17 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
 			checkBox.sinkBitlessEvent(BrowserEvents.CLICK);
 			checkBox.sinkBitlessEvent(BrowserEvents.MOUSEDOWN);
 
-			checkBox.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                	VCheckBox checkBox = (VCheckBox) event.getSource();
-                	if (checkBox.isEnabled()) {
-                		Element e = checkBox.getElement();
-                		checkBox.setValue(!checkBox.getValue());
-                		rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
-                				checkBox.getValue());
-                	}
+			checkBox.addClickHandler(event -> {
+               	VCheckBox cb = (VCheckBox) event.getSource();
+               	if (cb.isEnabled()) {
+               		Element e = cb.getElement();
+               		cb.setValue(!cb.getValue());
+               		rpc.onChange(e.getPropertyString(ROW_KEY_PROPERTY),                            
+               				cb.getValue());
                 }
             });
-			checkBox.addMouseDownHandler(new MouseDownHandler() {
-                @Override
-                public void onMouseDown(MouseDownEvent event) {
-                    event.stopPropagation();
-                }
+			checkBox.addMouseDownHandler(event -> {
+                event.stopPropagation();
             });			
 
 			registerRpc(BooleanSwitchRendererClientRpc.class,
@@ -104,6 +89,15 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
 							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
 								checkBox.setEnabled(getGrid().isEnabled() && enabled);
 								readOnly = !enabled;								
+							}
+						}
+
+						@Override
+						public void switchEnabled(String rowKey) {
+	                		Element e = checkBox.getElement();
+							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
+								readOnly = !readOnly;
+								checkBox.setEnabled(getGrid().isEnabled() && !readOnly);
 							}
 						}
 			});
