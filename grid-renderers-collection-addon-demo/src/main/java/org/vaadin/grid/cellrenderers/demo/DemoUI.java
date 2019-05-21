@@ -332,25 +332,27 @@ public class DemoUI extends UI {
 			// Add column with Boolean check box and event 
 			BooleanSwitchRenderer<SimplePojo> booleanRenderer = new BooleanSwitchRenderer<>(SimplePojo::setTruth,"True","False");
 			booleanRenderer.addItemEditListener(event ->  {
-					Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());				
-				});
-			booleanRenderer.setIsEnabledProvider(item -> {return item.getStars() < 5.0;});
-			grid.addColumn(SimplePojo::isTruth, booleanRenderer).setCaption("Truth");
+				Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());				
+				System.out.println("Boolean switched: "+event.getNewValue());
+			});
+			booleanRenderer.setIsEnabledProvider(item -> {return item.isStarsChanged();},true);
+			grid.addColumn(SimplePojo::isTruth, booleanRenderer).setId("truth").setCaption("Truth");
 			
 			TextFieldRenderer<SimplePojo,String> textFieldRenderer = new TextFieldRenderer<>(SimplePojo::setDescription);
 			textFieldRenderer.setBlurChangeMode(true);
 			textFieldRenderer.addItemEditListener(event -> {
-					Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
-					SimplePojo pojo = (SimplePojo) event.getItem();
-					pojo.setTruth(!pojo.isTruth());
-				});
+				Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
+				System.out.println("Description edited: "+event.getNewValue());
+			});
+			textFieldRenderer.setIsEnabledProvider(item -> {return !item.isTruth();});
 			grid.addColumn(SimplePojo::getDescription, textFieldRenderer).setCaption("Description");
 
 			
 			TextFieldRenderer<SimplePojo,BigDecimal> decimalFieldRenderer = new TextFieldRenderer<>(SimplePojo::setNumber);
 			decimalFieldRenderer.setConverter(new StringToBigDecimalConverter("Error message"));
 			decimalFieldRenderer.addItemEditListener(event -> {
-					Notification.show("Property " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());								
+				Notification.show("Property " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());								
+				System.out.println("Big decimal edited: "+event.getNewValue());
 			});
 			grid.addColumn(SimplePojo::getNumber, decimalFieldRenderer).setCaption("Big decimal");
 
@@ -359,26 +361,29 @@ public class DemoUI extends UI {
 			dateFieldRenderer.setDateResolution(DateResolution.DAY);
 			dateFieldRenderer.addItemEditListener(event -> {
 				Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
-				SimplePojo pojo = (SimplePojo) event.getItem();
+				System.out.println("Date edited: "+event.getNewValue());
 			});
 			grid.addColumn(SimplePojo::getDate, dateFieldRenderer).setCaption("Date");
 
 			RatingStarsRenderer<SimplePojo> ratingStarsRenderer = new RatingStarsRenderer<SimplePojo>(SimplePojo::setStars,5);
 			ratingStarsRenderer.addItemEditListener(event -> {
 				Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
-				SimplePojo pojo = (SimplePojo) event.getItem();
+				System.out.println("Stars edited: "+event.getNewValue());
 			});
-			grid.addColumn(SimplePojo::getStars, ratingStarsRenderer).setCaption("Rating");
+			grid.addColumn(SimplePojo::getStars, ratingStarsRenderer).setId("stars").setCaption("Rating");
 			
 			MyStringToIntegerConverter myConverter = new MyStringToIntegerConverter();
 
 			SimpleSelectRenderer<SimplePojo,Integer> choiceFieldRenderer = new SimpleSelectRenderer<>(SimplePojo::setChoice, Arrays.asList(1,2,3,4,5));
 			choiceFieldRenderer.setConverter(myConverter);
 			choiceFieldRenderer.addItemEditListener(event -> { 
-					Notification.show("Property " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());				
-				});
+				Notification.show("Property " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());
+				System.out.println("Choice edited: "+event.getNewValue());
+			});
 			grid.addColumn(SimplePojo::getChoice, choiceFieldRenderer).setCaption("Choice");			
 
+			grid.getHeaderRow(0).getCell("truth").setDescription("Set to false to disable editing of Description");
+			grid.getHeaderRow(0).getCell("stars").setDescription("Changing the Rating flips the enabled staaus of Truth");
 			setSizeFull();
 			setStyleName("demoContentLayout");
 			addComponent(grid);

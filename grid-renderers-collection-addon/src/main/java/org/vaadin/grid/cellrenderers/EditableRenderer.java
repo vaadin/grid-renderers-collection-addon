@@ -149,7 +149,7 @@ public abstract class EditableRenderer<A,T> extends ClickableRenderer<A,T> {
     }
 
     /**
-     * Set a provider function for the renderer to control whether the field is enable
+     * Set a provider function for the renderer to control whether the field is enabled
      * or not based on function return value. This method makes it possible to have
      * selected fields to be dynamically controlled.
      * 
@@ -167,7 +167,26 @@ public abstract class EditableRenderer<A,T> extends ClickableRenderer<A,T> {
     		getState().hasIsEnabledProvider = false;    		
     	}
     }
+
     
+    /**
+     * Set a provider function for the renderer to control whether the field is enabled or not,
+     * or enabled state toggled based on function return value. This method makes it possible to have
+     * selected fields to be dynamically controlled.
+     * 
+     * Note: Using the function will add an additional server round trip in the rendering
+     * process and with slow network connections may impact Grid rendering performance.
+     * 
+     * When togglingMode = true field enabled status is toggled if provider function provides value
+     * true.
+     * 
+     * @param isEnabledProvider Lambda expression or function reference of boolean type
+     * @param togglingMode Set to true to use toggling mode
+     */
+    public void setIsEnabledProvider(ValueProvider<A,Boolean> isEnabledProvider, boolean togglingMode) {    	
+    	getState().isEnabledProviderTogglingMode = togglingMode;
+    	setIsEnabledProvider(isEnabledProvider);
+    }    
     
     @Override
     protected EditableRendererState getState() {

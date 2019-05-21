@@ -58,6 +58,11 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
 ## Release notes
 
 
+### Version 2.5.0
+* Added setIsEnabledProvider(..,true) alternate method to EditableRenderer
+* Fixed issues with some Editable renderers triggering double events
+* Fixed client side exception in DateFieldRenderer
+
 ### Version 2.4.0
 * Added support for Resource in column for BrowserOpenerRenderer
 

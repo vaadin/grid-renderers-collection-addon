@@ -68,9 +68,13 @@ public class DateFieldRenderer<T> extends EditableRenderer<T,LocalDate> {
             	Grid<T> grid = getParentGrid();
             	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
             	if (item != null) {
-            		boolean result = isEnabledProvider.apply(item);
-    				getRPC().setEnabled(result,rowKey);				
-            	}				
+        			boolean result = isEnabledProvider.apply(item);
+            		if (getState().isEnabledProviderTogglingMode) {
+            			if (result) getRPC().switchEnabled(rowKey);
+            		} else {
+            			getRPC().setEnabled(result,rowKey);
+            		}
+            	}
 			}
 
         });
