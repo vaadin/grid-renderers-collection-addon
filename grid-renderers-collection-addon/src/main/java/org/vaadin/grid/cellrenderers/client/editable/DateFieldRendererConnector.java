@@ -171,14 +171,6 @@ public class DateFieldRendererConnector extends ClickableRendererConnector<Date>
 								dateField.setEnabled(enabled);
 							}
 						}
-
-						@Override
-						public void switchEnabled(String rowKey) {
-	                		Element e = dateField.getElement();
-							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
-								dateField.setEnabled(!dateField.isEnabled());
-							}
-						}
 			});
 			
             return dateField;

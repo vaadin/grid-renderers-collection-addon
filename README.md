@@ -57,6 +57,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 2.6.0
+* Removed setIsEnabledProvider(..,boolean) option as it was not working as intended
+* Replaced the above with caching option setIsEnabledProvider(..,int)
 
 ### Version 2.5.0
 * Added setIsEnabledProvider(..,true) alternate method to EditableRenderer

@@ -335,7 +335,7 @@ public class DemoUI extends UI {
 				Notification.show("Column " + event.getColumn().getCaption() + " edited with value " + event.getNewValue().toString());				
 				System.out.println("Boolean switched: "+event.getNewValue());
 			});
-			booleanRenderer.setIsEnabledProvider(item -> {return item.isStarsChanged();},true);
+			booleanRenderer.setIsEnabledProvider(item -> {return item.getStars() > 1;},100);
 			grid.addColumn(SimplePojo::isTruth, booleanRenderer).setId("truth").setCaption("Truth");
 			
 			TextFieldRenderer<SimplePojo,String> textFieldRenderer = new TextFieldRenderer<>(SimplePojo::setDescription);
@@ -383,7 +383,7 @@ public class DemoUI extends UI {
 			grid.addColumn(SimplePojo::getChoice, choiceFieldRenderer).setCaption("Choice");			
 
 			grid.getHeaderRow(0).getCell("truth").setDescription("Set to false to disable editing of Description");
-			grid.getHeaderRow(0).getCell("stars").setDescription("Changing the Rating flips the enabled staaus of Truth");
+			grid.getHeaderRow(0).getCell("stars").setDescription("Truth is enabled if there is one more stars");
 			setSizeFull();
 			setStyleName("demoContentLayout");
 			addComponent(grid);

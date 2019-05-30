@@ -136,14 +136,6 @@ public class TextFieldRendererConnector extends ClickableRendererConnector<Strin
 								textField.setReadOnly(!getGrid().isEnabled() || !enabled);
 							}
 						}
-
-						@Override
-						public void switchEnabled(String rowKey) {
-	                		Element e = textField.getElement();
-							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
-								textField.setReadOnly(!getGrid().isEnabled() || !textField.isReadOnly());
-							}
-						}
 			});
             
             return textField;

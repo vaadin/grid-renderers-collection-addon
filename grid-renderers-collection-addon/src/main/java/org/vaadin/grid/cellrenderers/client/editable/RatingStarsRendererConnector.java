@@ -93,15 +93,6 @@ public class RatingStarsRendererConnector extends ClickableRendererConnector<Dou
 								ratingStars.setReadOnly(getGrid().isEnabled() || !enabled);
 							}
 						}
-
-						@Override
-						public void switchEnabled(String rowKey) {
-	                		Element e = ratingStars.getElement();
-							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
-								readOnly = !readOnly;
-								ratingStars.setReadOnly(getGrid().isEnabled() || readOnly);
-							}
-						}
 			});
                        
    	 		return ratingStars;
