@@ -71,10 +71,11 @@ public class RatingStarsRenderer<T> extends EditableRenderer<T,Double> {
             	Grid<T> grid = getParentGrid();
             	T item = grid.getDataCommunicator().getKeyMapper().get(rowKey);
             	if (item != null) {
-        			boolean result = isEnabledProvider.apply(item);
-            		if (getState().isEnabledProviderTogglingMode) {
-            			if (result) getRPC().switchEnabled(rowKey);
-            		} else {
+            		Boolean isDisabled = isRowDisabled(rowKey);
+        			boolean result = applyIsEnabledProvider(item,rowKey);
+            		if (isDisabled == null) {
+            			getRPC().setEnabled(result,rowKey);
+            		} else if (isDisabled != result || result == false) {
             			getRPC().setEnabled(result,rowKey);
             		}
             	}

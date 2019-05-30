@@ -91,15 +91,6 @@ public class BooleanSwitchRendererConnector extends ClickableRendererConnector<B
 								readOnly = !enabled;								
 							}
 						}
-
-						@Override
-						public void switchEnabled(String rowKey) {
-	                		Element e = checkBox.getElement();
-							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
-								readOnly = !readOnly;
-								checkBox.setEnabled(getGrid().isEnabled() && !readOnly);
-							}
-						}
 			});
 				
 			return checkBox;

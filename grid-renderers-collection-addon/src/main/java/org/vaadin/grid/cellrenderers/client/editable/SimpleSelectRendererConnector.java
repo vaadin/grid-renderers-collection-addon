@@ -133,14 +133,6 @@ public class SimpleSelectRendererConnector extends ClickableRendererConnector<St
 								listBox.setEnabled(getGrid().isEnabled() && enabled);
 							}
 						}
-
-						@Override
-						public void switchEnabled(String rowKey) {
-	                		Element e = listBox.getElement();
-							if (rowKey.equals(e.getPropertyString(ROW_KEY_PROPERTY))) {
-								listBox.setEnabled(getGrid().isEnabled() && !listBox.isEnabled());
-							}
-						}
 			});
             
             return listBox;

@@ -11,6 +11,7 @@ import com.vaadin.ui.renderers.ClickableRenderer;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import org.vaadin.grid.cellrenderers.client.editable.TextFieldRendererState;
 import org.vaadin.grid.cellrenderers.client.shared.EditableRendererState;
@@ -33,8 +34,9 @@ import org.vaadin.grid.cellrenderers.client.shared.EditableRendererState;
  */
 public abstract class EditableRenderer<A,T> extends ClickableRenderer<A,T> {
 
-    protected ValueProvider<A,Boolean> isEnabledProvider;
-
+    private ValueProvider<A,Boolean> isEnabledProvider;
+    protected ArrayBlockingQueue<String> disabledRows = null; 
+    
     /**
      * Constructor
      *  
@@ -159,39 +161,68 @@ public abstract class EditableRenderer<A,T> extends ClickableRenderer<A,T> {
      * @param isEnabledProvider Lambda expression or function reference of boolean type
      */
     public void setIsEnabledProvider(ValueProvider<A,Boolean> isEnabledProvider) {
-    	if (isEnabledProvider != null) {
-    		this.isEnabledProvider = isEnabledProvider;
-    		getState().hasIsEnabledProvider = true;
-    	} else {
-    		this.isEnabledProvider = null;
-    		getState().hasIsEnabledProvider = false;    		
-    	}
+    	setIsEnabledProvider(isEnabledProvider,0);
     }
 
-    
     /**
-     * Set a provider function for the renderer to control whether the field is enabled or not,
-     * or enabled state toggled based on function return value. This method makes it possible to have
+     * Set a provider function for the renderer to control whether the field is enabled
+     * or not based on function return value. This method makes it possible to have
      * selected fields to be dynamically controlled.
      * 
      * Note: Using the function will add an additional server round trip in the rendering
      * process and with slow network connections may impact Grid rendering performance.
      * 
-     * When togglingMode = true field enabled status is toggled if provider function provides value
-     * true.
-     * 
      * @param isEnabledProvider Lambda expression or function reference of boolean type
-     * @param togglingMode Set to true to use toggling mode
+     * @param cacheCapacity Number of disabled rows to be cached in order to reduce RPC calls to client
      */
-    public void setIsEnabledProvider(ValueProvider<A,Boolean> isEnabledProvider, boolean togglingMode) {    	
-    	getState().isEnabledProviderTogglingMode = togglingMode;
-    	setIsEnabledProvider(isEnabledProvider);
-    }    
+    public void setIsEnabledProvider(ValueProvider<A,Boolean> isEnabledProvider, int cacheCapacity) {
+    	if (isEnabledProvider != null) {
+    		this.isEnabledProvider = isEnabledProvider;
+    		if (cacheCapacity > 0) disabledRows = new ArrayBlockingQueue<>(cacheCapacity);
+    		getState().hasIsEnabledProvider = true;    		
+    	} else {
+    		this.isEnabledProvider = null;
+    		disabledRows = null;
+    		getState().hasIsEnabledProvider = false;    		
+    	}
+    }
+
+    /*
+     * For internal use by child classes. 
+     * 
+     * Returns null if disabled rows are not cached
+     * Returns true if the rowkey is in disabled row cache
+     */
+    protected Boolean isRowDisabled(String rowKey) {
+    	if (disabledRows != null) {
+    		return disabledRows.contains(rowKey);
+    	} else {
+    		return null;
+    	}
+    }
+    
+    /*
+     * For internal use by child classes
+     * 
+     * Apply enabled provider for the item and cache result if cache
+     * is enabled
+     */
+    protected boolean applyIsEnabledProvider(A item, String rowKey) {
+    	boolean result = isEnabledProvider.apply(item);  
+    	if (disabledRows != null && !result && !disabledRows.contains(rowKey)) {
+    		try {
+    			disabledRows.add(rowKey);
+    		} catch (IllegalStateException e) {
+    			disabledRows.remove(); 
+    			disabledRows.add(rowKey);
+    		}
+    	}
+    	return result;
+    }
     
     @Override
     protected EditableRendererState getState() {
     	return (EditableRendererState) super.getState();
     }
-    
-    
+
 }
