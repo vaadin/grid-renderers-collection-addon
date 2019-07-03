@@ -22,6 +22,7 @@ import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererC
 import org.vaadin.grid.cellrenderers.action.DeleteButtonRenderer.DeleteRendererClickListener;
 import org.vaadin.grid.cellrenderers.action.AbstractHtmlButtonRenderer;
 import org.vaadin.grid.cellrenderers.action.HtmlButtonRenderer;
+import org.vaadin.grid.cellrenderers.client.view.RowIndexMode;
 import org.vaadin.grid.cellrenderers.editoraware.CheckboxRenderer;
 import org.vaadin.grid.cellrenderers.navigation.GridNavigationExtension;
 import org.vaadin.grid.cellrenderers.EditableRenderer.ItemEditEvent;
@@ -165,8 +166,8 @@ public class DemoUI extends UI {
     		Grid<MyPojo> grid = new Grid<>();
     		grid.setItems(beanList);
     		grid.setSizeFull();
-    		grid.addColumn(value -> "", new RowIndexRenderer(true)).setCaption("Row index");;
-    		RowIndexRenderer rowIndex = new RowIndexRenderer(true); 
+    		grid.addColumn(value -> "", new RowIndexRenderer(RowIndexMode.ORDINAL)).setCaption("Row index");;
+    		RowIndexRenderer rowIndex = new RowIndexRenderer(RowIndexMode.ROMAN); 
     		rowIndex.setOffset(1);
     		grid.addColumn(value -> "", rowIndex).setCaption("Row index");
     		grid.addColumn(MyPojo::getId, new NumberRenderer()).setCaption("Id");
