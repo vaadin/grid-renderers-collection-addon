@@ -1,5 +1,8 @@
 package org.vaadin.grid.cellrenderers.client.view;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.vaadin.client.connectors.AbstractRendererConnector;
 import com.vaadin.client.renderers.Renderer;
@@ -13,6 +16,46 @@ import com.vaadin.shared.ui.Connect;
 public class RowIndexRendererConnector extends
         AbstractRendererConnector<String> {
 
+    private static LinkedHashMap<String, Integer> roman_numerals = new LinkedHashMap<>();
+
+	public RowIndexRendererConnector() {
+		super();
+	    roman_numerals.put("M", 1000);
+	    roman_numerals.put("CM", 900);
+	    roman_numerals.put("D", 500);
+	    roman_numerals.put("CD", 400);
+	    roman_numerals.put("C", 100);
+	    roman_numerals.put("XC", 90);
+	    roman_numerals.put("L", 50);
+	    roman_numerals.put("XL", 40);
+	    roman_numerals.put("X", 10);
+	    roman_numerals.put("IX", 9);
+	    roman_numerals.put("V", 5);
+	    roman_numerals.put("IV", 4);
+	    roman_numerals.put("I", 1);		
+	}
+	
+	public static String repeat(String s, int n) {
+		if(s == null) {
+			return null;
+		}
+		final StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < n; i++) {
+			sb.append(s);
+		}
+		return sb.toString();
+	}
+	  
+	private static String roman(int number) {
+	    String result = "";
+	    for(Map.Entry<String, Integer> entry : roman_numerals.entrySet()){
+	      int matches = number/entry.getValue();
+	      result += repeat(entry.getKey(), matches);
+	      number = number % entry.getValue();
+	    }
+	    return result;
+	}
+	
 	// Helper method to create ordinal String
 	private static String ordinal(int i) {
 	    int mod100 = i % 100;
@@ -34,10 +77,12 @@ public class RowIndexRendererConnector extends
         public void render(RendererCellReference cell, String htmlString) {
         	int rowIndex = cell.getRowIndex()+getState().offset;
         	String content = null;
-        	if (getState().ordinalMode) {
+        	if (getState().rowIndexMode == RowIndexMode.ORDINAL) {
         		content = ordinal(rowIndex);
+        	} else if (getState().rowIndexMode == RowIndexMode.ROMAN) {
+        		content = roman(rowIndex);        		
         	} else {
-        		content = ""+rowIndex;        		
+        		content = ""+rowIndex;
         	}
             cell.getElement()
                     .setInnerSafeHtml(SafeHtmlUtils.fromSafeConstant(content));
