@@ -2,9 +2,12 @@ package org.vaadin.grid.cellrenderers.client.editable;
 
 import java.util.Date;
 
+import com.google.gwt.aria.client.Roles;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.i18n.client.TimeZone;
 import com.vaadin.client.VConsole;
+import com.vaadin.client.ui.VAbstractTextualDate;
 import com.vaadin.client.ui.VPopupCalendar;
 
 /**
@@ -76,4 +79,49 @@ public class VMyPopupCalendar extends VPopupCalendar {
     	}
     }
 
+    // Accessor for timezone
+    public static native final TimeZone getTimeZone(VAbstractTextualDate dateField) /*-{
+		return dateField.@com.vaadin.client.ui.VAbstractTextualDate::timeZone;
+	}-*/;
+
+    @Override
+    public void buildDate() {
+    	// Copy paste from VAbstractTextualDate and VAbstractPopupCalendar
+    	// Fixes issue due 8.9 
+
+        // Save previous value
+        String previousValue = getText();
+        removeStyleName(getStylePrimaryName() + PARSE_ERROR_CLASSNAME);
+        // Create the initial text for the textfield
+        String dateText;
+        Date currentDate = getDate();
+        // Always call this to ensure the format ends up in the element
+        String formatString = getFormatString();
+        if (currentDate != null) {
+            dateText = getDateTimeService().formatDate(currentDate,
+                    formatString, getTimeZone(this));
+        } else {
+            dateText = "";
+        }
+
+        setText(dateText);
+        text.setEnabled(enabled);
+        text.setReadOnly(readonly);
+
+        if (readonly) {
+            text.addStyleName("v-readonly");
+            Roles.getTextboxRole().setAriaReadonlyProperty(text.getElement(),
+                    true);
+        } else {
+            text.removeStyleName("v-readonly");
+            Roles.getTextboxRole()
+                    .removeAriaReadonlyProperty(text.getElement());
+        }
+
+        // Restore previous value if the input could not be parsed
+        if (!parsable) {
+            setText(previousValue);
+        }
+        updateTextFieldEnabled();
+    }
 }
